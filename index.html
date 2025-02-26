@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MGwebs</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="min-h-screen bg-black">
+        <!-- Particles Canvas -->
+        <canvas id="sparkles" class="particles-canvas"></canvas>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Navbar -->
+            <nav class="navbar slide-down">
+                <a href="index.html" class="logo">
+                    <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+                        <path d="M12 8v8"/>
+                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                    </svg>
+                    <span>MGwebs</span>
+                </a>
+
+                <div class="nav-links">
+                    <a href="caracteristicas.html">Características</a>
+                    <a href="como_funciona.html">Cómo Funciona</a>
+                    <a href="productos.html">Productos</a>
+                    <a href="soporte.html">Soporte</a>
+                    <a href="contactanos.html">Contáctanos</a>
+                </div>
+
+                <div class="auth-buttons">
+                    <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                    <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
+                    <button class="btn btn-primary" onclick="window.location.href='productos.html'">Comenzar</button>
+                </div>
+
+                <button class="menu-button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16m-16 6h16"/>
+                    </svg>
+                </button>
+            </nav>
+
+            <!-- Hero Section -->
+            <div class="hero">
+                <!-- Floating papers background -->
+                <div id="floating-papers" class="floating-papers"></div>
+
+                <div class="hero-content fade-up">
+                    <h1>
+                        Transforma tu negocio con
+                        <span class="gradient-text">MGwebs</span>
+                    </h1>
+                    
+                    <p>
+                        Crea tu página web y deja que nuestro equipo la transforme en una herramienta efectiva para tu negocio.
+                    </p>
+
+                    <div class="hero-buttons">
+                        <button class="btn btn-primary">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <path d="M14 2v6h6"/>
+                                <path d="M16 13H8"/>
+                                <path d="M16 17H8"/>
+                                <path d="M10 9H8"/>
+                            </svg>
+                            Crear Página Web
+                        </button>
+                        <button class="btn btn-outline">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 3v3m0 4v3m0 4v3M3 12h3m4 0h3m4 0h3"/>
+                            </svg>
+                            Ver Ejemplos
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Animated robot -->
+                <div class="robo-animation">
+                    <svg class="bot-large" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
+                        <path d="M12 8v8"/>
+                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>

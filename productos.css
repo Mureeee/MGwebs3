@@ -1,0 +1,24 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: rgba(0, 0, 0, 0.96);
+    color: #ffffff;
+    padding: 2rem;
+}
+
+.productos-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Ajusta el tamaño de las columnas */
+    gap: 1rem; /* Espacio entre los productos */
+}
+
+.producto {
+    background: rgba(255, 255, 255, 0.2); /* Fondo semi-transparente */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 1rem;
+    text-align: center;
+    transition: transform 0.3s; /* Transición suave */
+}
+
+.producto:hover {
+    transform: scale(1.05); /* Efecto de escala al pasar el ratón */
+} 

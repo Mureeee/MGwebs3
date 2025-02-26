@@ -1,0 +1,115 @@
+/* Estilos generales del navbar */
+.navbar-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribuye los elementos */
+    padding: 1rem 2rem;
+    background-color: black; /* Fondo negro */
+    height: 70px;
+    width: 100%;
+    position: fixed; /* Hace que el navbar se quede fijo arriba */
+    top: 0;
+    left: 0;
+    z-index: 1000; /* Asegura que esté encima de otros elementos */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Logo y nombre de la marca */
+.navbar-custom .logo {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    gap: 10px;
+}
+
+/* Icono del logo */
+.navbar-custom .logo svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+}
+
+/* Estilos de los enlaces de navegación */
+.nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #6a11cb; /* Efecto hover con color degradado */
+}
+
+/* Contenedor de botones de autenticación */
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+/* Estilos generales de los botones */
+.auth-buttons button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s;
+}
+
+/* Botón principal */
+.auth-buttons .btn-primary {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    color: white;
+}
+
+.auth-buttons .btn-primary:hover {
+    background: linear-gradient(45deg, #2575fc, #6a11cb);
+    transform: scale(1.05);
+}
+
+/* Botón fantasma */
+.auth-buttons .btn-ghost {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.auth-buttons .btn-ghost:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Estilos del menú hamburguesa */
+.menu-button {
+    display: none;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Icono del menú */
+.menu-button svg {
+    width: 24px;
+    height: 24px;
+    stroke: white;
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+    .nav-links,
+    .auth-buttons {
+        display: none; /* Oculta los enlaces y botones en móviles */
+    }
+
+    .menu-button {
+        display: block; /* Muestra el menú hamburguesa */
+    }
+}
