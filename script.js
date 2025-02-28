@@ -10,6 +10,8 @@ class Particle {
         this.speedX = Math.random() * 0.5 - 0.25;
         this.speedY = Math.random() * 0.5 - 0.25;
         this.color = options.particleColor;
+        this.alpha = Math.random() * 0.5 + 0.5; // Transparencia variable
+        this.originalSize = this.size;
     }
 
     update() {
@@ -25,15 +27,19 @@ class Particle {
         const dx = this.mousePosition.x - this.x;
         const dy = this.mousePosition.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
+        
         if (distance < 100) {
             const angle = Math.atan2(dy, dx);
             this.x -= Math.cos(angle) * 1;
             this.y -= Math.sin(angle) * 1;
+            this.size = this.originalSize * 1.5; // Aumenta el tamaño cerca del mouse
+        } else {
+            this.size = this.originalSize; // Vuelve al tamaño original
         }
     }
 
     draw() {
-        this.ctx.fillStyle = this.color;
+        this.ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
         this.ctx.beginPath();
         this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         this.ctx.fill();
@@ -43,6 +49,8 @@ class Particle {
 // Initialize particles
 function initParticles() {
     const canvas = document.getElementById('sparkles');
+    if (!canvas) return; // Evita errores si no existe el canvas
+    
     const ctx = canvas.getContext('2d');
     const mousePosition = { x: 0, y: 0 };
     let particles = [];
@@ -94,45 +102,86 @@ function initParticles() {
     animate();
 }
 
-// Floating papers animation
-function initFloatingPapers() {
-    const container = document.getElementById('floating-papers');
-    const paperCount = 6;
+// Animación de carga de productos
+function initProductAnimation() {
+    const productos = document.querySelectorAll('.producto-card');
+    
+    productos.forEach((producto, index) => {
+        producto.style.opacity = '0';
+        producto.style.transform = 'translateY(20px)';
+        
+        setTimeout(() => {
+            producto.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+            producto.style.opacity = '1';
+            producto.style.transform = 'translateY(0)';
+        }, index * 150); // Incrementado el delay entre productos
+    });
 
-    for (let i = 0; i < paperCount; i++) {
-        const paper = document.createElement('div');
-        paper.className = 'paper';
-        paper.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <path d="M14 2v6h6"/>
-                <path d="M16 13H8"/>
-                <path d="M16 17H8"/>
-                <path d="M10 9H8"/>
-            </svg>
-        `;
-
-        // Random initial position
-        paper.style.left = `${Math.random() * 100}%`;
-        paper.style.top = `${Math.random() * 100}%`;
-
-        // Animation
-        paper.style.animation = `float ${6 + Math.random() * 4}s ease-in-out infinite`;
-        paper.style.animationDelay = `${Math.random() * 5}s`;
-
-        container.appendChild(paper);
-    }
+    // Efecto hover mejorado en los productos
+    productos.forEach(producto => {
+        producto.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+            this.style.boxShadow = '0 20px 30px rgba(0, 0, 0, 0.3)';
+        });
+        
+        producto.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+            this.style.boxShadow = '0 10px 20px rgba(0, 0, 0, 0.2)';
+        });
+    });
 }
 
-// Robot animation
-function initRobotAnimation() {
-    const robot = document.querySelector('.bot-large');
-    robot.style.animation = 'float 4s ease-in-out infinite';
+// Efecto en botones
+function initButtonEffects() {
+    const botones = document.querySelectorAll('.btn-comprar');
+    
+    botones.forEach(boton => {
+        boton.addEventListener('mouseover', function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.boxShadow = '0 5px 15px rgba(59, 130, 246, 0.4)';
+        });
+        
+        boton.addEventListener('mouseout', function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = 'none';
+        });
+
+        // Efecto de click
+        boton.addEventListener('mousedown', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+
+        boton.addEventListener('mouseup', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+    });
 }
 
-// Initialize everything when the page loads
+// Inicializar todo cuando la página carga
 document.addEventListener('DOMContentLoaded', () => {
     initParticles();
-    initFloatingPapers();
-    initRobotAnimation();
+    initProductAnimation();
+    initButtonEffects();
+    
+    // Añadir efecto de desplazamiento suave
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+});
+
+// Optimización del rendimiento
+let ticking = false;
+window.addEventListener('scroll', () => {
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            // Aquí puedes añadir efectos de scroll si los necesitas
+            ticking = false;
+        });
+        ticking = true;
+    }
 });

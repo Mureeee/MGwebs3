@@ -1,6 +1,22 @@
 <?php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'base_de_datos_mg');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-?>
+class Database {
+    private $host = "localhost";
+    private $db_name = "base_de_datos_mg";
+    private $username = "root";
+    private $password = "";
+    public $conn;
+
+    public function getConnection() {
+        $this->conn = null;
+
+        try {
+            $this->conn = new PDO("mysql:host={$this->host};dbname={$this->db_name}", $this->username, $this->password);
+            $this->conn->exec("set names utf8");
+        } catch(PDOException $exception) {
+            echo "Connection error: " . $exception->getMessage();
+        }
+
+        return $this->conn;
+    }
+}
+?> 
