@@ -1,0 +1,136 @@
+/* Estilos específicos para la página de productos */
+.min-h-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.productos-container {
+    padding: 2rem;
+    width: 70%;
+    max-width: 800px;
+    z-index: 1;
+    margin: 0 auto;
+}
+
+.productos-titulo {
+    text-align: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(to right, #a78bfa, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    width: 100%;
+}
+
+.productos-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    width: 100%;
+}
+
+.producto-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease-in-out;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.producto-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.producto-imagen {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    display: block;
+}
+
+.producto-titulo {
+    font-size: 1.1em;
+    margin: 12px 12px 4px;
+    color: white;
+    font-weight: 600;
+}
+
+.producto-descripcion {
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0 12px;
+    font-size: 0.85em;
+    line-height: 1.2;
+}
+
+.producto-precio {
+    font-size: 1.2em;
+    color: #a78bfa;
+    font-weight: bold;
+    margin: 8px 12px;
+}
+
+/* Botón Ver Detalles */
+.producto-card .btn-detalles {
+    display: block;
+    width: calc(100% - 24px);
+    margin: 12px;
+    padding: 8px;
+    text-align: center;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.producto-card .btn-detalles:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .productos-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .productos-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .productos-container {
+        width: 85%;
+    }
+}
+
+@media (max-width: 600px) {
+    .productos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .productos-titulo {
+        font-size: 1.2rem;
+    }
+    .producto-imagen {
+        height: 120px;
+    }
+}
+
+.particles-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
