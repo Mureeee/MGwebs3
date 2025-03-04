@@ -47,4 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo json_encode(['success' => false, 'message' => 'Método no permitido']);
 }
+
+// Ejemplo de inserción de un administrador
+$conn = $database->getConnection();
+$stmt = $conn->prepare("INSERT INTO usuario (nombre, correo, contraseña, direccion_envio, rol) VALUES (?, ?, ?, ?, ?)");
+$stmt->execute(['Admin', 'admin@example.com', password_hash('contraseña_segura', PASSWORD_DEFAULT), 'Dirección del Admin', 'administrador']);
 ?>
