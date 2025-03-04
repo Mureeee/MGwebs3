@@ -384,7 +384,7 @@ body {
 
 .product-price {
     font-size: 1.5rem;
-    color: #48bb78;
+    color: #9F7AEA;
     font-weight: 600;
     margin-bottom: 1rem;
 }
@@ -393,7 +393,7 @@ body {
     width: 100%;
     padding: 0.75rem;
     text-align: center;
-    background: linear-gradient(135deg, #4299e1 0%, #667eea 100%);
+    background: linear-gradient(135deg, #9F7AEA 0%, #805AD5 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -403,7 +403,7 @@ body {
 }
 
 .btn-details:hover {
-    background: linear-gradient(135deg, #3182ce 0%, #5a67d8 100%);
+    background: linear-gradient(135deg, #805AD5 0%, #6B46C1 100%);
 }
 
 /* Responsive */
