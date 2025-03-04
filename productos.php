@@ -50,9 +50,10 @@ class Producto {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGwebs</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <main class="min-h-screen bg-black">
+    <main>
         <!-- Particles Canvas -->
         <canvas id="sparkles" class="particles-canvas"></canvas>
 
@@ -120,6 +121,50 @@ class Producto {
             </div>
         </div>
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre MGwebs</h3>
+                <p>Tu pagina web <br>de las paginas Webs</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Útiles</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="segunda_mano.php">Segunda Mano</a></li>
+                    <li><a href="soporte.html">Soporte</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
+                    <li><a href="registrarse.html">Registrarse</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul class="footer-links">
+                    <li><span>📞 +34 123 456 789</span></li>
+                    <li><span>✉️ info@mgwebs.com</span></li>
+                    <li><span>📍 Calle Principal 123, Ciudad</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p> MGwebs. Todos los derechos reservados.</p>
+        </div>
+    </footer>
 
     <!-- Scripts -->
     <script src="js/particles.js"></script>
