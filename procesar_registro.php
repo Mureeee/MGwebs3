@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correo = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $contraseña = $_POST['password'];
     $direccion_envio = filter_var($_POST['direccion'], FILTER_SANITIZE_STRING);
-    $rol = 'usuario'; // Por defecto, todos los nuevos registros son usuarios normales
+    $rol = 'cliente'; // Definimos el rol como cliente
     
     try {
         $database = new Database();
