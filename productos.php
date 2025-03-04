@@ -15,7 +15,9 @@ class Producto {
 
     public function getProductos() {
         try {
-            $query = "SELECT id_producto, nombre_producto, descripcion, precio, categoria_id FROM producto";
+            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria 
+                     FROM producto p 
+                     LEFT JOIN categoria c ON p.categoria_id = c.id_categoria";
             $stmt = $this->conn->prepare($query);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -26,7 +28,10 @@ class Producto {
 
     public function getProductoById($id) {
         try {
-            $query = "SELECT id_producto, nombre_producto, descripcion, precio, categoria_id FROM producto WHERE id_producto = ?";
+            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria 
+                     FROM producto p 
+                     LEFT JOIN categoria c ON p.categoria_id = c.id_categoria 
+                     WHERE p.id_producto = ?";
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(1, $id, PDO::PARAM_INT);
             $stmt->execute();
@@ -60,7 +65,6 @@ class Producto {
                 $productos = $producto->getProductos();
                 
                 foreach ($productos as $item):
-                    // Crear el nombre de la imagen basado en el nombre del producto
                     $nombreImagen = strtolower(str_replace(' ', '', $item['nombre_producto'])) . '.png';
                     $rutaImagen = 'imagenes/' . $nombreImagen;
                 ?>
@@ -69,10 +73,11 @@ class Producto {
                          src="<?php echo htmlspecialchars($rutaImagen); ?>" 
                          alt="<?php echo htmlspecialchars($item['nombre_producto']); ?>">
                     <h2 class="producto-titulo"><?php echo htmlspecialchars($item['nombre_producto']); ?></h2>
-                    <p class="producto-descripcion"><?php echo htmlspecialchars($item['descripcion']); ?></p>
+                    <div class="producto-descripcion"><?php echo htmlspecialchars($item['nombre_categoria']); ?></div>
                     <div class="producto-precio">
-                        $<?php echo number_format($item['precio'], 2); ?>
+                        €<?php echo number_format($item['precio'], 2); ?>
                     </div>
+                    <button class="btn-detalles">Ver Detalles</button>
                 </div>
                 <?php endforeach; ?>
             </div>
