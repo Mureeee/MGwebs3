@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correo = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
     $contraseña = $_POST['password'];
     $direccion_envio = filter_var($_POST['direccion'], FILTER_SANITIZE_STRING);
-    $rol = 'usuario'; // Por defecto, todos los nuevos registros son usuarios normales
+    $rol = 'cliente'; // Definimos el rol como cliente
     
     try {
         $database = new Database();
@@ -47,4 +47,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 } else {
     echo json_encode(['success' => false, 'message' => 'Método no permitido']);
 }
+
+// Ejemplo de inserción de un administrador
+$conn = $database->getConnection();
+$stmt = $conn->prepare("INSERT INTO usuario (nombre, correo, contraseña, direccion_envio, rol) VALUES (?, ?, ?, ?, ?)");
+$stmt->execute(['Admin', 'admin@example.com', password_hash('contraseña_segura', PASSWORD_DEFAULT), 'Dirección del Admin', 'administrador']);
 ?>
