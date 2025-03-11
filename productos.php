@@ -101,7 +101,7 @@ class Producto {
                         <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
-                    <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
+                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
                 </div>
 
                 <button class="menu-button">
