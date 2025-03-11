@@ -126,3 +126,18 @@ button:hover {
     width: 100%; /* Ajustar la imagen al contenedor */
     border-radius: 10px; /* Bordes redondeados para la imagen */
 }
+
+.register-link {
+    margin-top: 1rem;
+    color: #ffffff;
+}
+
+.register-link a {
+    color: #2575fc;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.register-link a:hover {
+    color: #6a11cb;
+}
