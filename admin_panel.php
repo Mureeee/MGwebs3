@@ -145,6 +145,13 @@ $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
                         <p class="precio">€${producto.precio}</p>
                     </div>
                     <div class="producto-acciones">
+                        <button onclick="editarProducto(${producto.id})" class="btn btn-edit">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Editar
+                        </button>
                         <button onclick="eliminarProducto(${producto.id})" class="btn btn-danger">
                             <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
@@ -162,6 +169,49 @@ $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
             console.error('Error:', error);
             document.getElementById('productos-lista').innerHTML = 
                 '<p class="error">Error al cargar los productos</p>';
+        });
+    }
+
+    function editarProducto(id) {
+        fetch(`obtener_producto.php?id=${id}`)
+        .then(response => response.json())
+        .then(producto => {
+            // Rellenar los campos del formulario con los datos existentes
+            document.getElementById('nombre').value = producto.nombre_producto;
+            document.getElementById('descripcion').value = producto.descripcion;
+            document.getElementById('precio').value = producto.precio;
+            document.getElementById('categoria_id').value = producto.categoria_id;
+            
+            // Mostrar la imagen actual
+            const imagenPreview = document.createElement('div');
+            imagenPreview.className = 'imagen-actual';
+            imagenPreview.innerHTML = `
+                <p>Imagen actual:</p>
+                <img src="${producto.imagenes}" alt="${producto.nombre_producto}" style="max-width: 200px;">
+                <p class="imagen-nota">* Sube una nueva imagen solo si deseas cambiarla</p>
+            `;
+            
+            // Quitar el required del input de imagen
+            document.getElementById('imagen').removeAttribute('required');
+            
+            // Insertar preview antes del input de imagen
+            const imagenInput = document.getElementById('imagen').parentNode;
+            imagenInput.insertBefore(imagenPreview, imagenInput.firstChild);
+            
+            // Añadir el ID del producto al formulario
+            const form = document.getElementById('productoForm');
+            form.dataset.editId = id;
+            form.dataset.imagenActual = producto.imagenes;
+            
+            // Mostrar el formulario
+            document.getElementById('formulario-producto').style.display = 'block';
+            
+            // Scroll hacia el formulario
+            document.getElementById('formulario-producto').scrollIntoView({ behavior: 'smooth' });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar el producto');
         });
     }
 
@@ -192,6 +242,19 @@ $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
     document.getElementById('productoForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
+        const editId = this.dataset.editId;
+        
+        // Si hay un ID, es una edición
+        if (editId) {
+            formData.append('id', editId);
+            formData.append('action', 'update');
+            
+            // Si no se seleccionó una nueva imagen, mantener la actual
+            if (!formData.get('imagen').size) {
+                formData.delete('imagen');
+                formData.append('imagen_actual', this.dataset.imagenActual);
+            }
+        }
         
         fetch('procesar_producto.php', {
             method: 'POST',
@@ -200,12 +263,21 @@ $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                alert('Producto guardado correctamente');
+                alert(editId ? 'Producto actualizado correctamente' : 'Producto guardado correctamente');
                 this.reset();
+                this.dataset.editId = '';
+                // Limpiar la preview de imagen actual si existe
+                const imagenActual = this.querySelector('.imagen-actual');
+                if (imagenActual) {
+                    imagenActual.remove();
+                }
+                // Restaurar el required del input de imagen
+                document.getElementById('imagen').setAttribute('required', 'required');
                 document.getElementById('formulario-producto').style.display = 'none';
+                this.querySelector('button[type="submit"]').textContent = 'Guardar Producto';
                 cargarProductos();
             } else {
-                alert('Error al guardar el producto: ' + data.message);
+                alert('Error: ' + data.message);
             }
         })
         .catch(error => {
