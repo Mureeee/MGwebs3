@@ -595,3 +595,35 @@ main {
 .register-link a:hover {
     text-decoration: underline;
 }
+
+.reset-link {
+    color: #2575fc;
+    text-decoration: none;
+    word-break: break-all;
+    transition: color 0.3s;
+}
+
+.reset-link:hover {
+    color: #6a11cb;
+}
+
+.message {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 5px;
+}
+
+.message.success {
+    background: rgba(0, 255, 0, 0.1);
+    color: #00ff00;
+}
+
+.message.error {
+    background: rgba(255, 0, 0, 0.1);
+    color: #ff0000;
+}
+
+.message.info {
+    background: rgba(0, 0, 255, 0.1);
+    color: #0000ff;
+}

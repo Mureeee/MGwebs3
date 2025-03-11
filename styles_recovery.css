@@ -1,0 +1,61 @@
+/* Estilos adicionales para las páginas de recuperación de contraseña */
+.message {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  .success {
+    background-color: rgba(0, 255, 0, 0.2);
+    color: #00ff00;
+  }
+  
+  .error {
+    background-color: rgba(255, 0, 0, 0.2);
+    color: #ff0000;
+  }
+  
+  .info {
+    background-color: rgba(0, 0, 255, 0.2);
+    color: #0000ff;
+  }
+  
+  .password-requirements {
+    font-size: 0.8rem;
+    margin-top: 5px;
+    color: #ddd;
+  }
+  
+  .login-container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .login-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 2rem 0;
+  }
+  
+  
