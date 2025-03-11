@@ -18,7 +18,7 @@ class Producto {
 
     public function getProductos() {
         try {
-            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria 
+            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria, p.imagenes 
                      FROM producto p 
                      LEFT JOIN categoria c ON p.categoria_id = c.id_categoria";
             $stmt = $this->conn->prepare($query);
@@ -119,21 +119,19 @@ class Producto {
                 ?>
 
                 <div class="products-grid">
-                    <?php foreach ($productos as $prod): 
-                        $nombreImagen = strtolower(str_replace(' ', '', $prod['nombre_producto'])) . '.png';
-                        $rutaImagen = 'imagenes/' . $nombreImagen;
-                    ?>
+                    <?php foreach ($productos as $prod): ?>
                         <div class="product-card">
-                            <img src="<?php echo htmlspecialchars($rutaImagen); ?>" 
+                            <img src="<?php echo htmlspecialchars($prod['imagenes']); ?>" 
                                  alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
                                  class="product-image">
-                            <div class="product-content">
-                                <h3 class="product-title"><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
+                            <div class="product-info">
+                                <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
                                 <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
                                 <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
                                 <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
-                                <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" 
-                                   class="btn btn-primary btn-details">Ver Detalles</a>
+                                <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
+                                    Ver Detalles
+                                </a>
                             </div>
                         </div>
                     <?php endforeach; ?>
