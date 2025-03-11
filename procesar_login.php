@@ -4,23 +4,23 @@ require_once 'config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $correo = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $contraseña = $_POST['password'];
+    $password = $_POST['password'];
     
     try {
         $database = new Database();
         $conn = $database->getConnection();
         
         // Buscar usuario por correo
-        $query = "SELECT id_usuario, nombre, correo, contraseña, rol FROM usuario WHERE correo = ?";
+        $query = "SELECT id_usuario, nombre, contraseña, rol FROM usuario WHERE correo = ?";
         $stmt = $conn->prepare($query);
         $stmt->execute([$correo]);
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        if ($usuario && password_verify($contraseña, $usuario['contraseña'])) {
+        if ($usuario && password_verify($password, $usuario['contraseña'])) {
             // Inicio de sesión exitoso
             $_SESSION['usuario_id'] = $usuario['id_usuario'];
             $_SESSION['usuario_nombre'] = $usuario['nombre'];
-            $_SESSION['usuario_correo'] = $usuario['correo'];
+            $_SESSION['usuario_correo'] = $correo;
             $_SESSION['usuario_rol'] = $usuario['rol'];
             
             echo json_encode(['success' => true, 'message' => 'Inicio de sesión exitoso']);
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo json_encode(['success' => false, 'message' => 'Correo o contraseña incorrectos']);
         }
     } catch (PDOException $e) {
-        echo json_encode(['success' => false, 'message' => 'Error en el servidor']);
+        echo json_encode(['success' => false, 'message' => 'Error al conectar con la base de datos']);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Método no permitido']);

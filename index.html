@@ -92,5 +92,21 @@
         </div>
     </main>
     <script src="script.js"></script>
+    <script>
+    // Verificar si el usuario es administrador
+    fetch('verificar_admin.php')
+    .then(response => response.json())
+    .then(data => {
+        if (data.isAdmin) {
+            // Añadir botón de admin al menú
+            const authButtons = document.querySelector('.auth-buttons');
+            const adminButton = document.createElement('button');
+            adminButton.className = 'btn btn-primary';
+            adminButton.textContent = 'Panel Admin';
+            adminButton.onclick = () => window.location.href = 'admin_panel.php';
+            authButtons.insertBefore(adminButton, authButtons.firstChild);
+        }
+    });
+    </script>
 </body>
 </html>
