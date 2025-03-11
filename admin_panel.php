@@ -5,6 +5,9 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'administrad
     header('Location: index.html');
     exit;
 }
+
+// Obtener la primera letra del nombre de usuario
+$primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -42,8 +45,9 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol'] !== 'administrad
                 </div>
 
                 <div class="auth-buttons">
-                    <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
-                    <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
+                    <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
+                        <?php echo $primeraLetra; ?>
+                    </div>
                     <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
                 </div>
 
