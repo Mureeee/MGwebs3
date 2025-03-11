@@ -36,17 +36,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         10 => 'Foro Online'
     ];
     
+    // Crear el texto de personalización con la información del proyecto
+    $personalizacion = json_encode([
+        'categoria_id' => $categoria_id,
+        'categoria_nombre' => $categorias[$categoria_id],
+        'nombre_proyecto' => $nombre_proyecto,
+        'descripcion' => $descripcion
+    ]);
+    
     try {
         // Conectar a la base de datos
         $database = new Database();
         $conn = $database->getConnection();
         
         // Preparar la consulta SQL para insertar el pedido
-        $query = "INSERT INTO pedidos (usuario_id, categoria_id, nombre_proyecto, descripcion, fecha_pedido, estado) 
-                  VALUES (?, ?, ?, ?, NOW(), 'pendiente')";
+        $query = "INSERT INTO pedido (id_usuario, fecha_pedido, total, personalizacion) 
+                  VALUES (?, NOW(), 1200, ?)";
         
         $stmt = $conn->prepare($query);
-        $stmt->execute([$usuario_id, $categoria_id, $nombre_proyecto, $descripcion]);
+        $stmt->execute([$usuario_id, $personalizacion]);
         
         // Obtener el ID del pedido insertado
         $pedido_id = $conn->lastInsertId();
@@ -55,9 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Éxito al guardar el pedido
             echo json_encode([
                 'success' => true, 
-                'message' => 'Su pedido ha sido registrado correctamente',
+                'message' => 'Su pedido ha sido registrado correctamente. El precio total es de 1.200€',
                 'pedido_id' => $pedido_id,
-                'categoria' => $categorias[$categoria_id]
+                'categoria' => $categorias[$categoria_id],
+                'total' => 1200
             ]);
         } else {
             // Error al guardar el pedido
