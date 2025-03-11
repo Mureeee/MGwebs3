@@ -47,7 +47,9 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                         <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
                             <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
                         <?php endif; ?>
+                        <a href="perfil.php" class="dropdown-item">Perfil</a>
                         <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        
                     </div>
                 </div>
                 
