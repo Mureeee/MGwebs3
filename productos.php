@@ -1,5 +1,8 @@
 <?php
 require_once 'config/database.php';
+session_start();
+$isLoggedIn = isset($_SESSION['usuario_id']);
+$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
 
 class Producto {
     private $conn;
@@ -79,10 +82,27 @@ class Producto {
                 </div>
 
                 <div class="auth-buttons">
-                    <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
-                    <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
-                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
-                    </div>
+                    <?php if ($isLoggedIn): ?>
+                        <div class="user-menu">
+                            <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
+                                <?php echo $primeraLetra; ?>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-header">
+                                    <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
+                                </div>
+                                <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
+                                    <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
+                                <?php endif; ?>
+                                <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                            </div>
+                        </div>
+                    <?php else: ?>
+                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
+                    <?php endif; ?>
+                    <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
+                </div>
 
                 <button class="menu-button">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

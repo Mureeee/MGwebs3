@@ -37,16 +37,27 @@ $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
                 </a>
 
                 <div class="nav-links">
-                    <a href="caracteristicas.html">Características</a>
-                    <a href="como_funciona.html">Cómo Funciona</a>
+                    <a href="caracteristicas.php">Características</a>
+                    <a href="como_funciona.php">Cómo Funciona</a>
                     <a href="productos.php">Productos</a>
-                    <a href="soporte.html">Soporte</a>
-                    <a href="contactanos.html">Contáctanos</a>
+                    <a href="soporte.php">Soporte</a>
+                    <a href="contactanos.php">Contáctanos</a>
                 </div>
 
                 <div class="auth-buttons">
-                    <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
-                        <?php echo $primeraLetra; ?>
+                    <div class="user-menu">
+                        <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
+                            <?php echo $primeraLetra; ?>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">
+                                <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
+                            </div>
+                            <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
+                                <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
+                            <?php endif; ?>
+                            <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        </div>
                     </div>
                     <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
                 </div>

@@ -27,11 +27,11 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
         </div>
 
         <div class="nav-links">
-            <a href="caracteristicas.html">Características</a>
-            <a href="como_funciona.html">Cómo Funciona</a>
+            <a href="caracteristicas.php">Características</a>
+            <a href="como_funciona.php">Cómo Funciona</a>
             <a href="productos.php">Productos</a>
-            <a href="soporte.html">Soporte</a>
-            <a href="contactanos.html">Contáctanos</a>
+            <a href="soporte.php">Soporte</a>
+            <a href="contactanos.php">Contáctanos</a>
         </div>
 
         <div class="auth-buttons">

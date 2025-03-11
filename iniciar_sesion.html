@@ -125,12 +125,13 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = 'index.php'; // Redirigir al inicio después del login exitoso
+                    window.location.href = 'index.php';
                 } else {
                     document.getElementById('loginError').textContent = data.message;
                 }
             })
             .catch(error => {
+                console.error('Error:', error);
                 document.getElementById('loginError').textContent = 'Error al conectar con el servidor';
             });
         });
