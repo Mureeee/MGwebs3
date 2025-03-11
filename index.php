@@ -50,11 +50,24 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                         <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                     </div>
                 </div>
+                
+                <!-- Icono del carrito (solo para usuarios logueados) -->
+                <a href="carrito.php" class="cart-icon">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    <?php if (!empty($_SESSION['carrito'])): ?>
+                        <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
+                    <?php endif; ?>
+                </a>
             <?php else: ?>
                 <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
-            <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
+            
+            <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
         </div>
     </nav>
 
