@@ -64,7 +64,7 @@ class Producto {
         <div class="content-wrapper">
             <!-- Navbar -->
             <nav class="navbar slide-down">
-                <a href="index.html" class="logo">
+                <a href="index.php" class="logo">
                     <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
                         <path d="M12 8v8"/>
