@@ -84,7 +84,7 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
             herramienta efectiva para tu negocio.
         </p>
         <div class="button-container">
-            <button class="btn btn-primary" onclick="window.location.href='productos.php'">
+            <button class="btn btn-primary" onclick="window.location.href='detalle_producto.php?id=16'">
                 Pagina mas Vendida
             </button>
             <button class="btn btn-outline" onclick="window.location.href='productos.php'">

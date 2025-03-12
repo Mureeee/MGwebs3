@@ -16,13 +16,46 @@ class Producto {
         }
     }
 
-    public function getProductos() {
+    public function getProductos($filtros = []) {
         try {
-            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria, p.imagenes 
+            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria, c.id_categoria, p.imagenes 
                      FROM producto p 
                      LEFT JOIN categoria c ON p.categoria_id = c.id_categoria";
+            
+            $condiciones = [];
+            $params = [];
+            
+            // Filtrar por nombre
+            if (!empty($filtros['nombre'])) {
+                $condiciones[] = "p.nombre_producto LIKE ?";
+                $params[] = '%' . $filtros['nombre'] . '%';
+            }
+            
+            // Filtrar por categoría
+            if (!empty($filtros['categoria'])) {
+                $condiciones[] = "c.id_categoria = ?";
+                $params[] = $filtros['categoria'];
+            }
+            
+            // Filtrar por precio mínimo
+            if (isset($filtros['precio_min']) && $filtros['precio_min'] !== '') {
+                $condiciones[] = "p.precio >= ?";
+                $params[] = $filtros['precio_min'];
+            }
+            
+            // Filtrar por precio máximo
+            if (isset($filtros['precio_max']) && $filtros['precio_max'] !== '') {
+                $condiciones[] = "p.precio <= ?";
+                $params[] = $filtros['precio_max'];
+            }
+            
+            // Añadir condiciones a la consulta
+            if (!empty($condiciones)) {
+                $query .= " WHERE " . implode(" AND ", $condiciones);
+            }
+            
             $stmt = $this->conn->prepare($query);
-            $stmt->execute();
+            $stmt->execute($params);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             die("Error en la consulta: " . $e->getMessage());
@@ -43,6 +76,28 @@ class Producto {
             die("Error al obtener el producto: " . $e->getMessage());
         }
     }
+    
+    public function getCategorias() {
+        try {
+            $query = "SELECT id_categoria, nombre_categoria FROM categoria ORDER BY nombre_categoria";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Error al obtener las categorías: " . $e->getMessage());
+        }
+    }
+    
+    public function getPrecioMinMax() {
+        try {
+            $query = "SELECT MIN(precio) as min_precio, MAX(precio) as max_precio FROM producto";
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            die("Error al obtener los precios: " . $e->getMessage());
+        }
+    }
 }
 ?>
 
@@ -51,7 +106,7 @@ class Producto {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MGwebs</title>
+    <title>MGwebs - Productos</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -59,6 +114,8 @@ class Producto {
         .products-section {
             margin-top: 6rem; /* Aumentar el margen superior */
             padding-top: 2rem; /* Añadir padding superior adicional */
+            display: flex;
+            gap: 2rem;
         }
         
         /* Asegurar que el contenido no se solape con el navbar */
@@ -66,10 +123,124 @@ class Producto {
             padding-top: 1rem;
         }
         
+        /* Estilo para el panel de filtros */
+        .filters-panel {
+            width: 300px;
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+            margin-left: 2rem;
+        }
+        
+        .filters-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: white;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0.5rem;
+        }
+        
+        .filter-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .filter-input {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .filter-select {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: rgba(30, 30, 30, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-bottom: 0.5rem;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+        }
+        
+        .price-range {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .price-inputs input {
+            width: 50%;
+            padding: 0.5rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .filter-button {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: linear-gradient(to right, #a78bfa, #ec4899);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(167, 139, 250, 0.4);
+        }
+        
+        .reset-filters {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .reset-filters a {
+            color: #a78bfa;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .reset-filters a:hover {
+            text-decoration: underline;
+        }
+        
         /* Estilo para las tarjetas de productos */
+        .products-container {
+            flex: 1;
+        }
+        
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
             padding: 0 2rem;
         }
@@ -121,6 +292,39 @@ class Producto {
             color: white;
             margin-bottom: 1.5rem;
         }
+        
+        .no-products {
+            text-align: center;
+            padding: 2rem;
+            color: white;
+            font-size: 1.2rem;
+            grid-column: 1 / -1;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .products-section {
+                flex-direction: column;
+            }
+            
+            .filters-panel {
+                width: auto;
+                margin: 0 2rem;
+                position: static;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
@@ -144,8 +348,8 @@ class Producto {
                 <div class="nav-links">
                     <a href="caracteristicas.php">Características</a>
                     <a href="como_funciona.php">Cómo Funciona</a>
-                    <a href="productos.php">Productos</a>
-                    <a href="soporte.php" class="active">Soporte</a>
+                    <a href="productos.php" class="active">Productos</a>
+                    <a href="soporte.php">Soporte</a>
                     <a href="contactanos.php">Contáctanos</a>
                 </div>
 
@@ -184,26 +388,104 @@ class Producto {
             <div class="products-section">
                 <?php
                 $producto = new Producto();
-                $productos = $producto->getProductos();
+                
+                // Obtener categorías para el filtro
+                $categorias = $producto->getCategorias();
+                
+                // Obtener rango de precios
+                $precioRango = $producto->getPrecioMinMax();
+                $precioMin = $precioRango['min_precio'] ?? 0;
+                $precioMax = $precioRango['max_precio'] ?? 1000;
+                
+                // Procesar filtros
+                $filtros = [];
+                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+                    if (!empty($_GET['nombre'])) {
+                        $filtros['nombre'] = $_GET['nombre'];
+                    }
+                    if (!empty($_GET['categoria'])) {
+                        $filtros['categoria'] = $_GET['categoria'];
+                    }
+                    if (isset($_GET['precio_min']) && $_GET['precio_min'] !== '') {
+                        $filtros['precio_min'] = $_GET['precio_min'];
+                    }
+                    if (isset($_GET['precio_max']) && $_GET['precio_max'] !== '') {
+                        $filtros['precio_max'] = $_GET['precio_max'];
+                    }
+                }
+                
+                // Obtener productos filtrados
+                $productos = $producto->getProductos($filtros);
                 ?>
-
-                <div class="products-grid">
-                    <?php foreach ($productos as $prod): ?>
-                        <div class="product-card">
-                            <img src="<?php echo htmlspecialchars($prod['imagenes']); ?>" 
-                                 alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
-                                 class="product-image">
-                            <div class="product-info">
-                                <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
-                                <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
-                                <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
-                                <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
-                                <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
-                                    Ver Detalles
-                                </a>
+                
+                <!-- Panel de Filtros -->
+                <div class="filters-panel">
+                    <h2 class="filters-title">Filtros</h2>
+                    <form action="" method="GET" id="filtrosForm">
+                        <div class="filter-group">
+                            <label for="nombre" class="filter-label">Buscar por nombre:</label>
+                            <input type="text" id="nombre" name="nombre" class="filter-input" placeholder="Nombre del producto" value="<?php echo htmlspecialchars($filtros['nombre'] ?? ''); ?>">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label for="categoria" class="filter-label">Categoría:</label>
+                            <select id="categoria" name="categoria" class="filter-select">
+                                <option value="">Todas las categorías</option>
+                                <?php foreach ($categorias as $cat): ?>
+                                    <option value="<?php echo $cat['id_categoria']; ?>" <?php echo (isset($filtros['categoria']) && $filtros['categoria'] == $cat['id_categoria']) ? 'selected' : ''; ?>>
+                                        <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                        
+                        <div class="filter-group">
+                            <label class="filter-label">Rango de precio:</label>
+                            <div class="price-inputs">
+                                <input type="number" id="precio_min" name="precio_min" placeholder="Min €" min="0" value="<?php echo htmlspecialchars($filtros['precio_min'] ?? ''); ?>">
+                                <input type="number" id="precio_max" name="precio_max" placeholder="Max €" min="0" value="<?php echo htmlspecialchars($filtros['precio_max'] ?? ''); ?>">
+                            </div>
+                            <input type="range" id="precio_slider" class="price-range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" step="10" value="<?php echo $filtros['precio_max'] ?? $precioMax; ?>">
+                            <div style="display: flex; justify-content: space-between; color: white; font-size: 0.8rem;">
+                                <span><?php echo number_format($precioMin, 0); ?>€</span>
+                                <span><?php echo number_format($precioMax, 0); ?>€</span>
                             </div>
                         </div>
-                    <?php endforeach; ?>
+                        
+                        <button type="submit" class="filter-button">Aplicar Filtros</button>
+                        
+                        <div class="reset-filters">
+                            <a href="productos.php">Limpiar filtros</a>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Contenedor de Productos -->
+                <div class="products-container">
+                    <div class="products-grid">
+                        <?php if (empty($productos)): ?>
+                            <div class="no-products">
+                                <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($productos as $prod): ?>
+                                <div class="product-card">
+                                    <img src="<?php echo htmlspecialchars($prod['imagenes']); ?>" 
+                                         alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
+                                         class="product-image">
+                                    <div class="product-info">
+                                        <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
+                                        <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
+                                        <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
+                                        <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
+                                        <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
+                                            Ver Detalles
+                                        </a>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -223,7 +505,7 @@ class Producto {
                     <li><a href="index.html">Inicio</a></li>
                     <li><a href="segunda_mano.php">Segunda Mano</a></li>
                     <li><a href="soporte.html">Soporte</a></li>
-                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="contactanos.php">Contacto</a></li>
                     <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
                     <li><a href="registrarse.html">Registrarse</a></li>
                 </ul>
@@ -254,6 +536,7 @@ class Producto {
     </footer>
 
     <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/menu.js"></script>
     
     <!-- Código de las partículas -->
@@ -320,6 +603,22 @@ class Producto {
         resizeCanvas();
         initParticles();
         animate();
+        
+        // Script para el slider de precio
+        document.addEventListener('DOMContentLoaded', function() {
+            const precioSlider = document.getElementById('precio_slider');
+            const precioMax = document.getElementById('precio_max');
+            
+            if (precioSlider && precioMax) {
+                precioSlider.addEventListener('input', function() {
+                    precioMax.value = this.value;
+                });
+                
+                precioMax.addEventListener('input', function() {
+                    precioSlider.value = this.value;
+                });
+            }
+        });
     </script>
 </body>
 </html>

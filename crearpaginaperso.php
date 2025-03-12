@@ -170,7 +170,13 @@ session_start();
                     <button class="btn btn-primary" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                     <button class="btn btn-outline" onclick="window.location.href='registrarse.html'">Registrarse</button>
                 </div>
+                <br>
+                
             <?php else: ?>
+                <br>
+                <br>
+                <br>
+                <br>
                 <form id="personalizacionForm">
                     <div class="step active" id="step1">
                         <h2 class="step-title">Elige el tipo de página web que necesitas</h2>
