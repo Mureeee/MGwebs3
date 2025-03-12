@@ -575,42 +575,7 @@ if ($isLoggedIn) {
                 </div>
 
                 <!-- Formulario de Contacto -->
-                <div class="contact-form">
-                    <h2>Contacta con Nosotros</h2>
-                    <form action="procesar_soporte.php" method="POST">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="nombre">Nombre</label>
-                                <input type="text" id="nombre" name="nombre" value="<?php echo $isLoggedIn ? htmlspecialchars($nombreUsuario) : ''; ?>" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Correo Electrónico</label>
-                                <input type="email" id="email" name="email" value="<?php echo $isLoggedIn ? htmlspecialchars($correoUsuario) : ''; ?>" required>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="asunto">Asunto</label>
-                            <select id="asunto" name="asunto" required>
-                                <option value="">Selecciona un asunto</option>
-                                <option value="Consulta general">Consulta general</option>
-                                <option value="Problema técnico">Problema técnico</option>
-                                <option value="Facturación">Facturación</option>
-                                <option value="Sugerencia">Sugerencia</option>
-                                <option value="Otro">Otro</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="mensaje">Mensaje</label>
-                            <textarea id="mensaje" name="mensaje" required></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn-primary">Enviar Mensaje</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+                
     </main>
 
     <!-- Footer -->
