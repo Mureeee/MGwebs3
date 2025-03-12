@@ -11,24 +11,25 @@ if (!isset($_SESSION['carrito'])) {
 }
 
 // Obtener los productos del carrito
-function obtenerProductosCarrito($conn) {
+function obtenerProductosCarrito($conn)
+{
     if (empty($_SESSION['carrito'])) {
         return [];
     }
 
     $ids = array_keys($_SESSION['carrito']);
     $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-    
+
     $query = "SELECT id_producto, nombre_producto, precio, imagenes FROM producto WHERE id_producto IN ($placeholders)";
     $stmt = $conn->prepare($query);
     $stmt->execute($ids);
-    
+
     $productos = [];
     while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $producto['cantidad'] = $_SESSION['carrito'][$producto['id_producto']];
         $productos[] = $producto;
     }
-    
+
     return $productos;
 }
 
@@ -43,6 +44,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -119,6 +121,7 @@ try {
         }
     </style>
 </head>
+
 <body class="bg-black">
     <!-- Particles Canvas -->
     <canvas id="sparkles" class="particles-canvas"></canvas>
@@ -127,9 +130,9 @@ try {
     <nav class="navbar slide-down">
         <a href="index.php" class="logo">
             <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                <path d="M12 8v8"/>
-                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                <path d="M12 8v8" />
+                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
             </svg>
             <span>MGwebs</span>
         </a>
@@ -138,7 +141,7 @@ try {
             <a href="caracteristicas.php">Características</a>
             <a href="como_funciona.php">Cómo Funciona</a>
             <a href="productos.php">Productos</a>
-            <a href="soporte.php">Soporte</a>
+            <a href="soporte.php" class="active">Soporte</a>
             <a href="contactanos.php">Contáctanos</a>
         </div>
 
@@ -158,13 +161,13 @@ try {
                         <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                     </div>
                 </div>
-                
+
                 <!-- Icono del carrito (solo para usuarios logueados) -->
                 <a href="carrito.php" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
@@ -174,14 +177,14 @@ try {
                 <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
-            
+
             <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
         </div>
     </nav>
 
     <div class="carrito-container">
         <h1>Tu Carrito</h1>
-        
+
         <?php if (empty($productosCarrito)): ?>
             <div class="carrito-vacio">
                 <p>Tu carrito está vacío</p>
@@ -190,9 +193,9 @@ try {
         <?php else: ?>
             <?php foreach ($productosCarrito as $producto): ?>
                 <div class="carrito-item">
-                    <img src="<?php echo htmlspecialchars($producto['imagenes']); ?>" 
-                         alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>">
-                    
+                    <img src="<?php echo htmlspecialchars($producto['imagenes']); ?>"
+                        alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>">
+
                     <div class="carrito-info">
                         <h3><?php echo htmlspecialchars($producto['nombre_producto']); ?></h3>
                         <p>€<?php echo number_format($producto['precio'], 2); ?></p>
@@ -212,11 +215,11 @@ try {
             <?php endforeach; ?>
 
             <div class="carrito-total">
-                <p>Total: €<?php 
-                    $total = array_reduce($productosCarrito, function($carry, $item) {
-                        return $carry + ($item['precio'] * $item['cantidad']);
-                    }, 0);
-                    echo number_format($total, 2);
+                <p>Total: €<?php
+                $total = array_reduce($productosCarrito, function ($carry, $item) {
+                    return $carry + ($item['precio'] * $item['cantidad']);
+                }, 0);
+                echo number_format($total, 2);
                 ?></p>
                 <button class="btn btn-primary" onclick="procesarCompra()">Proceder al Pago</button>
             </div>
@@ -235,14 +238,14 @@ try {
                     accion: accion
                 })
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.message);
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert(data.message);
+                    }
+                });
         }
 
         function eliminarProducto(id) {
@@ -257,12 +260,12 @@ try {
                         accion: 'eliminar'
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        location.reload();
-                    }
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            location.reload();
+                        }
+                    });
             }
         }
 
@@ -299,7 +302,7 @@ try {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -335,4 +338,5 @@ try {
         animate();
     </script>
 </body>
-</html> 
+
+</html>

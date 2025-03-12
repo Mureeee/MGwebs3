@@ -16,7 +16,7 @@ if ($isLoggedIn) {
     $nombreUsuario = $_SESSION['usuario_nombre'];
     $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
     $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
-    
+
     // Calcular items en el carrito
     if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
         $itemsCarrito = array_sum($_SESSION['carrito']);
@@ -25,6 +25,7 @@ if ($isLoggedIn) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -519,25 +520,25 @@ if ($isLoggedIn) {
             .features-header h1 {
                 font-size: 2.5rem;
             }
-            
+
             .cta-section h2 {
                 font-size: 2rem;
             }
-            
+
             .comparison-table {
                 font-size: 0.9rem;
             }
-            
+
             .comparison-table th,
             .comparison-table td {
                 padding: 1rem 0.5rem;
             }
-            
+
             .cta-buttons {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .btn-primary,
             .btn-secondary {
                 width: 100%;
@@ -551,6 +552,7 @@ if ($isLoggedIn) {
         }
     </style>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -562,18 +564,18 @@ if ($isLoggedIn) {
             <nav class="navbar slide-down">
                 <a href="index.php" class="logo">
                     <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                        <path d="M12 8v8"/>
-                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                        <path d="M12 8v8" />
+                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                     </svg>
                     <span>MGwebs</span>
                 </a>
 
                 <div class="nav-links">
-                    <a href="caracteristicas.php" class="active">Características</a>
-                    <a href="como_funciona.html">Cómo Funciona</a>
+                    <a href="caracteristicas.php">Características</a>
+                    <a href="como_funciona.php">Cómo Funciona</a>
                     <a href="productos.php">Productos</a>
-                    <a href="soporte.php">Soporte</a>
+                    <a href="soporte.php" class="active">Soporte</a>
                     <a href="contactanos.php">Contáctanos</a>
                 </div>
 
@@ -594,28 +596,31 @@ if ($isLoggedIn) {
                                 <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                             </div>
                         </div>
-                        
+
                         <!-- Icono del carrito (solo para usuarios logueados) -->
                         <a href="carrito.php" class="cart-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"/>
-                                <circle cx="20" cy="21" r="1"/>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="9" cy="21" r="1" />
+                                <circle cx="20" cy="21" r="1" />
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                             </svg>
                             <?php if ($itemsCarrito > 0): ?>
                                 <span class="cart-count"><?php echo $itemsCarrito; ?></span>
                             <?php endif; ?>
                         </a>
                     <?php else: ?>
-                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                            Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
-                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+                    <button class="btn btn-primary"
+                        onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
                 </div>
 
                 <button class="menu-button">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16m-16 6h16"/>
+                        <path d="M4 6h16M4 12h16m-16 6h16" />
                     </svg>
                 </button>
             </nav>
@@ -624,7 +629,9 @@ if ($isLoggedIn) {
             <div class="features-container">
                 <div class="features-header">
                     <h1>Características de MGwebs</h1>
-                    <p>Descubre por qué MGwebs es la plataforma ideal para crear tu presencia online. Ofrecemos herramientas potentes y fáciles de usar para que puedas construir el sitio web de tus sueños sin necesidad de conocimientos técnicos.</p>
+                    <p>Descubre por qué MGwebs es la plataforma ideal para crear tu presencia online. Ofrecemos
+                        herramientas potentes y fáciles de usar para que puedas construir el sitio web de tus sueños sin
+                        necesidad de conocimientos técnicos.</p>
                 </div>
 
                 <!-- Características Principales -->
@@ -634,7 +641,8 @@ if ($isLoggedIn) {
                             <i class="fas fa-paint-brush"></i>
                         </div>
                         <h3>Diseño Intuitivo</h3>
-                        <p>Crea sitios web profesionales sin necesidad de conocimientos técnicos. Nuestra interfaz de arrastrar y soltar te permite diseñar páginas atractivas en minutos.</p>
+                        <p>Crea sitios web profesionales sin necesidad de conocimientos técnicos. Nuestra interfaz de
+                            arrastrar y soltar te permite diseñar páginas atractivas en minutos.</p>
                         <ul>
                             <li><i class="fas fa-check"></i> Editor visual de arrastrar y soltar</li>
                             <li><i class="fas fa-check"></i> Plantillas profesionales personalizables</li>
@@ -648,7 +656,8 @@ if ($isLoggedIn) {
                             <i class="fas fa-rocket"></i>
                         </div>
                         <h3>Rendimiento Optimizado</h3>
-                        <p>Todos nuestros sitios web están optimizados para cargar rápidamente y ofrecer la mejor experiencia a tus visitantes, mejorando tu posicionamiento en buscadores.</p>
+                        <p>Todos nuestros sitios web están optimizados para cargar rápidamente y ofrecer la mejor
+                            experiencia a tus visitantes, mejorando tu posicionamiento en buscadores.</p>
                         <ul>
                             <li><i class="fas fa-check"></i> Hosting de alta velocidad</li>
                             <li><i class="fas fa-check"></i> Optimización automática de imágenes</li>
@@ -662,7 +671,8 @@ if ($isLoggedIn) {
                             <i class="fas fa-mobile-alt"></i>
                         </div>
                         <h3>100% Responsive</h3>
-                        <p>Todos los sitios web creados con MGwebs se adaptan automáticamente a cualquier dispositivo, ofreciendo una experiencia perfecta en móviles, tablets y ordenadores.</p>
+                        <p>Todos los sitios web creados con MGwebs se adaptan automáticamente a cualquier dispositivo,
+                            ofreciendo una experiencia perfecta en móviles, tablets y ordenadores.</p>
                         <ul>
                             <li><i class="fas fa-check"></i> Diseño adaptable automático</li>
                             <li><i class="fas fa-check"></i> Vista previa en diferentes dispositivos</li>
@@ -676,7 +686,8 @@ if ($isLoggedIn) {
                             <i class="fas fa-search"></i>
                         </div>
                         <h3>SEO Avanzado</h3>
-                        <p>Mejora tu visibilidad en los motores de búsqueda con nuestras herramientas de SEO integradas, que te ayudarán a posicionar tu sitio web en los primeros resultados.</p>
+                        <p>Mejora tu visibilidad en los motores de búsqueda con nuestras herramientas de SEO integradas,
+                            que te ayudarán a posicionar tu sitio web en los primeros resultados.</p>
                         <ul>
                             <li><i class="fas fa-check"></i> Análisis de palabras clave</li>
                             <li><i class="fas fa-check"></i> Metadatos personalizables</li>
@@ -690,7 +701,8 @@ if ($isLoggedIn) {
                             <i class="fas fa-shopping-cart"></i>
                         </div>
                         <h3>E-Commerce Integrado</h3>
-                        <p>Vende tus productos online con nuestra solución de comercio electrónico integrada. Gestiona inventario, procesa pagos y envía pedidos desde un solo lugar.</p>
+                        <p>Vende tus productos online con nuestra solución de comercio electrónico integrada. Gestiona
+                            inventario, procesa pagos y envía pedidos desde un solo lugar.</p>
                         <ul>
                             <li><i class="fas fa-check"></i> Carrito de compras personalizable</li>
                             <li><i class="fas fa-check"></i> Múltiples métodos de pago</li>
@@ -704,7 +716,8 @@ if ($isLoggedIn) {
                             <i class="fas fa-headset"></i>
                         </div>
                         <h3>Soporte Premium</h3>
-                        <p>Nuestro equipo de soporte está disponible para ayudarte en cada paso del camino. Resolvemos tus dudas y problemas para que puedas centrarte en tu negocio.</p>
+                        <p>Nuestro equipo de soporte está disponible para ayudarte en cada paso del camino. Resolvemos
+                            tus dudas y problemas para que puedas centrarte en tu negocio.</p>
                         <ul>
                             <li><i class="fas fa-check"></i> Soporte 24/7</li>
                             <li><i class="fas fa-check"></i> Tutoriales y guías detalladas</li>
@@ -718,28 +731,33 @@ if ($isLoggedIn) {
                 <div class="showcase-section">
                     <div class="showcase-header">
                         <h2>Nuestros Productos Destacados</h2>
-                        <p>Explora nuestra selección de soluciones web profesionales diseñadas para diferentes necesidades y sectores.</p>
+                        <p>Explora nuestra selección de soluciones web profesionales diseñadas para diferentes
+                            necesidades y sectores.</p>
                     </div>
 
                     <div class="showcase-grid">
                         <!-- Tiendas Online -->
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('imagenes/TiendaOnlineBasica.png')"></div>
+                            <div class="showcase-image"
+                                style="background-image: url('imagenes/TiendaOnlineBasica.png')"></div>
                             <div class="showcase-content">
                                 <h3>Tienda Online Básica</h3>
                                 <p>Tienda online con funcionalidades esenciales.</p>
                                 <div class="showcase-price">€<?php echo number_format(500.00, 2); ?></div>
-                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                                <a href="productos.php" class="btn-text">Ver detalles <i
+                                        class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('imagenes/TiendaOnlineAvanzada.png')"></div>
+                            <div class="showcase-image"
+                                style="background-image: url('imagenes/TiendaOnlineAvanzada.png')"></div>
                             <div class="showcase-content">
                                 <h3>Tienda Online Avanzada</h3>
                                 <p>Tienda online con integraciones avanzadas.</p>
                                 <div class="showcase-price">€<?php echo number_format(1000.00, 2); ?></div>
-                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                                <a href="productos.php" class="btn-text">Ver detalles <i
+                                        class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
@@ -749,38 +767,45 @@ if ($isLoggedIn) {
                                 <h3>Marketplace</h3>
                                 <p>Plataforma para múltiples vendedores.</p>
                                 <div class="showcase-price">€<?php echo number_format(1500.00, 2); ?></div>
-                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                                <a href="productos.php" class="btn-text">Ver detalles <i
+                                        class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
                         <!-- Sitios Corporativos -->
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('imagenes/PáginaWebPersonalizada.png')"></div>
+                            <div class="showcase-image"
+                                style="background-image: url('imagenes/PáginaWebPersonalizada.png')"></div>
                             <div class="showcase-content">
                                 <h3>Página Web Personalizada</h3>
                                 <p>Página diseñada a medida con funcionalidades específicas.</p>
                                 <div class="showcase-price">€<?php echo number_format(1200.00, 2); ?></div>
-                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                                <a href="productos.php" class="btn-text">Ver detalles <i
+                                        class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('imagenes/PáginaCorporativa.png')"></div>
+                            <div class="showcase-image" style="background-image: url('imagenes/PáginaCorporativa.png')">
+                            </div>
                             <div class="showcase-content">
                                 <h3>Página Corporativa</h3>
                                 <p>Web para empresas con información institucional.</p>
                                 <div class="showcase-price">€<?php echo number_format(900.00, 2); ?></div>
-                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                                <a href="productos.php" class="btn-text">Ver detalles <i
+                                        class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('imagenes/WebdeConsultoria.png')"></div>
+                            <div class="showcase-image" style="background-image: url('imagenes/WebdeConsultoria.png')">
+                            </div>
                             <div class="showcase-content">
                                 <h3>Web de Consultoría</h3>
                                 <p>Página web para negocios de consultoría.</p>
                                 <div class="showcase-price">€<?php echo number_format(800.00, 2); ?></div>
-                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                                <a href="productos.php" class="btn-text">Ver detalles <i
+                                        class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -858,7 +883,8 @@ if ($isLoggedIn) {
                 <!-- Sección de CTA -->
                 <div class="cta-section">
                     <h2>¿Listo para crear tu sitio web?</h2>
-                    <p>Comienza hoy mismo a construir tu presencia online con MGwebs. Elige el plan que mejor se adapte a tus necesidades y empieza a diseñar tu sitio web en minutos.</p>
+                    <p>Comienza hoy mismo a construir tu presencia online con MGwebs. Elige el plan que mejor se adapte
+                        a tus necesidades y empieza a diseñar tu sitio web en minutos.</p>
                     <div class="cta-buttons">
                         <a href="crearpaginaperso.php" class="btn-primary">Comenzar Ahora</a>
                         <a href="productos.php" class="btn-secondary">Ver Planes y Precios</a>
@@ -919,46 +945,46 @@ if ($isLoggedIn) {
 
     <!-- Scripts -->
     <script src="js/menu.js"></script>
-    
+
     <!-- Script para el menú de usuario y carrito -->
     <script>
         // Asegurarse de que el menú de usuario funcione correctamente
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const userMenu = document.querySelector('.user-menu');
             const dropdownMenu = document.querySelector('.dropdown-menu');
-            
+
             if (userMenu) {
                 // Alternar el menú desplegable al hacer clic en el avatar
-                userMenu.addEventListener('click', function(e) {
+                userMenu.addEventListener('click', function (e) {
                     e.stopPropagation();
                     dropdownMenu.classList.toggle('active');
                 });
-                
+
                 // Cerrar el menú al hacer clic fuera de él
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function () {
                     if (dropdownMenu.classList.contains('active')) {
                         dropdownMenu.classList.remove('active');
                     }
                 });
-                
+
                 // Evitar que el menú se cierre al hacer clic dentro de él
-                dropdownMenu.addEventListener('click', function(e) {
+                dropdownMenu.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             }
-            
+
             // Menú móvil
             const menuButton = document.querySelector('.menu-button');
             const navLinks = document.querySelector('.nav-links');
-            
+
             if (menuButton) {
-                menuButton.addEventListener('click', function() {
+                menuButton.addEventListener('click', function () {
                     navLinks.classList.toggle('active');
                 });
             }
         });
     </script>
-    
+
     <!-- Código de las partículas -->
     <script>
         // Código de las partículas
@@ -989,7 +1015,7 @@ if ($isLoggedIn) {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -1025,5 +1051,5 @@ if ($isLoggedIn) {
         animate();
     </script>
 </body>
-</html>
 
+</html>
