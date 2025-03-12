@@ -501,6 +501,20 @@ if ($isLoggedIn) {
             justify-content: center;
         }
 
+        .showcase-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2575fc;
+            margin: 1rem 0;
+        }
+
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
         @media (max-width: 768px) {
             .features-header h1 {
                 font-size: 2.5rem;
@@ -530,6 +544,10 @@ if ($isLoggedIn) {
                 max-width: 300px;
                 margin-bottom: 1rem;
             }
+
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -553,7 +571,7 @@ if ($isLoggedIn) {
 
                 <div class="nav-links">
                     <a href="caracteristicas.php" class="active">Características</a>
-                    <a href="como_funciona.php">Cómo Funciona</a>
+                    <a href="como_funciona.html">Cómo Funciona</a>
                     <a href="productos.php">Productos</a>
                     <a href="soporte.php">Soporte</a>
                     <a href="contactanos.php">Contáctanos</a>
@@ -699,35 +717,70 @@ if ($isLoggedIn) {
                 <!-- Sección de Showcase -->
                 <div class="showcase-section">
                     <div class="showcase-header">
-                        <h2>Plantillas Profesionales</h2>
-                        <p>Elige entre cientos de plantillas diseñadas por profesionales para diferentes sectores y personalízalas según tus necesidades.</p>
+                        <h2>Nuestros Productos Destacados</h2>
+                        <p>Explora nuestra selección de soluciones web profesionales diseñadas para diferentes necesidades y sectores.</p>
                     </div>
 
                     <div class="showcase-grid">
+                        <!-- Tiendas Online -->
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="showcase-image" style="background-image: url('imagenes/TiendaOnlineBasica.png')"></div>
                             <div class="showcase-content">
-                                <h3>Plantillas para Negocios</h3>
-                                <p>Diseños profesionales para empresas de todos los tamaños, con secciones para servicios, equipo y testimonios.</p>
-                                <a href="#" class="btn-text">Ver plantillas <i class="fas fa-arrow-right"></i></a>
+                                <h3>Tienda Online Básica</h3>
+                                <p>Tienda online con funcionalidades esenciales.</p>
+                                <div class="showcase-price">€<?php echo number_format(500.00, 2); ?></div>
+                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="showcase-image" style="background-image: url('imagenes/TiendaOnlineAvanzada.png')"></div>
                             <div class="showcase-content">
-                                <h3>Tiendas Online</h3>
-                                <p>Plantillas optimizadas para e-commerce con catálogos de productos, carrito de compras y proceso de pago.</p>
-                                <a href="#" class="btn-text">Ver plantillas <i class="fas fa-arrow-right"></i></a>
+                                <h3>Tienda Online Avanzada</h3>
+                                <p>Tienda online con integraciones avanzadas.</p>
+                                <div class="showcase-price">€<?php echo number_format(1000.00, 2); ?></div>
+                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
 
                         <div class="showcase-item">
-                            <div class="showcase-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="showcase-image" style="background-image: url('imagenes/Marketplace.png')"></div>
                             <div class="showcase-content">
-                                <h3>Portfolios Creativos</h3>
-                                <p>Muestra tu trabajo de forma elegante con nuestras plantillas para fotógrafos, diseñadores y artistas.</p>
-                                <a href="#" class="btn-text">Ver plantillas <i class="fas fa-arrow-right"></i></a>
+                                <h3>Marketplace</h3>
+                                <p>Plataforma para múltiples vendedores.</p>
+                                <div class="showcase-price">€<?php echo number_format(1500.00, 2); ?></div>
+                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- Sitios Corporativos -->
+                        <div class="showcase-item">
+                            <div class="showcase-image" style="background-image: url('imagenes/PáginaWebPersonalizada.png')"></div>
+                            <div class="showcase-content">
+                                <h3>Página Web Personalizada</h3>
+                                <p>Página diseñada a medida con funcionalidades específicas.</p>
+                                <div class="showcase-price">€<?php echo number_format(1200.00, 2); ?></div>
+                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="showcase-item">
+                            <div class="showcase-image" style="background-image: url('imagenes/PáginaCorporativa.png')"></div>
+                            <div class="showcase-content">
+                                <h3>Página Corporativa</h3>
+                                <p>Web para empresas con información institucional.</p>
+                                <div class="showcase-price">€<?php echo number_format(900.00, 2); ?></div>
+                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="showcase-item">
+                            <div class="showcase-image" style="background-image: url('imagenes/WebdeConsultoria.png')"></div>
+                            <div class="showcase-content">
+                                <h3>Web de Consultoría</h3>
+                                <p>Página web para negocios de consultoría.</p>
+                                <div class="showcase-price">€<?php echo number_format(800.00, 2); ?></div>
+                                <a href="productos.php" class="btn-text">Ver detalles <i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -973,3 +1026,4 @@ if ($isLoggedIn) {
     </script>
 </body>
 </html>
+
