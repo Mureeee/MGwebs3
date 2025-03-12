@@ -1,7 +1,27 @@
 <?php
+require_once 'config/database.php';
 session_start();
+
+// Verificar si el usuario está logueado
 $isLoggedIn = isset($_SESSION['usuario_id']);
-$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
+$primeraLetra = '';
+$nombreUsuario = '';
+$correoUsuario = '';
+$rolUsuario = '';
+$itemsCarrito = 0;
+
+// Si está logueado, obtener información del usuario
+if ($isLoggedIn) {
+    $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
+    $nombreUsuario = $_SESSION['usuario_nombre'];
+    $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
+    $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
+    
+    // Calcular items en el carrito
+    if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
+        $itemsCarrito = array_sum($_SESSION['carrito']);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -263,6 +283,101 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
             box-shadow: 0 4px 12px rgba(106, 17, 203, 0.2);
         }
 
+        /* Estilos para el navbar y menú de usuario */
+        .user-menu {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            width: 200px;
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 0;
+            margin-top: 0.5rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .user-menu:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-header {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Estilos para el carrito */
+        .cart-icon {
+            position: relative;
+            margin-left: 1rem;
+            margin-right: 1rem;
+            color: white;
+            text-decoration: none;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         @media (max-width: 768px) {
             .support-grid {
                 grid-template-columns: 1fr;
@@ -301,20 +416,20 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                     <a href="como_funciona.html">Cómo Funciona</a>
                     <a href="productos.php">Productos</a>
                     <a href="soporte.php" class="active">Soporte</a>
-                    <a href="contactanos.html">Contáctanos</a>
+                    <a href="contactanos.php">Contáctanos</a>
                 </div>
 
                 <div class="auth-buttons">
                     <?php if ($isLoggedIn): ?>
                         <div class="user-menu">
-                            <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
+                            <div class="user-avatar" title="<?php echo htmlspecialchars($nombreUsuario); ?>">
                                 <?php echo $primeraLetra; ?>
                             </div>
                             <div class="dropdown-menu">
                                 <div class="dropdown-header">
-                                    <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
+                                    <?php echo htmlspecialchars($nombreUsuario); ?>
                                 </div>
-                                <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
+                                <?php if ($rolUsuario === 'administrador'): ?>
                                     <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
                                 <?php endif; ?>
                                 <a href="perfil.php" class="dropdown-item">Perfil</a>
@@ -329,8 +444,8 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                                 <circle cx="20" cy="21" r="1"/>
                                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                             </svg>
-                            <?php if (!empty($_SESSION['carrito'])): ?>
-                                <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
+                            <?php if ($itemsCarrito > 0): ?>
+                                <span class="cart-count"><?php echo $itemsCarrito; ?></span>
                             <?php endif; ?>
                         </a>
                     <?php else: ?>
@@ -466,11 +581,11 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="nombre">Nombre</label>
-                                <input type="text" id="nombre" name="nombre" value="<?php echo $isLoggedIn ? htmlspecialchars($_SESSION['usuario_nombre']) : ''; ?>" required>
+                                <input type="text" id="nombre" name="nombre" value="<?php echo $isLoggedIn ? htmlspecialchars($nombreUsuario) : ''; ?>" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Correo Electrónico</label>
-                                <input type="email" id="email" name="email" value="<?php echo $isLoggedIn ? htmlspecialchars($_SESSION['usuario_correo']) : ''; ?>" required>
+                                <input type="email" id="email" name="email" value="<?php echo $isLoggedIn ? htmlspecialchars($correoUsuario) : ''; ?>" required>
                             </div>
                         </div>
                         
@@ -513,8 +628,13 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                     <li><a href="segunda_mano.php">Segunda Mano</a></li>
                     <li><a href="soporte.php">Soporte</a></li>
                     <li><a href="contactanos.html">Contacto</a></li>
-                    <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                    <li><a href="registrarse.html">Registrarse</a></li>
+                    <?php if (!$isLoggedIn): ?>
+                        <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
+                        <li><a href="registrarse.html">Registrarse</a></li>
+                    <?php else: ?>
+                        <li><a href="perfil.php">Mi Perfil</a></li>
+                        <li><a href="carrito.php">Mi Carrito</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
@@ -544,6 +664,45 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
 
     <!-- Scripts -->
     <script src="js/menu.js"></script>
+    
+    <!-- Script para el menú de usuario y carrito -->
+    <script>
+        // Asegurarse de que el menú de usuario funcione correctamente
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+            
+            if (userMenu) {
+                // Alternar el menú desplegable al hacer clic en el avatar
+                userMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('active');
+                });
+                
+                // Cerrar el menú al hacer clic fuera de él
+                document.addEventListener('click', function() {
+                    if (dropdownMenu.classList.contains('active')) {
+                        dropdownMenu.classList.remove('active');
+                    }
+                });
+                
+                // Evitar que el menú se cierre al hacer clic dentro de él
+                dropdownMenu.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            }
+            
+            // Menú móvil
+            const menuButton = document.querySelector('.menu-button');
+            const navLinks = document.querySelector('.nav-links');
+            
+            if (menuButton) {
+                menuButton.addEventListener('click', function() {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+    </script>
     
     <!-- Código de las partículas -->
     <script>
@@ -609,8 +768,10 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
         resizeCanvas();
         initParticles();
         animate();
+    </script>
 
-        // Script para las preguntas frecuentes
+    <!-- Script para las preguntas frecuentes -->
+    <script>
         document.querySelectorAll('.faq-question').forEach(question => {
             question.addEventListener('click', () => {
                 const faqItem = question.parentElement;
