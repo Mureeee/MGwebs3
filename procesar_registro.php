@@ -42,14 +42,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         echo json_encode(['success' => true, 'message' => 'Registro exitoso']);
     } catch (PDOException $e) {
-        echo json_encode(['success' => false, 'message' => 'Error en el servidor']);
+        // Log del error para depuración (en un entorno de producción, no mostrar detalles del error)
+        error_log("Error en registro: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => 'Error en el servidor: ' . $e->getMessage()]);
     }
 } else {
     echo json_encode(['success' => false, 'message' => 'Método no permitido']);
 }
 
-// Ejemplo de inserción de un administrador
-$conn = $database->getConnection();
-$stmt = $conn->prepare("INSERT INTO usuario (nombre, correo, contraseña, direccion_envio, rol) VALUES (?, ?, ?, ?, ?)");
-$stmt->execute(['Admin', 'admin@example.com', password_hash('contraseña_segura', PASSWORD_DEFAULT), 'Dirección del Admin', 'administrador']);
+// Eliminamos el código de inserción del administrador que estaba causando problemas
+// Si necesitas crear un administrador, hazlo en un script separado o con una condición específica
 ?>
