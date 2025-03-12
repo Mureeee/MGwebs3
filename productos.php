@@ -142,11 +142,11 @@ class Producto {
                 </a>
 
                 <div class="nav-links">
-                    <a href="caracteristicas.html">Características</a>
-                    <a href="como_funciona.html">Cómo Funciona</a>
-                    <a href="productos.php" class="active">Productos</a>
-                    <a href="soporte.html">Soporte</a>
-                    <a href="contactanos.html">Contáctanos</a>
+                    <a href="caracteristicas.php">Características</a>
+                    <a href="como_funciona.php">Cómo Funciona</a>
+                    <a href="productos.php">Productos</a>
+                    <a href="soporte.php" class="active">Soporte</a>
+                    <a href="contactanos.php">Contáctanos</a>
                 </div>
 
                 <div class="auth-buttons">

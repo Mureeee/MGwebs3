@@ -96,12 +96,12 @@ try {
             </a>
 
             <div class="nav-links">
-                <a href="caracteristicas.html">Características</a>
-                <a href="como_funciona.html">Cómo Funciona</a>
-                <a href="productos.php">Productos</a>
-                <a href="soporte.html">Soporte</a>
-                <a href="contactanos.html">Contáctanos</a>
-            </div>
+                    <a href="caracteristicas.php">Características</a>
+                    <a href="como_funciona.php">Cómo Funciona</a>
+                    <a href="productos.php">Productos</a>
+                    <a href="soporte.php" class="active">Soporte</a>
+                    <a href="contactanos.php">Contáctanos</a>
+                </div>
 
             <div class="auth-buttons">
                 <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
