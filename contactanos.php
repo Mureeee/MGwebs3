@@ -1,7 +1,27 @@
 <?php
+require_once 'config/database.php';
 session_start();
+
+// Verificar si el usuario está logueado
 $isLoggedIn = isset($_SESSION['usuario_id']);
-$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
+$primeraLetra = '';
+$nombreUsuario = '';
+$correoUsuario = '';
+$rolUsuario = '';
+$itemsCarrito = 0;
+
+// Si está logueado, obtener información del usuario
+if ($isLoggedIn) {
+  $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
+  $nombreUsuario = $_SESSION['usuario_nombre'];
+  $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
+  $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
+  
+  // Calcular items en el carrito
+  if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
+      $itemsCarrito = array_sum($_SESSION['carrito']);
+  }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -208,7 +228,8 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
 
         <!-- Navbar -->
         <nav class="navbar slide-down">
-            <a href="index.html" class="logo">
+            <!-- CORREGIDO: Cambiado de index.html a index.php -->
+            <a href="index.php" class="logo">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
                     <path d="M12 8v8"/>
@@ -218,22 +239,22 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
             </a>
 
             <div class="nav-links">
-                    <a href="caracteristicas.php">Características</a>
-                    <a href="como_funciona.php">Cómo Funciona</a>
-                    <a href="productos.php">Productos</a>
-                    <a href="soporte.php" class="active">Soporte</a>
-                    <a href="contactanos.php">Contáctanos</a>
-                </div>
+                <a href="caracteristicas.php">Características</a>
+                <a href="como_funciona.php">Cómo Funciona</a>
+                <a href="productos.php">Productos</a>
+                <a href="soporte.php">Soporte</a>
+                <a href="contactanos.php" class="active">Contáctanos</a>
+            </div>
 
             <div class="auth-buttons">
                 <?php if ($isLoggedIn): ?>
                     <div class="user-menu">
-                        <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
+                        <div class="user-avatar" title="<?php echo htmlspecialchars($nombreUsuario); ?>">
                             <?php echo $primeraLetra; ?>
                         </div>
                         <div class="dropdown-menu">
                             <div class="dropdown-header">
-                                <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
+                                <?php echo htmlspecialchars($nombreUsuario); ?>
                             </div>
                             <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
                                 <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
@@ -242,6 +263,18 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                             <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                         </div>
                     </div>
+                    
+                    <!-- Icono del carrito (solo para usuarios logueados) -->
+                    <a href="carrito.php" class="cart-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        <?php if ($itemsCarrito > 0): ?>
+                            <span class="cart-count"><?php echo $itemsCarrito; ?></span>
+                        <?php endif; ?>
+                    </a>
                 <?php else: ?>
                     <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                     <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
@@ -320,12 +353,12 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="nombre">Nombre Completo</label>
-                            <input type="text" id="nombre" name="nombre" required>
+                            <input type="text" id="nombre" name="nombre" required value="<?php echo $isLoggedIn ? htmlspecialchars($nombreUsuario) : ''; ?>">
                         </div>
                         
                         <div class="form-group">
                             <label for="email">Correo Electrónico</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="email" required value="<?php echo $isLoggedIn ? htmlspecialchars($correoUsuario) : ''; ?>">
                         </div>
                         
                         <div class="form-group">
@@ -369,12 +402,18 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="index.html">Inicio</a></li>
+                    <!-- CORREGIDO: Cambiado todos los enlaces .html a .php -->
+                    <li><a href="index.php">Inicio</a></li>
                     <li><a href="segunda_mano.php">Segunda Mano</a></li>
-                    <li><a href="soporte.html">Soporte</a></li>
+                    <li><a href="soporte.php">Soporte</a></li>
                     <li><a href="contactanos.php">Contacto</a></li>
-                    <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                    <li><a href="registrarse.html">Registrarse</a></li>
+                    <?php if (!$isLoggedIn): ?>
+                        <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
+                        <li><a href="registrarse.html">Registrarse</a></li>
+                    <?php else: ?>
+                        <li><a href="perfil.php">Mi Perfil</a></li>
+                        <li><a href="carrito.php">Mi Carrito</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
@@ -398,13 +437,12 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
         </div>
 
         <div class="footer-bottom">
-            <p>© 2025 MGwebs. Todos los derechos reservados.</p>
+            <p>© MGwebs. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/particles.js"></script>
     <script src="js/menu.js"></script>
     <script>
         $(document).ready(function() {
@@ -490,4 +528,4 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
         });
     </script>
 </body>
-</html> 
+</html>
