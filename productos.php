@@ -325,6 +325,14 @@ class Producto {
                 grid-template-columns: 1fr;
             }
         }
+
+        #scrollToTop {
+            transition: opacity 0.3s;
+        }
+
+        #scrollToTop:hover {
+            background-color: #2575fc; /* Cambiar color al pasar el ratón */
+        }
     </style>
 </head>
 <body>
@@ -371,7 +379,7 @@ class Producto {
                             </div>
                         </div>
                     <?php else: ?>
-                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                        <button class="btn btn-ghost" style="padding: 15px 30px; font-size: 1.2rem;" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
                     <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
@@ -502,7 +510,7 @@ class Producto {
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.php">Inicio</a></li>
                     <li><a href="segunda_mano.php">Segunda Mano</a></li>
                     <li><a href="soporte.html">Soporte</a></li>
                     <li><a href="contactanos.php">Contacto</a></li>
@@ -619,6 +627,25 @@ class Producto {
                 });
             }
         });
+
+        // Mostrar el botón cuando se desplaza hacia abajo
+        window.onscroll = function() {
+            const button = document.getElementById("scrollToTop");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                button.style.display = "block";
+            } else {
+                button.style.display = "none";
+            }
+        };
+
+        // Función para hacer scroll hacia arriba
+        document.getElementById("scrollToTop").onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
     </script>
+
+    <button id="scrollToTop" style="display: none; position: fixed; bottom: 20px; right: 20px; padding: 10px; background-color: #6a11cb; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        ↑ Volver arriba
+    </button>
 </body>
 </html>

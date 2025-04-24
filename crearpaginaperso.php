@@ -131,7 +131,7 @@ session_start();
 
         <!-- Navbar -->
         <nav class="navbar slide-down">
-            <a href="index.html" class="logo">
+            <a href="index.php" class="logo">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
                     <path d="M12 8v8" />
@@ -276,7 +276,7 @@ session_start();
                 <div class="success-message" id="successMessage">
                     <h3>¡Solicitud enviada con éxito!</h3>
                     <p>Hemos recibido tu solicitud y nos pondremos en contacto contigo pronto para comenzar a trabajar en tu proyecto.</p>
-                    <button class="btn btn-primary" onclick="window.location.href='index.html'" style="margin-top: 20px;">Volver al inicio</button>
+                    <button class="btn btn-primary" onclick="window.location.href='index.php'" style="margin-top: 20px;">Volver al inicio</button>
                 </div>
                 
                 <div class="error-message" id="errorMessage">
@@ -299,7 +299,7 @@ session_start();
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.php">Inicio</a></li>
                     <li><a href="segunda_mano.php">Segunda Mano</a></li>
                     <li><a href="soporte.html">Soporte</a></li>
                     <li><a href="contacto.html">Contacto</a></li>
