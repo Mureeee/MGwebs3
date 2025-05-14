@@ -6,12 +6,12 @@ $isLoggedIn = isset($_SESSION['usuario_id']);
 $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
 
 // Obtener el ID del producto de la URL
-$id_producto = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$id_producto = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 try {
     $database = new Database();
     $conn = $database->getConnection();
-    
+
     // Obtener detalles del producto
     $query = "SELECT p.*, c.nombre_categoria 
              FROM producto p 
@@ -52,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
     if (!isset($_SESSION['carrito'])) {
         $_SESSION['carrito'] = [];
     }
-    
+
     if (isset($_POST['agregar_carrito'])) {
-        $cantidad = isset($_POST['cantidad']) ? (int)$_POST['cantidad'] : 1;
+        $cantidad = isset($_POST['cantidad']) ? (int) $_POST['cantidad'] : 1;
         if (isset($_SESSION['carrito'][$id_producto])) {
             $_SESSION['carrito'][$id_producto] += $cantidad;
         } else {
@@ -91,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -450,8 +451,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
             justify-content: center;
             height: 100%; /* Asegura que ocupe toda la altura de la celda */
         }
+
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Estilo para el slider de precio */
+        input[type="range"] {
+            -webkit-appearance: none; /* Eliminar el estilo predeterminado */
+            width: 100%;
+            height: 8px; /* Altura del slider */
+            background: #a78bfa; /* Color de fondo del slider */
+            border-radius: 5px; /* Bordes redondeados */
+            outline: none; /* Sin contorno al enfocar */
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; /* Eliminar el estilo predeterminado */
+            appearance: none; /* Eliminar el estilo predeterminado */
+            width: 20px; /* Ancho del thumb */
+            height: 20px; /* Alto del thumb */
+            background: #6a11cb; /* Color del thumb */
+            border-radius: 50%; /* Bordes redondeados */
+            cursor: pointer; /* Cambiar el cursor al pasar sobre el thumb */
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px; /* Ancho del thumb */
+            height: 20px; /* Alto del thumb */
+            background: #6a11cb; /* Color del thumb */
+            border-radius: 50%; /* Bordes redondeados */
+            cursor: pointer; /* Cambiar el cursor al pasar sobre el thumb */
+        }
     </style>
 </head>
+
 <body class="bg-black">
     <!-- Particles Canvas -->
     <canvas id="sparkles" class="particles-canvas"></canvas>
@@ -460,9 +527,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
     <nav class="navbar slide-down">
         <a href="index.php" class="logo">
             <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                <path d="M12 8v8"/>
-                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                <path d="M12 8v8" />
+                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
             </svg>
             <span>MGwebs</span>
         </a>
@@ -491,12 +558,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                         <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                     </div>
                 </div>
-                
+
                 <a href="carrito.php" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
@@ -506,7 +573,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                 <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
-            
+
             <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
         </div>
     </nav>
@@ -514,22 +581,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
     <div class="producto-detalle">
         <div class="producto-contenido">
             <div class="producto-imagen-container">
-                <img src="<?php echo htmlspecialchars($producto['imagenes']); ?>" 
-                     alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>"
-                     class="producto-imagen">
+                <img src="<?php echo htmlspecialchars($producto['imagenes']); ?>"
+                    alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>" class="producto-imagen">
             </div>
-            
+
             <div class="producto-info">
                 <span class="producto-categoria">
                     <?php echo htmlspecialchars($producto['nombre_categoria']); ?>
                 </span>
-                
+
                 <h1><?php echo htmlspecialchars($producto['nombre_producto']); ?></h1>
-                
+
                 <div class="producto-precio">
                     €<?php echo number_format($producto['precio'], 2); ?>
                 </div>
-                
+
                 <p class="descripcion">
                     <?php echo nl2br(htmlspecialchars($producto['descripcion'])); ?>
                 </p>
@@ -686,7 +752,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
             const cantidadSpan = document.getElementById('cantidad');
             const cantidadInput = document.getElementById('cantidad-input');
             let cantidad = parseInt(cantidadSpan.textContent);
-            
+
             cantidad = Math.max(1, cantidad + cambio);
             cantidadSpan.textContent = cantidad;
             cantidadInput.value = cantidad;
@@ -720,7 +786,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -762,7 +828,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
         resizeCanvas();
         initParticles();
         animate();
+        // Control del botón para volver arriba
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
 </html>
 
+
+
+</html>

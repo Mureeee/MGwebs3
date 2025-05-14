@@ -333,6 +333,43 @@ class Producto {
         #scrollToTop:hover {
             background-color: #2575fc; /* Cambiar color al pasar el ratón */
         }
+
+        #scrollToTopBtn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 50px;
+  height: 50px;
+  background-color: #a78bfa; /* Color lila */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex; /* Cambiado de 'none' a 'flex' para que sea visible por defecto */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  z-index: 9999; /* Aumentado para asegurar que esté por encima de otros elementos */
+  opacity: 0; /* Inicialmente transparente */
+  pointer-events: none; /* No interactuable cuando está invisible */
+}
+
+#scrollToTopBtn.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#scrollToTopBtn:hover {
+  background-color: #8b5cf6;
+  transform: scale(1.1);
+}
+
+#scrollToTopBtn svg {
+  width: 24px;
+  height: 24px;
+}
+
     </style>
 </head>
 <body>
@@ -425,7 +462,7 @@ class Producto {
                 // Obtener productos filtrados
                 $productos = $producto->getProductos($filtros);
                 ?>
-                
+
                 <!-- Panel de Filtros -->
                 <div class="filters-panel">
                     <h2 class="filters-title">Filtros</h2>
@@ -470,28 +507,28 @@ class Producto {
                 
                 <!-- Contenedor de Productos -->
                 <div class="products-container">
-                    <div class="products-grid">
+                <div class="products-grid">
                         <?php if (empty($productos)): ?>
                             <div class="no-products">
                                 <p>No se encontraron productos que coincidan con los filtros seleccionados.</p>
                             </div>
                         <?php else: ?>
-                            <?php foreach ($productos as $prod): ?>
-                                <div class="product-card">
-                                    <img src="<?php echo htmlspecialchars($prod['imagenes']); ?>" 
-                                         alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
-                                         class="product-image">
-                                    <div class="product-info">
-                                        <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
-                                        <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
-                                        <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
-                                        <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
-                                        <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
-                                            Ver Detalles
-                                        </a>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+                    <?php foreach ($productos as $prod): ?>
+                        <div class="product-card">
+                            <img src="<?php echo htmlspecialchars($prod['imagenes']); ?>" 
+                                 alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
+                                 class="product-image">
+                            <div class="product-info">
+                                <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
+                                <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
+                                <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
+                                <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
+                                <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
+                                    Ver Detalles
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -654,10 +691,42 @@ class Producto {
             window.scrollTo({top: 0, behavior: 'smooth'});
 >>>>>>> US26_rediseñodelindex
         };
+// Control del botón para volver arriba
+document.addEventListener('DOMContentLoaded', function() {
+  const scrollBtn = document.getElementById('scrollToTopBtn');
+  
+  // Función para verificar la posición de scroll y mostrar/ocultar el botón
+  function checkScrollPosition() {
+    if (window.scrollY > 300) {
+      scrollBtn.classList.add('visible');
+    } else {
+      scrollBtn.classList.remove('visible');
+    }
+  }
+  
+  // Verificar al cargar la página
+  checkScrollPosition();
+  
+  // Verificar al hacer scroll
+  window.addEventListener('scroll', checkScrollPosition);
+  
+  // Acción al hacer clic en el botón
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+});
     </script>
 
-    <button id="scrollToTop" style="display: none; position: fixed; bottom: 20px; right: 20px; padding: 10px; background-color: #6a11cb; color: white; border: none; border-radius: 5px; cursor: pointer;">
-        ↑ Volver arriba
-    </button>
+    <!-- Botón para volver arriba -->
+<button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="18 15 12 9 6 15"></polyline>
+  </svg>
+</button>
+
 </body>
 </html>

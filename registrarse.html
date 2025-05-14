@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <!-- Agregamos jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -17,9 +19,9 @@
         <nav class="navbar slide-down">
             <a href="index.php" class="logo">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                    <path d="M12 8v8"/>
-                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                    <path d="M12 8v8" />
+                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                 </svg>
                 <span>MGwebs</span>
             </a>
@@ -33,14 +35,15 @@
             </div>
 
             <div class="auth-buttons">
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                    Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                 <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
             </div>
 
             <button class="menu-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16m-16 6h16"/>
+                    <path d="M4 6h16M4 12h16m-16 6h16" />
                 </svg>
             </button>
         </nav>
@@ -118,18 +121,55 @@
             <p>© 2025 MGwebs. Todos los derechos reservados.</p>
         </div>
     </footer>
+    <style>
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
 
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
     <!-- Scripts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="js/particles.js"></script>
     <script src="js/menu.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             let emailTimeout;
             let emailIsValid = false;
 
             // Verificación AJAX del correo electrónico
-            $('#email').on('input', function() {
+            $('#email').on('input', function () {
                 clearTimeout(emailTimeout);
                 const email = $(this).val();
                 const emailError = $('#email-error');
@@ -142,13 +182,13 @@
 
                 if (email) {
                     // Esperar 500ms después de que el usuario deje de escribir
-                    emailTimeout = setTimeout(function() {
+                    emailTimeout = setTimeout(function () {
                         $.ajax({
                             url: 'verificar_correo.php',
                             method: 'POST',
                             data: { email: email },
                             dataType: 'json',
-                            success: function(response) {
+                            success: function (response) {
                                 if (response.exists) {
                                     emailError.text('Este correo ya está registrado');
                                     emailSuccess.text('');
@@ -161,7 +201,7 @@
                                     submitBtn.prop('disabled', false);
                                 }
                             },
-                            error: function() {
+                            error: function () {
                                 emailError.text('Error al verificar el correo');
                                 emailSuccess.text('');
                                 emailIsValid = false;
@@ -173,16 +213,16 @@
             });
 
             // Manejo del envío del formulario
-            $('#registerForm').on('submit', function(e) {
+            $('#registerForm').on('submit', function (e) {
                 e.preventDefault();
-                
+
                 if (!emailIsValid) {
                     $('#registerError').text('Por favor, verifica el correo electrónico');
                     return;
                 }
 
                 const formData = new FormData(this);
-                
+
                 $.ajax({
                     url: 'procesar_registro.php',
                     method: 'POST',
@@ -190,19 +230,53 @@
                     processData: false,
                     contentType: false,
                     dataType: 'json',
-                    success: function(data) {
+                    success: function (data) {
                         if (data.success) {
                             window.location.href = 'iniciar_sesion.html';
                         } else {
                             $('#registerError').text(data.message);
                         }
                     },
-                    error: function() {
+                    error: function () {
                         $('#registerError').text('Error al conectar con el servidor');
                     }
                 });
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
+
 </html>

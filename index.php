@@ -5,12 +5,14 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGwebs</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="bg-black">
     <!-- Particles Canvas -->
     <canvas id="sparkles" class="particles-canvas"></canvas>
@@ -19,9 +21,9 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
     <nav class="navbar slide-down">
         <div class="logo">
             <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                <path d="M12 8v8"/>
-                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                <path d="M12 8v8" />
+                <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
             </svg>
             <span>MGwebs</span>
         </div>
@@ -49,16 +51,16 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                         <?php endif; ?>
                         <a href="perfil.php" class="dropdown-item">Perfil</a>
                         <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
-                        
+
                     </div>
                 </div>
-                
+
                 <!-- Icono del carrito (solo para usuarios logueados) -->
                 <a href="carrito.php" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"/>
-                        <circle cx="20" cy="21" r="1"/>
-                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
                     <?php if (!empty($_SESSION['carrito'])): ?>
                         <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
@@ -68,7 +70,7 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                 <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
-            
+
             <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
         </div>
     </nav>
@@ -92,7 +94,44 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
             </button>
         </div>
     </div>
+    <style>
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
 
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
     <script>
         // Código de las partículas
         const canvas = document.getElementById('sparkles');
@@ -122,7 +161,7 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -156,6 +195,40 @@ $primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 
         resizeCanvas();
         initParticles();
         animate();
+        // Control del botón para volver arriba
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
-</html> 
+
+</html>

@@ -58,11 +58,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $conn->commit();
-            
+
             // Actualizar datos de sesión
             $_SESSION['usuario_nombre'] = $nuevo_nombre;
             $_SESSION['usuario_correo'] = $nuevo_email;
-            
+
             $mensaje = "Perfil actualizado correctamente";
         } catch (Exception $e) {
             $conn->rollBack();
@@ -81,6 +81,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -193,8 +194,46 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(106, 17, 203, 0.2);
         }
+
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -206,9 +245,9 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             <nav class="navbar slide-down">
                 <a href="index.php" class="logo">
                     <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                        <path d="M12 8v8"/>
-                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                        <path d="M12 8v8" />
+                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                     </svg>
                     <span>MGwebs</span>
                 </a>
@@ -239,26 +278,28 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                     <?php else: ?>
-                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                            Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
-                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+                    <button class="btn btn-primary"
+                        onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
                 </div>
 
                 <button class="menu-button">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16m-16 6h16"/>
+                        <path d="M4 6h16M4 12h16m-16 6h16" />
                     </svg>
                 </button>
             </nav>
 
             <div class="profile-container">
                 <h2>Mi Perfil</h2>
-                
+
                 <?php if (!empty($mensaje)): ?>
                     <div class="message success"><?php echo htmlspecialchars($mensaje); ?></div>
                 <?php endif; ?>
-                
+
                 <?php if (!empty($error)): ?>
                     <div class="message error"><?php echo htmlspecialchars($error); ?></div>
                 <?php endif; ?>
@@ -266,17 +307,20 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                 <form class="profile-form" method="POST">
                     <div class="form-group">
                         <label for="nombre">Nombre de Usuario</label>
-                        <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
+                        <input type="text" id="nombre" name="nombre"
+                            value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="correo">Correo Electrónico</label>
-                        <input type="email" id="correo" name="correo" value="<?php echo htmlspecialchars($usuario['correo']); ?>" required>
+                        <input type="email" id="correo" name="correo"
+                            value="<?php echo htmlspecialchars($usuario['correo']); ?>" required>
                     </div>
 
                     <div class="form-group">
                         <label for="direccion_envio">Dirección de Envío</label>
-                        <input type="text" id="direccion_envio" name="direccion_envio" value="<?php echo htmlspecialchars($usuario['direccion_envio']); ?>">
+                        <input type="text" id="direccion_envio" name="direccion_envio"
+                            value="<?php echo htmlspecialchars($usuario['direccion_envio']); ?>">
                     </div>
 
                     <div class="form-group">
@@ -372,7 +416,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -406,6 +450,40 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
         resizeCanvas();
         initParticles();
         animate();
+        // Control del botón para volver arriba
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
+
 </html>

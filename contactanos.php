@@ -12,19 +12,20 @@ $itemsCarrito = 0;
 
 // Si está logueado, obtener información del usuario
 if ($isLoggedIn) {
-  $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
-  $nombreUsuario = $_SESSION['usuario_nombre'];
-  $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
-  $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
-  
-  // Calcular items en el carrito
-  if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
-      $itemsCarrito = array_sum($_SESSION['carrito']);
-  }
+    $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
+    $nombreUsuario = $_SESSION['usuario_nombre'];
+    $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
+    $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
+
+    // Calcular items en el carrito
+    if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
+        $itemsCarrito = array_sum($_SESSION['carrito']);
+    }
 }
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,28 +38,28 @@ if ($isLoggedIn) {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .contact-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 3rem;
             margin-top: 2rem;
         }
-        
+
         .contact-info {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 10px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
+
         .contact-form {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 10px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        
+
         .contact-title {
             font-size: 2.5rem;
             margin-bottom: 1rem;
@@ -68,48 +69,48 @@ if ($isLoggedIn) {
             background-clip: text;
             color: transparent;
         }
-        
+
         .contact-subtitle {
             text-align: center;
             margin-bottom: 2rem;
             color: rgba(255, 255, 255, 0.8);
             font-size: 1.1rem;
         }
-        
+
         .info-item {
             display: flex;
             align-items: flex-start;
             margin-bottom: 1.5rem;
         }
-        
+
         .info-icon {
             font-size: 1.5rem;
             color: #a78bfa;
             margin-right: 1rem;
             min-width: 30px;
         }
-        
+
         .info-text {
             color: white;
         }
-        
+
         .info-text h3 {
             margin: 0 0 0.5rem 0;
             font-size: 1.2rem;
         }
-        
+
         .info-text p {
             margin: 0;
             color: rgba(255, 255, 255, 0.8);
             line-height: 1.5;
         }
-        
+
         .social-links {
             display: flex;
             gap: 1rem;
             margin-top: 2rem;
         }
-        
+
         .social-links a {
             display: flex;
             align-items: center;
@@ -121,22 +122,22 @@ if ($isLoggedIn) {
             color: white;
             transition: all 0.3s ease;
         }
-        
+
         .social-links a:hover {
             background: #a78bfa;
             transform: translateY(-3px);
         }
-        
+
         .form-group {
             margin-bottom: 1.5rem;
         }
-        
+
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             color: white;
         }
-        
+
         .form-group input,
         .form-group textarea {
             width: 100%;
@@ -147,18 +148,18 @@ if ($isLoggedIn) {
             color: white;
             font-family: inherit;
         }
-        
+
         .form-group textarea {
             resize: vertical;
             min-height: 120px;
         }
-        
+
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
             border-color: #a78bfa;
         }
-        
+
         .btn-submit {
             background: linear-gradient(to right, #a78bfa, #ec4899);
             color: white;
@@ -170,12 +171,12 @@ if ($isLoggedIn) {
             transition: all 0.3s ease;
             width: 100%;
         }
-        
+
         .btn-submit:hover {
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(167, 139, 250, 0.4);
         }
-        
+
         .map-container {
             margin-top: 3rem;
             border-radius: 10px;
@@ -183,13 +184,13 @@ if ($isLoggedIn) {
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             height: 400px;
         }
-        
+
         .map-container iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
-        
+
         .success-message,
         .error-message {
             padding: 1rem;
@@ -197,30 +198,68 @@ if ($isLoggedIn) {
             margin-top: 1rem;
             display: none;
         }
-        
+
         .success-message {
             background: rgba(72, 187, 120, 0.1);
             color: #48bb78;
             border: 1px solid rgba(72, 187, 120, 0.2);
         }
-        
+
         .error-message {
             background: rgba(245, 101, 101, 0.1);
             color: #f56565;
             border: 1px solid rgba(245, 101, 101, 0.2);
         }
-        
+
         @media (max-width: 768px) {
             .contact-container {
                 grid-template-columns: 1fr;
             }
-            
+
             .contact-title {
                 font-size: 2rem;
             }
         }
+
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -231,9 +270,9 @@ if ($isLoggedIn) {
             <!-- CORREGIDO: Cambiado de index.html a index.php -->
             <a href="index.php" class="logo">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                    <path d="M12 8v8"/>
-                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                    <path d="M12 8v8" />
+                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                 </svg>
                 <span>MGwebs</span>
             </a>
@@ -263,20 +302,21 @@ if ($isLoggedIn) {
                             <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                         </div>
                     </div>
-                    
+
                     <!-- Icono del carrito (solo para usuarios logueados) -->
                     <a href="carrito.php" class="cart-icon">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"/>
-                            <circle cx="20" cy="21" r="1"/>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                         </svg>
                         <?php if ($itemsCarrito > 0): ?>
                             <span class="cart-count"><?php echo $itemsCarrito; ?></span>
                         <?php endif; ?>
                     </a>
                 <?php else: ?>
-                    <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                    <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                        Sesión</button>
                     <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                 <?php endif; ?>
                 <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
@@ -284,7 +324,7 @@ if ($isLoggedIn) {
 
             <button class="menu-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16m-16 6h16"/>
+                    <path d="M4 6h16M4 12h16m-16 6h16" />
                 </svg>
             </button>
         </nav>
@@ -292,8 +332,9 @@ if ($isLoggedIn) {
         <!-- Contact Section -->
         <section class="contact-section">
             <h1 class="contact-title">Contáctanos</h1>
-            <p class="contact-subtitle">Estamos aquí para ayudarte. Ponte en contacto con nosotros y te responderemos lo antes posible.</p>
-            
+            <p class="contact-subtitle">Estamos aquí para ayudarte. Ponte en contacto con nosotros y te responderemos lo
+                antes posible.</p>
+
             <div class="contact-container">
                 <div class="contact-info">
                     <div class="info-item">
@@ -306,7 +347,7 @@ if ($isLoggedIn) {
                             <p>Av. Meridiana, 263, 08027 Barcelona</p>
                         </div>
                     </div>
-                    
+
                     <div class="info-item">
                         <div class="info-icon">
                             <i class="fas fa-phone-alt"></i>
@@ -317,7 +358,7 @@ if ($isLoggedIn) {
                             <p>+34 987 654 321</p>
                         </div>
                     </div>
-                    
+
                     <div class="info-item">
                         <div class="info-icon">
                             <i class="fas fa-envelope"></i>
@@ -328,7 +369,7 @@ if ($isLoggedIn) {
                             <p>soporte@mgwebs.com</p>
                         </div>
                     </div>
-                    
+
                     <div class="info-item">
                         <div class="info-icon">
                             <i class="fas fa-clock"></i>
@@ -339,7 +380,7 @@ if ($isLoggedIn) {
                             <p>Sábados: 10:00 AM - 2:00 PM</p>
                         </div>
                     </div>
-                    
+
                     <div class="social-links">
                         <a href="#"><i class="fab fa-facebook-f"></i></a>
                         <a href="#"><i class="fab fa-twitter"></i></a>
@@ -348,45 +389,49 @@ if ($isLoggedIn) {
                         <a href="#"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                
+
                 <div class="contact-form">
                     <form id="contactForm">
                         <div class="form-group">
                             <label for="nombre">Nombre Completo</label>
-                            <input type="text" id="nombre" name="nombre" required value="<?php echo $isLoggedIn ? htmlspecialchars($nombreUsuario) : ''; ?>">
+                            <input type="text" id="nombre" name="nombre" required
+                                value="<?php echo $isLoggedIn ? htmlspecialchars($nombreUsuario) : ''; ?>">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="email">Correo Electrónico</label>
-                            <input type="email" id="email" name="email" required value="<?php echo $isLoggedIn ? htmlspecialchars($correoUsuario) : ''; ?>">
+                            <input type="email" id="email" name="email" required
+                                value="<?php echo $isLoggedIn ? htmlspecialchars($correoUsuario) : ''; ?>">
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="asunto">Asunto</label>
                             <input type="text" id="asunto" name="asunto" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="mensaje">Mensaje</label>
                             <textarea id="mensaje" name="mensaje" required></textarea>
                         </div>
-                        
+
                         <button type="submit" class="btn-submit">Enviar Mensaje</button>
-                        
+
                         <div class="success-message" id="successMessage">
                             ¡Mensaje enviado con éxito! Nos pondremos en contacto contigo pronto.
                         </div>
-                        
+
                         <div class="error-message" id="errorMessage">
                             Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo.
                         </div>
                     </form>
                 </div>
             </div>
-            
+
             <!-- Google Maps -->
             <div class="map-container">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2991.9636953957!2d2.1861737!3d41.421901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a4bcd4df52e8df%3A0xf5c866dc9d618114!2sCentro%20de%20Estudios%20Roca%20-%20Grupo%20Escolar%20Roca!5e0!3m2!1ses!2ses!4v1710789012345!5m2!1ses!2ses" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2991.9636953957!2d2.1861737!3d41.421901!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12a4bcd4df52e8df%3A0xf5c866dc9d618114!2sCentro%20de%20Estudios%20Roca%20-%20Grupo%20Escolar%20Roca!5e0!3m2!1ses!2ses!4v1710789012345!5m2!1ses!2ses"
+                    allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
         </section>
     </main>
@@ -445,24 +490,24 @@ if ($isLoggedIn) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="js/menu.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Manejar el envío del formulario
-            $('#contactForm').on('submit', function(e) {
+            $('#contactForm').on('submit', function (e) {
                 e.preventDefault();
-                
+
                 // Aquí normalmente enviarías los datos a un servidor
                 // Simulamos una respuesta exitosa
                 $('#successMessage').fadeIn();
-                
+
                 // Limpiar el formulario
                 this.reset();
-                
+
                 // Ocultar el mensaje después de 5 segundos
-                setTimeout(function() {
+                setTimeout(function () {
                     $('#successMessage').fadeOut();
                 }, 5000);
             });
-            
+
             // Código para las partículas
             const canvas = document.getElementById('sparkles');
             const ctx = canvas.getContext('2d');
@@ -491,7 +536,7 @@ if ($isLoggedIn) {
                     this.x += this.vx;
                     this.y += this.vy;
 
-                    if (this.x < 0 || this.x > canvas.width || 
+                    if (this.x < 0 || this.x > canvas.width ||
                         this.y < 0 || this.y > canvas.height) {
                         this.reset();
                     }
@@ -526,6 +571,39 @@ if ($isLoggedIn) {
             initParticles();
             animate();
         });
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
+
 </html>

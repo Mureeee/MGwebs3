@@ -16,7 +16,7 @@ if ($isLoggedIn) {
     $nombreUsuario = $_SESSION['usuario_nombre'];
     $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
     $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
-    
+
     // Calcular items en el carrito
     if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
         $itemsCarrito = array_sum($_SESSION['carrito']);
@@ -25,6 +25,7 @@ if ($isLoggedIn) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -459,43 +460,43 @@ if ($isLoggedIn) {
             .process-timeline::before {
                 left: 20px;
             }
-            
+
             .timeline-item {
                 justify-content: flex-start;
                 margin-left: 40px;
             }
-            
+
             .timeline-item:nth-child(even) {
                 justify-content: flex-start;
             }
-            
+
             .timeline-content {
                 width: 100%;
             }
-            
+
             .timeline-item:nth-child(odd) .timeline-content::after,
             .timeline-item:nth-child(even) .timeline-content::after {
                 left: -50px;
             }
-            
+
             .timeline-item:nth-child(odd) .timeline-number,
             .timeline-item:nth-child(even) .timeline-number {
                 left: -60px;
             }
-            
+
             .how-it-works-header h1 {
                 font-size: 2.5rem;
             }
-            
+
             .cta-section h2 {
                 font-size: 2rem;
             }
-            
+
             .cta-buttons {
                 flex-direction: column;
                 align-items: center;
             }
-            
+
             .btn-primary,
             .btn-secondary {
                 width: 100%;
@@ -503,8 +504,47 @@ if ($isLoggedIn) {
                 margin-bottom: 1rem;
             }
         }
+
+
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -516,9 +556,9 @@ if ($isLoggedIn) {
             <nav class="navbar slide-down">
                 <a href="index.php" class="logo">
                     <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                        <path d="M12 8v8"/>
-                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                        <path d="M12 8v8" />
+                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                     </svg>
                     <span>MGwebs</span>
                 </a>
@@ -548,28 +588,31 @@ if ($isLoggedIn) {
                                 <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                             </div>
                         </div>
-                        
+
                         <!-- Icono del carrito (solo para usuarios logueados) -->
                         <a href="carrito.php" class="cart-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"/>
-                                <circle cx="20" cy="21" r="1"/>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="9" cy="21" r="1" />
+                                <circle cx="20" cy="21" r="1" />
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                             </svg>
                             <?php if ($itemsCarrito > 0): ?>
                                 <span class="cart-count"><?php echo $itemsCarrito; ?></span>
                             <?php endif; ?>
                         </a>
                     <?php else: ?>
-                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                            Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
-                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+                    <button class="btn btn-primary"
+                        onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
                 </div>
 
                 <button class="menu-button">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16m-16 6h16"/>
+                        <path d="M4 6h16M4 12h16m-16 6h16" />
                     </svg>
                 </button>
             </nav>
@@ -578,7 +621,8 @@ if ($isLoggedIn) {
             <div class="how-it-works-container">
                 <div class="how-it-works-header">
                     <h1>Cómo Funciona MGwebs</h1>
-                    <p>Crear tu sitio web profesional con MGwebs es rápido y sencillo. Sigue estos tres simples pasos para tener tu página web lista en poco tiempo, sin necesidad de conocimientos técnicos.</p>
+                    <p>Crear tu sitio web profesional con MGwebs es rápido y sencillo. Sigue estos tres simples pasos
+                        para tener tu página web lista en poco tiempo, sin necesidad de conocimientos técnicos.</p>
                 </div>
 
                 <!-- Timeline del Proceso -->
@@ -588,8 +632,12 @@ if ($isLoggedIn) {
                         <div class="timeline-content">
                             <div class="timeline-number">1</div>
                             <div class="timeline-image" style="background-image: url('imagenes/seleccion plantilla.jpg')"></div>
+                            <div class="timeline-image"
+                                style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
                             <h3>Selecciona una Plantilla</h3>
-                            <p>El primer paso es elegir la plantilla que mejor se adapte a tus necesidades. Ofrecemos una amplia variedad de diseños profesionales para diferentes sectores y tipos de negocio.</p>
+                            <p>El primer paso es elegir la plantilla que mejor se adapte a tus necesidades. Ofrecemos
+                                una amplia variedad de diseños profesionales para diferentes sectores y tipos de
+                                negocio.</p>
                             <ul class="features-list">
                                 <li><i class="fas fa-check"></i> Plantillas optimizadas para diferentes sectores</li>
                                 <li><i class="fas fa-check"></i> Diseños responsivos para todos los dispositivos</li>
@@ -605,15 +653,20 @@ if ($isLoggedIn) {
                         <div class="timeline-content">
                             <div class="timeline-number">2</div>
                             <div class="timeline-image" style="background-image: url('imagenes/personaliza tu sitio.png')"></div>
+                            <div class="timeline-image"
+                                style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
                             <h3>Personaliza tu Sitio</h3>
-                            <p>Una vez seleccionada la plantilla, completa un formulario detallado donde nos indicas tus preferencias y necesidades específicas para personalizar tu sitio web.</p>
+                            <p>Una vez seleccionada la plantilla, completa un formulario detallado donde nos indicas tus
+                                preferencias y necesidades específicas para personalizar tu sitio web.</p>
                             <ul class="features-list">
                                 <li><i class="fas fa-check"></i> Personalización de colores y tipografías</li>
                                 <li><i class="fas fa-check"></i> Integración de tu logo e imágenes</li>
                                 <li><i class="fas fa-check"></i> Configuración de secciones y páginas</li>
                                 <li><i class="fas fa-check"></i> Funcionalidades específicas para tu negocio</li>
                             </ul>
-                            <p>Nuestro equipo de diseñadores profesionales se encargará de implementar todos los cambios y personalizaciones que solicites, asegurando que tu sitio web refleje la identidad de tu marca.</p>
+                            <p>Nuestro equipo de diseñadores profesionales se encargará de implementar todos los cambios
+                                y personalizaciones que solicites, asegurando que tu sitio web refleje la identidad de
+                                tu marca.</p>
                         </div>
                     </div>
 
@@ -622,15 +675,20 @@ if ($isLoggedIn) {
                         <div class="timeline-content">
                             <div class="timeline-number">3</div>
                             <div class="timeline-image" style="background-image: url('imagenes/realiza el pago.webp')"></div>
+                            <div class="timeline-image"
+                                style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
                             <h3>Realiza el Pago</h3>
-                            <p>Finalmente, procede al pago de tu sitio web. Ofrecemos diferentes métodos de pago seguros y flexibles para tu comodidad.</p>
+                            <p>Finalmente, procede al pago de tu sitio web. Ofrecemos diferentes métodos de pago seguros
+                                y flexibles para tu comodidad.</p>
                             <ul class="features-list">
                                 <li><i class="fas fa-check"></i> Pago con tarjeta de crédito/débito</li>
                                 <li><i class="fas fa-check"></i> Transferencia bancaria</li>
                                 <li><i class="fas fa-check"></i> PayPal y otros métodos electrónicos</li>
                                 <li><i class="fas fa-check"></i> Opciones de pago fraccionado</li>
                             </ul>
-                            <p>Una vez completado el pago, nuestro equipo comenzará a trabajar en tu proyecto. Recibirás actualizaciones regulares sobre el progreso y podrás solicitar ajustes durante el proceso de desarrollo.</p>
+                            <p>Una vez completado el pago, nuestro equipo comenzará a trabajar en tu proyecto. Recibirás
+                                actualizaciones regulares sobre el progreso y podrás solicitar ajustes durante el
+                                proceso de desarrollo.</p>
                         </div>
                     </div>
 
@@ -639,15 +697,19 @@ if ($isLoggedIn) {
                         <div class="timeline-content">
                             <div class="timeline-number">4</div>
                             <div class="timeline-image" style="background-image: url('imagenes/recibe tu sitio web.jpeg')"></div>
+                            <div class="timeline-image"
+                                style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
                             <h3>Recibe tu Sitio Web</h3>
-                            <p>En un plazo de 7 a 14 días (dependiendo de la complejidad del proyecto), recibirás tu sitio web completamente funcional y listo para ser publicado.</p>
+                            <p>En un plazo de 7 a 14 días (dependiendo de la complejidad del proyecto), recibirás tu
+                                sitio web completamente funcional y listo para ser publicado.</p>
                             <ul class="features-list">
                                 <li><i class="fas fa-check"></i> Sitio web completamente funcional</li>
                                 <li><i class="fas fa-check"></i> Optimizado para SEO</li>
                                 <li><i class="fas fa-check"></i> Adaptado a todos los dispositivos</li>
                                 <li><i class="fas fa-check"></i> Soporte técnico incluido</li>
                             </ul>
-                            <p>Además, te proporcionamos acceso a un panel de control intuitivo donde podrás gestionar tu contenido, realizar actualizaciones y monitorizar el rendimiento de tu sitio web.</p>
+                            <p>Además, te proporcionamos acceso a un panel de control intuitivo donde podrás gestionar
+                                tu contenido, realizar actualizaciones y monitorizar el rendimiento de tu sitio web.</p>
                         </div>
                     </div>
                 </div>
@@ -661,33 +723,47 @@ if ($isLoggedIn) {
 
                     <div class="faq-grid">
                         <div class="faq-item">
-                            <h3><i class="fas fa-question-circle"></i> ¿Cuánto tiempo tarda en estar listo mi sitio web?</h3>
-                            <p>El tiempo de entrega varía según la complejidad del proyecto. Para sitios web básicos, el plazo es de 7 a 10 días. Para proyectos más complejos como tiendas online o marketplaces, puede tomar entre 14 y 21 días.</p>
+                            <h3><i class="fas fa-question-circle"></i> ¿Cuánto tiempo tarda en estar listo mi sitio web?
+                            </h3>
+                            <p>El tiempo de entrega varía según la complejidad del proyecto. Para sitios web básicos, el
+                                plazo es de 7 a 10 días. Para proyectos más complejos como tiendas online o
+                                marketplaces, puede tomar entre 14 y 21 días.</p>
                         </div>
 
                         <div class="faq-item">
-                            <h3><i class="fas fa-question-circle"></i> ¿Puedo solicitar cambios después de la entrega?</h3>
-                            <p>Sí, ofrecemos un período de revisión de 15 días después de la entrega, durante el cual puedes solicitar ajustes sin costo adicional. Después de este período, los cambios se facturarán según su complejidad.</p>
+                            <h3><i class="fas fa-question-circle"></i> ¿Puedo solicitar cambios después de la entrega?
+                            </h3>
+                            <p>Sí, ofrecemos un período de revisión de 15 días después de la entrega, durante el cual
+                                puedes solicitar ajustes sin costo adicional. Después de este período, los cambios se
+                                facturarán según su complejidad.</p>
                         </div>
 
                         <div class="faq-item">
                             <h3><i class="fas fa-question-circle"></i> ¿Incluye hosting y dominio?</h3>
-                            <p>Todos nuestros planes incluyen hosting por un año. El dominio puede adquirirse por separado o transferirse si ya posees uno. También ofrecemos paquetes que incluyen dominio gratuito por el primer año.</p>
+                            <p>Todos nuestros planes incluyen hosting por un año. El dominio puede adquirirse por
+                                separado o transferirse si ya posees uno. También ofrecemos paquetes que incluyen
+                                dominio gratuito por el primer año.</p>
                         </div>
 
                         <div class="faq-item">
                             <h3><i class="fas fa-question-circle"></i> ¿Qué ocurre si no me gusta el diseño final?</h3>
-                            <p>Trabajamos en estrecha colaboración contigo durante todo el proceso para asegurar tu satisfacción. Si no estás conforme con el resultado, realizaremos los ajustes necesarios hasta que el diseño cumpla con tus expectativas.</p>
+                            <p>Trabajamos en estrecha colaboración contigo durante todo el proceso para asegurar tu
+                                satisfacción. Si no estás conforme con el resultado, realizaremos los ajustes necesarios
+                                hasta que el diseño cumpla con tus expectativas.</p>
                         </div>
 
                         <div class="faq-item">
                             <h3><i class="fas fa-question-circle"></i> ¿Ofrecen mantenimiento para el sitio web?</h3>
-                            <p>Sí, disponemos de planes de mantenimiento mensuales que incluyen actualizaciones de contenido, copias de seguridad, monitorización de seguridad y soporte técnico prioritario.</p>
+                            <p>Sí, disponemos de planes de mantenimiento mensuales que incluyen actualizaciones de
+                                contenido, copias de seguridad, monitorización de seguridad y soporte técnico
+                                prioritario.</p>
                         </div>
 
                         <div class="faq-item">
                             <h3><i class="fas fa-question-circle"></i> ¿Puedo gestionar yo mismo el contenido?</h3>
-                            <p>Absolutamente. Te proporcionamos acceso a un panel de administración intuitivo donde podrás actualizar textos, imágenes y otros contenidos de tu sitio web sin necesidad de conocimientos técnicos.</p>
+                            <p>Absolutamente. Te proporcionamos acceso a un panel de administración intuitivo donde
+                                podrás actualizar textos, imágenes y otros contenidos de tu sitio web sin necesidad de
+                                conocimientos técnicos.</p>
                         </div>
                     </div>
                 </div>
@@ -695,7 +771,8 @@ if ($isLoggedIn) {
                 <!-- Sección de CTA -->
                 <div class="cta-section">
                     <h2>¿Listo para crear tu sitio web?</h2>
-                    <p>Comienza hoy mismo a construir tu presencia online con MGwebs. Sigue nuestro sencillo proceso y tendrás tu sitio web profesional en poco tiempo.</p>
+                    <p>Comienza hoy mismo a construir tu presencia online con MGwebs. Sigue nuestro sencillo proceso y
+                        tendrás tu sitio web profesional en poco tiempo.</p>
                     <div class="cta-buttons">
                         <a href="crearpaginaperso.php" class="btn-primary">Comenzar Ahora</a>
                         <a href="productos.php" class="btn-secondary">Ver Planes y Precios</a>
@@ -756,46 +833,46 @@ if ($isLoggedIn) {
 
     <!-- Scripts -->
     <script src="js/menu.js"></script>
-    
+
     <!-- Script para el menú de usuario y carrito -->
     <script>
         // Asegurarse de que el menú de usuario funcione correctamente
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const userMenu = document.querySelector('.user-menu');
             const dropdownMenu = document.querySelector('.dropdown-menu');
-            
+
             if (userMenu) {
                 // Alternar el menú desplegable al hacer clic en el avatar
-                userMenu.addEventListener('click', function(e) {
+                userMenu.addEventListener('click', function (e) {
                     e.stopPropagation();
                     dropdownMenu.classList.toggle('active');
                 });
-                
+
                 // Cerrar el menú al hacer clic fuera de él
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function () {
                     if (dropdownMenu.classList.contains('active')) {
                         dropdownMenu.classList.remove('active');
                     }
                 });
-                
+
                 // Evitar que el menú se cierre al hacer clic dentro de él
-                dropdownMenu.addEventListener('click', function(e) {
+                dropdownMenu.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             }
-            
+
             // Menú móvil
             const menuButton = document.querySelector('.menu-button');
             const navLinks = document.querySelector('.nav-links');
-            
+
             if (menuButton) {
-                menuButton.addEventListener('click', function() {
+                menuButton.addEventListener('click', function () {
                     navLinks.classList.toggle('active');
                 });
             }
         });
     </script>
-    
+
     <!-- Código de las partículas -->
     <script>
         // Código de las partículas
@@ -826,7 +903,7 @@ if ($isLoggedIn) {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -860,6 +937,40 @@ if ($isLoggedIn) {
         resizeCanvas();
         initParticles();
         animate();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 </body>
+<button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+</button>
+
 </html>

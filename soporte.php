@@ -16,7 +16,7 @@ if ($isLoggedIn) {
     $nombreUsuario = $_SESSION['usuario_nombre'];
     $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
     $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
-    
+
     // Calcular items en el carrito
     if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
         $itemsCarrito = array_sum($_SESSION['carrito']);
@@ -25,6 +25,7 @@ if ($isLoggedIn) {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -382,17 +383,56 @@ if ($isLoggedIn) {
             .support-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .form-row {
                 grid-template-columns: 1fr;
             }
-            
+
             .support-header h1 {
                 font-size: 2rem;
             }
         }
+
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
     </style>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -404,9 +444,9 @@ if ($isLoggedIn) {
             <nav class="navbar slide-down">
                 <a href="index.php" class="logo">
                     <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                        <path d="M12 8v8"/>
-                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                        <path d="M12 8v8" />
+                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                     </svg>
                     <span>MGwebs</span>
                 </a>
@@ -436,28 +476,31 @@ if ($isLoggedIn) {
                                 <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
                             </div>
                         </div>
-                        
+
                         <!-- Icono del carrito (solo para usuarios logueados) -->
                         <a href="carrito.php" class="cart-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="9" cy="21" r="1"/>
-                                <circle cx="20" cy="21" r="1"/>
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <circle cx="9" cy="21" r="1" />
+                                <circle cx="20" cy="21" r="1" />
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                             </svg>
                             <?php if ($itemsCarrito > 0): ?>
                                 <span class="cart-count"><?php echo $itemsCarrito; ?></span>
                             <?php endif; ?>
                         </a>
                     <?php else: ?>
-                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                        <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                            Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
-                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+                    <button class="btn btn-primary"
+                        onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
                 </div>
 
                 <button class="menu-button">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16m-16 6h16"/>
+                        <path d="M4 6h16M4 12h16m-16 6h16" />
                     </svg>
                 </button>
             </nav>
@@ -466,7 +509,8 @@ if ($isLoggedIn) {
             <div class="support-container">
                 <div class="support-header">
                     <h1>Centro de Soporte</h1>
-                    <p>Estamos aquí para ayudarte con cualquier duda o problema que tengas con nuestros servicios. Encuentra respuestas rápidas o contacta con nuestro equipo de soporte.</p>
+                    <p>Estamos aquí para ayudarte con cualquier duda o problema que tengas con nuestros servicios.
+                        Encuentra respuestas rápidas o contacta con nuestro equipo de soporte.</p>
                 </div>
 
                 <!-- Tarjetas de Soporte -->
@@ -505,19 +549,20 @@ if ($isLoggedIn) {
                 <!-- Sección de Preguntas Frecuentes -->
                 <div class="faq-section">
                     <h2>Preguntas Frecuentes</h2>
-                    
+
                     <div class="faq-item">
                         <div class="faq-question">
                             ¿Cómo puedo crear mi primera página web con MGwebs?
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            <p>Crear tu primera página web con MGwebs es muy sencillo. Solo tienes que seguir estos pasos:</p>
+                            <p>Crear tu primera página web con MGwebs es muy sencillo. Solo tienes que seguir estos
+                                pasos:</p>
                             <p>1. Regístrate en nuestra plataforma o inicia sesión si ya tienes una cuenta.<br>
-                               2. Haz clic en el botón "Comenzar" en la página principal.<br>
-                               3. Selecciona una plantilla que se adapte a tus necesidades.<br>
-                               4. Personaliza tu página con tu contenido, imágenes y colores.<br>
-                               5. Publica tu página cuando estés satisfecho con el resultado.</p>
+                                2. Haz clic en el botón "Comenzar" en la página principal.<br>
+                                3. Selecciona una plantilla que se adapte a tus necesidades.<br>
+                                4. Personaliza tu página con tu contenido, imágenes y colores.<br>
+                                5. Publica tu página cuando estés satisfecho con el resultado.</p>
                         </div>
                     </div>
 
@@ -528,9 +573,12 @@ if ($isLoggedIn) {
                         </div>
                         <div class="faq-answer">
                             <p>MGwebs ofrece diferentes planes adaptados a las necesidades de cada cliente:</p>
-                            <p>- <strong>Plan Básico:</strong> Ideal para pequeños negocios o proyectos personales. Incluye hosting, dominio y plantillas básicas.<br>
-                               - <strong>Plan Profesional:</strong> Para empresas en crecimiento. Incluye más funcionalidades, SEO básico y soporte prioritario.<br>
-                               - <strong>Plan Premium:</strong> Para empresas establecidas. Incluye todas las funcionalidades, SEO avanzado, soporte 24/7 y más.</p>
+                            <p>- <strong>Plan Básico:</strong> Ideal para pequeños negocios o proyectos personales.
+                                Incluye hosting, dominio y plantillas básicas.<br>
+                                - <strong>Plan Profesional:</strong> Para empresas en crecimiento. Incluye más
+                                funcionalidades, SEO básico y soporte prioritario.<br>
+                                - <strong>Plan Premium:</strong> Para empresas establecidas. Incluye todas las
+                                funcionalidades, SEO avanzado, soporte 24/7 y más.</p>
                             <p>Puedes consultar los precios detallados en nuestra sección de productos.</p>
                         </div>
                     </div>
@@ -541,8 +589,11 @@ if ($isLoggedIn) {
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            <p>No, no necesitas conocimientos técnicos para usar MGwebs. Nuestra plataforma está diseñada para ser intuitiva y fácil de usar, incluso para principiantes.</p>
-                            <p>Ofrecemos un editor visual que te permite arrastrar y soltar elementos, cambiar colores, fuentes y más sin necesidad de escribir código. Si tienes conocimientos de HTML, CSS o JavaScript, también puedes utilizarlos para personalizar aún más tu página.</p>
+                            <p>No, no necesitas conocimientos técnicos para usar MGwebs. Nuestra plataforma está
+                                diseñada para ser intuitiva y fácil de usar, incluso para principiantes.</p>
+                            <p>Ofrecemos un editor visual que te permite arrastrar y soltar elementos, cambiar colores,
+                                fuentes y más sin necesidad de escribir código. Si tienes conocimientos de HTML, CSS o
+                                JavaScript, también puedes utilizarlos para personalizar aún más tu página.</p>
                         </div>
                     </div>
 
@@ -552,12 +603,13 @@ if ($isLoggedIn) {
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            <p>Puedes modificar tu página web en cualquier momento, incluso después de publicarla. Para hacerlo:</p>
+                            <p>Puedes modificar tu página web en cualquier momento, incluso después de publicarla. Para
+                                hacerlo:</p>
                             <p>1. Inicia sesión en tu cuenta de MGwebs.<br>
-                               2. Ve a tu panel de control.<br>
-                               3. Selecciona la página que deseas modificar.<br>
-                               4. Realiza los cambios necesarios en el editor.<br>
-                               5. Guarda los cambios y vuelve a publicar la página.</p>
+                                2. Ve a tu panel de control.<br>
+                                3. Selecciona la página que deseas modificar.<br>
+                                4. Realiza los cambios necesarios en el editor.<br>
+                                5. Guarda los cambios y vuelve a publicar la página.</p>
                             <p>Los cambios se reflejarán inmediatamente en tu sitio web publicado.</p>
                         </div>
                     </div>
@@ -568,14 +620,18 @@ if ($isLoggedIn) {
                             <i class="fas fa-chevron-down"></i>
                         </div>
                         <div class="faq-answer">
-                            <p>Sí, MGwebs ofrece dominio y hosting incluidos en todos nuestros planes. Al crear tu página web con nosotros, no tendrás que preocuparte por contratar estos servicios por separado.</p>
-                            <p>También ofrecemos la posibilidad de usar un dominio que ya poseas, si lo prefieres. Nuestro equipo de soporte puede ayudarte a configurar tu dominio existente con tu nueva página web de MGwebs.</p>
+                            <p>Sí, MGwebs ofrece dominio y hosting incluidos en todos nuestros planes. Al crear tu
+                                página web con nosotros, no tendrás que preocuparte por contratar estos servicios por
+                                separado.</p>
+                            <p>También ofrecemos la posibilidad de usar un dominio que ya poseas, si lo prefieres.
+                                Nuestro equipo de soporte puede ayudarte a configurar tu dominio existente con tu nueva
+                                página web de MGwebs.</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Formulario de Contacto -->
-                
+
     </main>
 
     <!-- Footer -->
@@ -629,46 +685,46 @@ if ($isLoggedIn) {
 
     <!-- Scripts -->
     <script src="js/menu.js"></script>
-    
+
     <!-- Script para el menú de usuario y carrito -->
     <script>
         // Asegurarse de que el menú de usuario funcione correctamente
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const userMenu = document.querySelector('.user-menu');
             const dropdownMenu = document.querySelector('.dropdown-menu');
-            
+
             if (userMenu) {
                 // Alternar el menú desplegable al hacer clic en el avatar
-                userMenu.addEventListener('click', function(e) {
+                userMenu.addEventListener('click', function (e) {
                     e.stopPropagation();
                     dropdownMenu.classList.toggle('active');
                 });
-                
+
                 // Cerrar el menú al hacer clic fuera de él
-                document.addEventListener('click', function() {
+                document.addEventListener('click', function () {
                     if (dropdownMenu.classList.contains('active')) {
                         dropdownMenu.classList.remove('active');
                     }
                 });
-                
+
                 // Evitar que el menú se cierre al hacer clic dentro de él
-                dropdownMenu.addEventListener('click', function(e) {
+                dropdownMenu.addEventListener('click', function (e) {
                     e.stopPropagation();
                 });
             }
-            
+
             // Menú móvil
             const menuButton = document.querySelector('.menu-button');
             const navLinks = document.querySelector('.nav-links');
-            
+
             if (menuButton) {
-                menuButton.addEventListener('click', function() {
+                menuButton.addEventListener('click', function () {
                     navLinks.classList.toggle('active');
                 });
             }
         });
     </script>
-    
+
     <!-- Código de las partículas -->
     <script>
         // Código de las partículas
@@ -699,7 +755,7 @@ if ($isLoggedIn) {
                 this.x += this.vx;
                 this.y += this.vy;
 
-                if (this.x < 0 || this.x > canvas.width || 
+                if (this.x < 0 || this.x > canvas.width ||
                     this.y < 0 || this.y > canvas.height) {
                     this.reset();
                 }
@@ -743,6 +799,40 @@ if ($isLoggedIn) {
                 faqItem.classList.toggle('active');
             });
         });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
+
 </html>

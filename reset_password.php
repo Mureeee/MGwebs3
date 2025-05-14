@@ -16,7 +16,7 @@ $nombreUsuario = '';
 try {
     $database = new Database();
     $conn = $database->getConnection();
-    
+
     // Verificar si el token existe y no ha expirado
     $query = "SELECT r.id_usuario, r.expiracion, r.creado, u.nombre 
               FROM recuperacion_password r 
@@ -25,7 +25,7 @@ try {
     $stmt = $conn->prepare($query);
     $stmt->execute([$token]);
     $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-    
+
     if ($resultado) {
         $tokenValido = true;
         $nombreUsuario = $resultado['nombre'];
@@ -36,7 +36,7 @@ try {
                   WHERE r.token = ? AND r.expiracion <= NOW()";
         $stmt = $conn->prepare($query);
         $stmt->execute([$token]);
-        
+
         if ($stmt->fetch()) {
             $tokenExpirado = true;
         }
@@ -49,6 +49,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -60,25 +61,67 @@ try {
             border-radius: 5px;
             margin: 10px 0;
         }
+
         .success {
             background-color: rgba(0, 255, 0, 0.2);
             color: #00ff00;
         }
+
         .error {
             background-color: rgba(255, 0, 0, 0.2);
             color: #ff0000;
         }
+
         .info {
             background-color: rgba(0, 0, 255, 0.2);
             color: #0000ff;
         }
+
         .password-requirements {
             font-size: 0.8rem;
             margin-top: 5px;
             color: #ddd;
         }
+
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -88,30 +131,31 @@ try {
         <nav class="navbar slide-down">
             <a href="index.php" class="logo">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                    <path d="M12 8v8"/>
-                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                    <path d="M12 8v8" />
+                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                 </svg>
                 <span>MGwebs</span>
             </a>
 
             <div class="nav-links">
-                    <a href="caracteristicas.php">Características</a>
-                    <a href="como_funciona.php">Cómo Funciona</a>
-                    <a href="productos.php">Productos</a>
-                    <a href="soporte.php" class="active">Soporte</a>
-                    <a href="contactanos.php">Contáctanos</a>
-                </div>
+                <a href="caracteristicas.php">Características</a>
+                <a href="como_funciona.php">Cómo Funciona</a>
+                <a href="productos.php">Productos</a>
+                <a href="soporte.php" class="active">Soporte</a>
+                <a href="contactanos.php">Contáctanos</a>
+            </div>
 
             <div class="auth-buttons">
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                    Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                 <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
             </div>
 
             <button class="menu-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16m-16 6h16"/>
+                    <path d="M4 6h16M4 12h16m-16 6h16" />
                 </svg>
             </button>
         </nav>
@@ -119,7 +163,7 @@ try {
         <div class="login-section">
             <div class="login-container">
                 <h1>Restablecer Contraseña</h1>
-                
+
                 <?php if ($tokenExpirado): ?>
                     <div class="message error">
                         <p>El enlace ha expirado. Por favor, solicita un nuevo enlace de recuperación.</p>
@@ -127,31 +171,34 @@ try {
                     </div>
                 <?php elseif (!$tokenValido): ?>
                     <div class="message error">
-                        <p>El enlace no es válido. Por favor, verifica que hayas copiado correctamente la URL del correo.</p>
+                        <p>El enlace no es válido. Por favor, verifica que hayas copiado correctamente la URL del correo.
+                        </p>
                         <p><a href="recuperar_password.html" style="color: #2575fc;">Solicitar nuevo enlace</a></p>
                     </div>
                 <?php else: ?>
-                    <p>Hola <?php echo htmlspecialchars($nombreUsuario); ?>, establece tu nueva contraseña a continuación:</p>
-                    
+                    <p>Hola <?php echo htmlspecialchars($nombreUsuario); ?>, establece tu nueva contraseña a continuación:
+                    </p>
+
                     <form id="resetForm" action="procesar_reset.php" method="POST">
                         <input type="hidden" name="token" value="<?php echo htmlspecialchars($token); ?>">
-                        
+
                         <div class="form-group">
                             <label for="password">Nueva Contraseña:</label>
                             <input type="password" id="password" name="password" required>
-                            <p class="password-requirements">La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una minúscula y un número.</p>
+                            <p class="password-requirements">La contraseña debe tener al menos 8 caracteres, incluir una
+                                letra mayúscula, una minúscula y un número.</p>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="confirm_password">Confirmar Contraseña:</label>
                             <input type="password" id="confirm_password" name="confirm_password" required>
                         </div>
-                        
+
                         <button type="submit" class="btn btn-primary">Cambiar Contraseña</button>
                         <p class="message" id="resetMessage"></p>
                     </form>
                 <?php endif; ?>
-                
+
                 <p class="register-link">¿Recordaste tu contraseña? <a href="iniciar_sesion.html">Iniciar sesión</a></p>
             </div>
         </div>
@@ -207,60 +254,94 @@ try {
     <script src="js/menu.js"></script>
     <script>
         <?php if ($tokenValido): ?>
-        document.getElementById('resetForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm_password').value;
-            const messageElement = document.getElementById('resetMessage');
-            
-            // Validar contraseña
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
-            
-            if (!passwordRegex.test(password)) {
-                messageElement.textContent = 'La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una minúscula y un número.';
-                messageElement.className = 'message error';
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                messageElement.textContent = 'Las contraseñas no coinciden.';
-                messageElement.className = 'message error';
-                return;
-            }
-            
-            // Mostrar mensaje de carga
-            messageElement.textContent = 'Procesando...';
-            messageElement.className = 'message info';
-            
-            const formData = new FormData(this);
-            
-            fetch('procesar_reset.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    messageElement.textContent = data.message;
-                    messageElement.className = 'message success';
-                    
-                    // Redirigir después de 3 segundos
-                    setTimeout(function() {
-                        window.location.href = 'iniciar_sesion.html';
-                    }, 3000);
-                } else {
-                    messageElement.textContent = data.message;
+            document.getElementById('resetForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm_password').value;
+                const messageElement = document.getElementById('resetMessage');
+
+                // Validar contraseña
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+
+                if (!passwordRegex.test(password)) {
+                    messageElement.textContent = 'La contraseña debe tener al menos 8 caracteres, incluir una letra mayúscula, una minúscula y un número.';
                     messageElement.className = 'message error';
+                    return;
                 }
-            })
-            .catch(error => {
-                messageElement.textContent = 'Error al conectar con el servidor';
-                messageElement.className = 'message error';
+
+                if (password !== confirmPassword) {
+                    messageElement.textContent = 'Las contraseñas no coinciden.';
+                    messageElement.className = 'message error';
+                    return;
+                }
+
+                // Mostrar mensaje de carga
+                messageElement.textContent = 'Procesando...';
+                messageElement.className = 'message info';
+
+                const formData = new FormData(this);
+
+                fetch('procesar_reset.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            messageElement.textContent = data.message;
+                            messageElement.className = 'message success';
+
+                            // Redirigir después de 3 segundos
+                            setTimeout(function () {
+                                window.location.href = 'iniciar_sesion.html';
+                            }, 3000);
+                        } else {
+                            messageElement.textContent = data.message;
+                            messageElement.className = 'message error';
+                        }
+                    })
+                    .catch(error => {
+                        messageElement.textContent = 'Error al conectar con el servidor';
+                        messageElement.className = 'message error';
+                    });
+            });
+        <?php endif; ?>
+        // Control del botón para volver arriba
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
         });
-        <?php endif; ?>
     </script>
+    <!-- HTML del botón (añadir justo antes de cerrar el </body>) -->
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
-</html>
 
+</html>

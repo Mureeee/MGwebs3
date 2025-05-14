@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
     <main>
         <!-- Particles Canvas -->
@@ -16,9 +18,9 @@
         <nav class="navbar slide-down">
             <a href="index.php" class="logo">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                    <path d="M12 8v8"/>
-                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
+                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
+                    <path d="M12 8v8" />
+                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
                 </svg>
                 <span>MGwebs</span>
             </a>
@@ -32,14 +34,15 @@
             </div>
 
             <div class="auth-buttons">
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                    Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                 <button class="btn btn-primary" onclick="window.location.href='productos.php'">Comenzar</button>
             </div>
 
             <button class="menu-button">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16m-16 6h16"/>
+                    <path d="M4 6h16M4 12h16m-16 6h16" />
                 </svg>
             </button>
         </nav>
@@ -105,24 +108,62 @@
         </div>
     </footer>
 
+    <style>
+        #scrollToTopBtn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa;
+            /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
+
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
+    </style>
     <!-- Scripts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="js/particles.js"></script>
     <script src="js/menu.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#recoveryForm').on('submit', function(e) {
+        $(document).ready(function () {
+            $('#recoveryForm').on('submit', function (e) {
                 e.preventDefault();
-                
+
                 const messageElement = $('#recoveryMessage');
                 messageElement.text('Procesando solicitud...').removeClass('error success').addClass('info');
-                
+
                 $.ajax({
                     url: 'procesar_recuperacion.php',
                     method: 'POST',
                     data: $(this).serialize(),
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             messageElement.removeClass('error info').addClass('success');
                             // Crear el mensaje con el enlace
@@ -133,14 +174,47 @@
                             messageElement.removeClass('success info').addClass('error').text(response.message);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         messageElement.removeClass('success info').addClass('error')
                             .text('Error al procesar la solicitud. Por favor, intenta más tarde.');
                     }
                 });
             });
         });
-    </script>
-</body>
-</html>
+        // Control del botón para volver arriba
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
 
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+
+            // Verificar al cargar la página
+            checkScrollPosition();
+
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+</body>
+
+</html>

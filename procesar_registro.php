@@ -51,5 +51,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // Eliminamos el código de inserción del administrador que estaba causando problemas
-// Si necesitas crear un administrador, hazlo en un script separado o con una condición específica
 ?>
