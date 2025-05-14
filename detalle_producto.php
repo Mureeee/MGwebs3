@@ -835,7 +835,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
 
             // Función para verificar la posición de scroll y mostrar/ocultar el botón
             function checkScrollPosition() {
-                if (window.scrollY > 300) {
+                if (window.scrollY > 200) {
                     scrollBtn.classList.add('visible');
                 } else {
                     scrollBtn.classList.remove('visible');
@@ -864,8 +864,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
         </svg>
     </button>
 </body>
-</html>
-
-
-
 </html>

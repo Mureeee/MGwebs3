@@ -728,6 +728,22 @@ class Producto {
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
-
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const scrollBtn = document.getElementById('scrollToTopBtn');
+        function checkScrollPosition() {
+            if (window.scrollY > 200) {
+                scrollBtn.classList.add('visible');
+            } else {
+                scrollBtn.classList.remove('visible');
+            }
+        }
+        checkScrollPosition();
+        window.addEventListener('scroll', checkScrollPosition);
+        scrollBtn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+    </script>
 </body>
 </html>
