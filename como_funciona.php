@@ -587,7 +587,7 @@ if ($isLoggedIn) {
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">1</div>
-                            <div class="timeline-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="timeline-image" style="background-image: url('imagenes/seleccion plantilla.jpg')"></div>
                             <h3>Selecciona una Plantilla</h3>
                             <p>El primer paso es elegir la plantilla que mejor se adapte a tus necesidades. Ofrecemos una amplia variedad de diseños profesionales para diferentes sectores y tipos de negocio.</p>
                             <ul class="features-list">
@@ -604,7 +604,7 @@ if ($isLoggedIn) {
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">2</div>
-                            <div class="timeline-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="timeline-image" style="background-image: url('imagenes/personaliza tu sitio.png')"></div>
                             <h3>Personaliza tu Sitio</h3>
                             <p>Una vez seleccionada la plantilla, completa un formulario detallado donde nos indicas tus preferencias y necesidades específicas para personalizar tu sitio web.</p>
                             <ul class="features-list">
@@ -621,7 +621,7 @@ if ($isLoggedIn) {
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">3</div>
-                            <div class="timeline-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="timeline-image" style="background-image: url('imagenes/realiza el pago.webp')"></div>
                             <h3>Realiza el Pago</h3>
                             <p>Finalmente, procede al pago de tu sitio web. Ofrecemos diferentes métodos de pago seguros y flexibles para tu comodidad.</p>
                             <ul class="features-list">
@@ -638,7 +638,7 @@ if ($isLoggedIn) {
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">4</div>
-                            <div class="timeline-image" style="background-image: url('/placeholder.svg?height=400&width=600')"></div>
+                            <div class="timeline-image" style="background-image: url('imagenes/recibe tu sitio web.jpeg')"></div>
                             <h3>Recibe tu Sitio Web</h3>
                             <p>En un plazo de 7 a 14 días (dependiendo de la complejidad del proyecto), recibirás tu sitio web completamente funcional y listo para ser publicado.</p>
                             <ul class="features-list">
