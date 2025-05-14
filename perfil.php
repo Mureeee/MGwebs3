@@ -306,7 +306,7 @@ $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="index.php">Inicio</a></li>
                     <li><a href="segunda_mano.php">Segunda Mano</a></li>
                     <li><a href="soporte.html">Soporte</a></li>
                     <li><a href="contacto.html">Contacto</a></li>

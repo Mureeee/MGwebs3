@@ -195,7 +195,7 @@ try {
     echo '<div class="step">
             <h2>Instalación Completada</h2>
             <p>Todas las tablas necesarias han sido creadas correctamente. Ahora puede utilizar el sistema de pedidos de páginas web personalizadas.</p>
-            <a href="index.html" class="btn">Volver al Inicio</a>
+            <a href="index.php" class="btn">Volver al Inicio</a>
           </div>';
     
 } catch(PDOException $e) {
