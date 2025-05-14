@@ -282,7 +282,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
             background: rgba(255, 255, 255, 0.05);
             padding: 1.5rem;
             border-radius: 8px;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #6a11cb;
         }
 
         .resena-cabecera {
@@ -383,11 +383,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
 
         .form-grupo textarea:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: #6a11cb;
         }
 
         .btn-enviar-resena {
-            background: linear-gradient(90deg, #4CAF50, #45a049);
+            background: linear-gradient(90deg, #6a11cb, #a78bfa);
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
@@ -399,6 +399,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
 
         .btn-enviar-resena:hover {
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(106, 17, 203, 0.2);
         }
 
         .mensaje-resena {

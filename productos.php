@@ -419,6 +419,18 @@ class Producto {
                         <button class="btn btn-ghost" style="padding: 15px 30px; font-size: 1.2rem;" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
                         <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
                     <?php endif; ?>
+
+                    <!-- Icono del carrito: SIEMPRE visible -->
+                    <a href="carrito.php" class="cart-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1"/>
+                            <circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                        <?php if (!empty($_SESSION['carrito'])): ?>
+                            <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
+                        <?php endif; ?>
+                    </a>
                     <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
                 </div>
 
@@ -665,68 +677,57 @@ class Producto {
             }
         });
 
-<<<<<<< HEAD
-        window.onscroll = function() {
-            const button = document.getElementById("scrollToTop");
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-=======
         // Mostrar el botón cuando se desplaza hacia abajo
         window.onscroll = function() {
             const button = document.getElementById("scrollToTop");
             if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
->>>>>>> US26_rediseñodelindex
                 button.style.display = "block";
             } else {
                 button.style.display = "none";
             }
         };
 
-<<<<<<< HEAD
-        document.getElementById("scrollToTop").onclick = function() {
-            document.body.scrollTop = 0; // Para Safari
-            document.documentElement.scrollTop = 0; // Para Chrome, Firefox, IE y Opera
-=======
         // Función para hacer scroll hacia arriba
         document.getElementById("scrollToTop").onclick = function() {
             window.scrollTo({top: 0, behavior: 'smooth'});
->>>>>>> US26_rediseñodelindex
         };
-// Control del botón para volver arriba
-document.addEventListener('DOMContentLoaded', function() {
-  const scrollBtn = document.getElementById('scrollToTopBtn');
-  
-  // Función para verificar la posición de scroll y mostrar/ocultar el botón
-  function checkScrollPosition() {
-    if (window.scrollY > 300) {
-      scrollBtn.classList.add('visible');
-    } else {
-      scrollBtn.classList.remove('visible');
-    }
-  }
-  
-  // Verificar al cargar la página
-  checkScrollPosition();
-  
-  // Verificar al hacer scroll
-  window.addEventListener('scroll', checkScrollPosition);
-  
-  // Acción al hacer clic en el botón
-  scrollBtn.addEventListener('click', function() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-});
+
+        // Control del botón para volver arriba
+        document.addEventListener('DOMContentLoaded', function() {
+            const scrollBtn = document.getElementById('scrollToTopBtn');
+            
+            // Función para verificar la posición de scroll y mostrar/ocultar el botón
+            function checkScrollPosition() {
+                if (window.scrollY > 300) {
+                    scrollBtn.classList.add('visible');
+                } else {
+                    scrollBtn.classList.remove('visible');
+                }
+            }
+            
+            // Verificar al cargar la página
+            checkScrollPosition();
+            
+            // Verificar al hacer scroll
+            window.addEventListener('scroll', checkScrollPosition);
+            
+            // Acción al hacer clic en el botón
+            scrollBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
     </script>
 
     <!-- Botón para volver arriba -->
-<button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-       stroke-linecap="round" stroke-linejoin="round">
-    <polyline points="18 15 12 9 6 15"></polyline>
-  </svg>
-</button>
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 
 </body>
 </html>
