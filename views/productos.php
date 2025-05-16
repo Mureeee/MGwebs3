@@ -1,113 +1,10 @@
-<?php
-require_once 'config/database.php';
-session_start();
-$isLoggedIn = isset($_SESSION['usuario_id']);
-$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
-
-class Producto {
-    private $conn;
-
-    public function __construct() {
-        try {
-            $database = new Database();
-            $this->conn = $database->getConnection();
-        } catch (PDOException $e) {
-            die("Error de conexión: " . $e->getMessage());
-        }
-    }
-
-    public function getProductos($filtros = []) {
-        try {
-            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria, c.id_categoria, p.imagenes 
-                     FROM producto p 
-                     LEFT JOIN categoria c ON p.categoria_id = c.id_categoria";
-            
-            $condiciones = [];
-            $params = [];
-            
-            // Filtrar por nombre
-            if (!empty($filtros['nombre'])) {
-                $condiciones[] = "p.nombre_producto LIKE ?";
-                $params[] = '%' . $filtros['nombre'] . '%';
-            }
-            
-            // Filtrar por categoría
-            if (!empty($filtros['categoria'])) {
-                $condiciones[] = "c.id_categoria = ?";
-                $params[] = $filtros['categoria'];
-            }
-            
-            // Filtrar por precio mínimo
-            if (isset($filtros['precio_min']) && $filtros['precio_min'] !== '') {
-                $condiciones[] = "p.precio >= ?";
-                $params[] = $filtros['precio_min'];
-            }
-            
-            // Filtrar por precio máximo
-            if (isset($filtros['precio_max']) && $filtros['precio_max'] !== '') {
-                $condiciones[] = "p.precio <= ?";
-                $params[] = $filtros['precio_max'];
-            }
-            
-            // Añadir condiciones a la consulta
-            if (!empty($condiciones)) {
-                $query .= " WHERE " . implode(" AND ", $condiciones);
-            }
-            
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute($params);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            die("Error en la consulta: " . $e->getMessage());
-        }
-    }
-
-    public function getProductoById($id) {
-        try {
-            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria 
-                     FROM producto p 
-                     LEFT JOIN categoria c ON p.categoria_id = c.id_categoria 
-                     WHERE p.id_producto = ?";
-            $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(1, $id, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            die("Error al obtener el producto: " . $e->getMessage());
-        }
-    }
-    
-    public function getCategorias() {
-        try {
-            $query = "SELECT id_categoria, nombre_categoria FROM categoria ORDER BY nombre_categoria";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            die("Error al obtener las categorías: " . $e->getMessage());
-        }
-    }
-    
-    public function getPrecioMinMax() {
-        try {
-            $query = "SELECT MIN(precio) as min_precio, MAX(precio) as max_precio FROM producto";
-            $stmt = $this->conn->prepare($query);
-            $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            die("Error al obtener los precios: " . $e->getMessage());
-        }
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGwebs - Productos</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Añadir más espacio entre el navbar y la sección de productos */
@@ -381,7 +278,7 @@ class Producto {
         <div class="content-wrapper">
             <!-- Navbar -->
             <nav class="navbar slide-down">
-                <a href="index.php" class="logo">
+                <a href="../index.php" class="logo">
                     <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
                         <path d="M12 8v8"/>
@@ -391,11 +288,11 @@ class Producto {
                 </a>
 
                 <div class="nav-links">
-                    <a href="caracteristicas.php">Características</a>
-                    <a href="como_funciona.php">Cómo Funciona</a>
-                    <a href="productos.php" class="active">Productos</a>
-                    <a href="soporte.php">Soporte</a>
-                    <a href="contactanos.php">Contáctanos</a>
+                    <a href="../controllers/caracteristicas.php">Características</a>
+                    <a href="../controllers/como_funciona.php">Cómo Funciona</a>
+                    <a href="../controllers/productos.php" class="active">Productos</a>
+                    <a href="../controllers/soporte.php">Soporte</a>
+                    <a href="../controllers/contactanos.php">Contáctanos</a>
                 </div>
 
                 <div class="auth-buttons">
@@ -421,7 +318,7 @@ class Producto {
                     <?php endif; ?>
 
                     <!-- Icono del carrito: SIEMPRE visible -->
-                    <a href="carrito.php" class="cart-icon">
+                    <a href="../controllers/carrito.php" class="cart-icon">
                         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1"/>
                             <circle cx="20" cy="21" r="1"/>
@@ -431,7 +328,7 @@ class Producto {
                             <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
                         <?php endif; ?>
                     </a>
-                    <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+                    <button class="btn btn-primary" onclick="window.location.href='../controllers/crearpaginaperso.php'">Comenzar</button>
                 </div>
 
                 <button class="menu-button">
@@ -443,37 +340,6 @@ class Producto {
 
             <!-- Contenido de Productos -->
             <div class="products-section">
-                <?php
-                $producto = new Producto();
-                
-                // Obtener categorías para el filtro
-                $categorias = $producto->getCategorias();
-                
-                // Obtener rango de precios
-                $precioRango = $producto->getPrecioMinMax();
-                $precioMin = $precioRango['min_precio'] ?? 0;
-                $precioMax = $precioRango['max_precio'] ?? 1000;
-                
-                // Procesar filtros
-                $filtros = [];
-                if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                    if (!empty($_GET['nombre'])) {
-                        $filtros['nombre'] = $_GET['nombre'];
-                    }
-                    if (!empty($_GET['categoria'])) {
-                        $filtros['categoria'] = $_GET['categoria'];
-                    }
-                    if (isset($_GET['precio_min']) && $_GET['precio_min'] !== '') {
-                        $filtros['precio_min'] = $_GET['precio_min'];
-                    }
-                    if (isset($_GET['precio_max']) && $_GET['precio_max'] !== '') {
-                        $filtros['precio_max'] = $_GET['precio_max'];
-                    }
-                }
-                
-                // Obtener productos filtrados
-                $productos = $producto->getProductos($filtros);
-                ?>
 
                 <!-- Panel de Filtros -->
                 <div class="filters-panel">
@@ -527,7 +393,7 @@ class Producto {
                         <?php else: ?>
                     <?php foreach ($productos as $prod): ?>
                         <div class="product-card">
-                            <img src="<?php echo htmlspecialchars($prod['imagenes']); ?>" 
+                            <img src="../<?php echo htmlspecialchars($prod['imagenes']); ?>" 
                                  alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
                                  class="product-image">
                             <div class="product-info">
@@ -535,7 +401,7 @@ class Producto {
                                 <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
                                 <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
                                 <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
-                                <a href="detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
+                                <a href="../controllers/detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
                                     Ver Detalles
                                 </a>
                             </div>
@@ -559,10 +425,10 @@ class Producto {
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="index.php">Inicio</a></li>
-                    <li><a href="segunda_mano.php">Segunda Mano</a></li>
+                    <li><a href="../index.php">Inicio</a></li>
+                    <li><a href="../controllers/segunda_mano.php">Segunda Mano</a></li>
                     <li><a href="soporte.html">Soporte</a></li>
-                    <li><a href="contactanos.php">Contacto</a></li>
+                    <li><a href="../controllers/contactanos.php">Contacto</a></li>
                     <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
                     <li><a href="registrarse.html">Registrarse</a></li>
                 </ul>
@@ -594,7 +460,7 @@ class Producto {
 
     <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="js/menu.js"></script>
+    <script src="../public/js/menu.js"></script>
     
     <!-- Código de las partículas -->
     <script>
@@ -746,4 +612,4 @@ class Producto {
     });
     </script>
 </body>
-</html>
+</html> 

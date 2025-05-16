@@ -1,94 +1,3 @@
-<?php
-session_start();
-require_once 'config/database.php';
-
-$isLoggedIn = isset($_SESSION['usuario_id']);
-$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
-
-// Obtener el ID del producto de la URL
-$id_producto = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-try {
-    $database = new Database();
-    $conn = $database->getConnection();
-
-    // Obtener detalles del producto
-    $query = "SELECT p.*, c.nombre_categoria 
-             FROM producto p 
-             LEFT JOIN categoria c ON p.categoria_id = c.id_categoria 
-             WHERE p.id_producto = ?";
-    $stmt = $conn->prepare($query);
-    $stmt->execute([$id_producto]);
-    $producto = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$producto) {
-        header('Location: productos.php');
-        exit;
-    }
-    
-    // Obtener reseñas del producto
-    $query_resenas = "SELECT r.*, u.nombre as nombre_usuario 
-                     FROM resenas r 
-                     LEFT JOIN usuario u ON r.usuario_id = u.id_usuario 
-                     WHERE r.producto_id = ? 
-                     ORDER BY r.fecha_creacion DESC";
-    $stmt_resenas = $conn->prepare($query_resenas);
-    $stmt_resenas->execute([$id_producto]);
-    $resenas = $stmt_resenas->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Calcular promedio de valoraciones
-    $query_promedio = "SELECT AVG(valoracion) as promedio FROM resenas WHERE producto_id = ?";
-    $stmt_promedio = $conn->prepare($query_promedio);
-    $stmt_promedio->execute([$id_producto]);
-    $promedio = $stmt_promedio->fetch(PDO::FETCH_ASSOC);
-    $valoracion_promedio = $promedio['promedio'] ? round($promedio['promedio'], 1) : 0;
-
-} catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
-}
-
-// Función para agregar al carrito
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
-    if (!isset($_SESSION['carrito'])) {
-        $_SESSION['carrito'] = [];
-    }
-
-    if (isset($_POST['agregar_carrito'])) {
-        $cantidad = isset($_POST['cantidad']) ? (int) $_POST['cantidad'] : 1;
-        if (isset($_SESSION['carrito'][$id_producto])) {
-            $_SESSION['carrito'][$id_producto] += $cantidad;
-        } else {
-            $_SESSION['carrito'][$id_producto] = $cantidad;
-        }
-        header('Location: carrito.php');
-        exit;
-    }
-    
-    // Procesar nueva reseña
-    if (isset($_POST['enviar_resena']) && isset($_POST['valoracion']) && isset($_POST['comentario'])) {
-        $valoracion = (int)$_POST['valoracion'];
-        $comentario = trim($_POST['comentario']);
-        
-        if ($valoracion >= 1 && $valoracion <= 5 && !empty($comentario)) {
-            try {
-                $query_insert = "INSERT INTO resenas (producto_id, usuario_id, valoracion, comentario, fecha_creacion) 
-                                VALUES (?, ?, ?, ?, NOW())";
-                $stmt_insert = $conn->prepare($query_insert);
-                $stmt_insert->execute([$id_producto, $_SESSION['usuario_id'], $valoracion, $comentario]);
-                
-                // Recargar la página para mostrar la nueva reseña
-                header("Location: detalle_producto.php?id=$id_producto&resena_enviada=1");
-                exit;
-            } catch (PDOException $e) {
-                $error_resena = "Error al guardar la reseña: " . $e->getMessage();
-            }
-        } else {
-            $error_resena = "Por favor, proporciona una valoración válida y un comentario.";
-        }
-    }
-}
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -96,7 +5,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($producto['nombre_producto']); ?> - MGwebs</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../public/styles.css">
     <style>
         html, body {
             height: 100%;
@@ -521,12 +430,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
 </head>
 
 <body class="bg-black">
+    <svg style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="50%" style="stop-color:#FFD700;stop-opacity:1" />
+                <stop offset="50%" style="stop-color:transparent;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+    </svg>
     <!-- Particles Canvas -->
     <canvas id="sparkles" class="particles-canvas"></canvas>
 
     <!-- Navbar -->
     <nav class="navbar slide-down">
-        <a href="index.php" class="logo">
+        <a href="../index.php" class="logo">
             <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
                 <path d="M12 8v8" />
@@ -536,11 +453,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
         </a>
 
         <div class="nav-links">
-            <a href="caracteristicas.php">Características</a>
-            <a href="como_funciona.php">Cómo Funciona</a>
-            <a href="productos.php">Productos</a>
-            <a href="soporte.php">Soporte</a>
-            <a href="contactanos.php">Contáctanos</a>
+            <a href="../controllers/caracteristicas.php">Características</a>
+            <a href="../controllers/como_funciona.php">Cómo Funciona</a>
+            <a href="../controllers/productos.php">Productos</a>
+            <a href="../controllers/soporte.php">Soporte</a>
+            <a href="../controllers/contactanos.php">Contáctanos</a>
         </div>
 
         <div class="auth-buttons">
@@ -554,13 +471,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                             <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
                         </div>
                         <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
-                            <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
+                            <a href="../controllers/admin_panel.php" class="dropdown-item">Panel Admin</a>
                         <?php endif; ?>
-                        <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        <a href="../controllers/perfil.php" class="dropdown-item">Perfil</a>
+                        <a href="../controllers/cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+
                     </div>
                 </div>
 
-                <a href="carrito.php" class="cart-icon">
+                <!-- Icono del carrito (solo para usuarios logueados) -->
+                <a href="../controllers/carrito.php" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
@@ -575,14 +495,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
 
-            <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+            <button class="btn btn-primary" onclick="window.location.href='../controllers/crearpaginaperso.php'">Comenzar</button>
         </div>
     </nav>
 
     <div class="producto-detalle">
         <div class="producto-contenido">
             <div class="producto-imagen-container">
-                <img src="<?php echo htmlspecialchars($producto['imagenes']); ?>"
+                <img src="../<?php echo htmlspecialchars($producto['imagenes']); ?>"
                     alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>" class="producto-imagen">
             </div>
 
@@ -696,20 +616,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
                                 <div class="estrellas">
                                     <?php for ($i = 1; $i <= 5; $i++): ?>
                                         <?php if ($i <= $resena['valoracion']): ?>
-                                            <svg class="estrella llena" viewBox="0 0 24 24">
-                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                            </svg>
-                                        <?php else: ?>
-                                            <svg class="estrella" viewBox="0 0 24 24">
-                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                                            </svg>
-                                        <?php endif; ?>
-                                    <?php endfor; ?>
-                                </div>
-                            </div>
-                            <p class="resena-comentario"><?php echo nl2br(htmlspecialchars($resena['comentario'])); ?></p>
-                        </div>
-                    <?php endforeach; ?>
+                                             <svg class="estrella llena" viewBox="0 0 24 24">
+                                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                             </svg>
+                                         <?php else: ?>
+                                             <svg class="estrella" viewBox="0 0 24 24">
+                                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                             </svg>
+                                         <?php endif; ?>
+                                     <?php endfor; ?>
+                                 </div>
+                             </div>
+                             <p class="resena-comentario"><?php echo nl2br(htmlspecialchars($resena['comentario'])); ?></p>
+                         </div>
+                     <?php endforeach; ?>
                 <?php endif; ?>
             </div>
             
@@ -747,6 +667,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
         </div>
     </div>
 
+    <script src="../public/js/script.js"></script>
     <script>
         // Función para actualizar la cantidad
         function actualizarCantidad(cambio) {
@@ -864,4 +785,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isLoggedIn) {
         </svg>
     </button>
 </body>
-</html>
+
+</html> 

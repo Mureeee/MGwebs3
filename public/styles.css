@@ -458,6 +458,7 @@
   /* Footer Styles */
   main {
     flex: 1;
+    padding-top: 90px;
   }
   
   .footer {
@@ -1001,5 +1002,83 @@
   
   .btn-enviar-resena:hover {
     transform: translateY(-2px);
+  }
+  
+  /* Estilos para la página de Perfil */
+  .perfil-container {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    color: #333;
+  }
+  
+  .perfil-container h1, .perfil-container h2 {
+    text-align: center;
+    color: #5e35b1; /* Color del tema */
+    margin-bottom: 20px;
+  }
+  
+  .perfil-container label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+  
+  .perfil-container input[type="text"],
+  .perfil-container input[type="email"],
+  .perfil-container input[type="password"],
+  .perfil-container textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box; /* Para incluir el padding y borde en el width */
+  }
+  
+  .perfil-container textarea {
+    resize: vertical; /* Permitir redimensionar solo verticalmente */
+    min-height: 100px;
+  }
+  
+  .perfil-container button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #7e57c2; /* Color primario */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .perfil-container button[type="submit"]:hover {
+    background-color: #673ab7; /* Un tono más oscuro al pasar el ratón */
+  }
+  
+  /* Estilos para mensajes de éxito/error */
+  .mensaje-exito {
+    color: #28a745; /* Verde */
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .mensaje-error {
+    color: #dc3545; /* Rojo */
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
   }
   
