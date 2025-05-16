@@ -62,7 +62,7 @@
                     <?php endif; ?>
                 </a>
             <?php else: ?>
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='views/login.php'">Iniciar Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
 

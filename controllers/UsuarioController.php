@@ -50,6 +50,11 @@ class UsuarioController {
         }
     }
 
+    public function isAdmin() {
+        // Verificar si la variable de sesión para el rol está definida y si es 'administrador'
+        return isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador';
+    }
+
     // Puedes añadir más métodos relacionados con usuarios aquí (registro, login, etc.)
 }
 

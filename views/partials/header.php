@@ -62,8 +62,8 @@
                     <?php endif; ?>
                 </a>
             <?php else: ?>
-                <button class="btn btn-ghost" onclick="window.location.href='../../iniciar_sesion.html'">Iniciar Sesión</button>
-                <button class="btn btn-ghost" onclick="window.location.href='../../registrarse.html'">Registrate</button>
+                <a href="<?php echo SITE_PATH; ?>login.php" class="btn btn-ghost">Iniciar Sesión</a>
+                <a href="<?php echo SITE_PATH; ?>registro.php" class="btn btn-ghost">Registrate</a>
             <?php endif; ?>
 
             <button class="btn btn-primary" onclick="window.location.href='../../controllers/crearpaginaperso.php'">Comenzar</button>
