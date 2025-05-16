@@ -13,7 +13,7 @@
 <!-- Navbar -->
 <nav class="navbar slide-down">
         <div class="logo">
-            <a href="<?php echo SITE_PATH; ?>index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
+            <a href="/MGwebs3/index.php" style="text-decoration: none; color: inherit; display: flex; align-items: center;">
                 <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
                     <path d="M12 8v8" />
@@ -24,11 +24,11 @@
         </div>
 
         <div class="nav-links">
-            <a href="<?php echo SITE_PATH; ?>controllers/caracteristicas.php">Características</a>
-            <a href="<?php echo SITE_PATH; ?>controllers/como_funciona.php">Cómo Funciona</a>
-            <a href="<?php echo SITE_PATH; ?>controllers/productos.php">Productos</a>
-            <a href="<?php echo SITE_PATH; ?>controllers/soporte.php">Soporte</a>
-            <a href="<?php echo SITE_PATH; ?>controllers/contactanos.php">Contáctanos</a>
+            <a href="../../controllers/caracteristicas.php">Características</a>
+            <a href="../../controllers/como_funciona.php">Cómo Funciona</a>
+            <a href="../../controllers/productos.php">Productos</a>
+            <a href="../../controllers/soporte.php">Soporte</a>
+            <a href="../../controllers/contactanos.php">Contáctanos</a>
         </div>
 
         <div class="auth-buttons">
@@ -42,16 +42,16 @@
                             <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
                         </div>
                         <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
-                            <a href="<?php echo SITE_PATH; ?>controllers/admin_panel.php" class="dropdown-item">Panel Admin</a>
+                            <a href="../../controllers/admin_panel.php" class="dropdown-item">Panel Admin</a>
                         <?php endif; ?>
-                        <a href="<?php echo SITE_PATH; ?>controllers/perfil.php" class="dropdown-item">Perfil</a>
-                        <a href="<?php echo SITE_PATH; ?>controllers/cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        <a href="../../controllers/perfil.php" class="dropdown-item">Perfil</a>
+                        <a href="../../controllers/cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
 
                     </div>
                 </div>
 
                 <!-- Icono del carrito (solo para usuarios logueados) -->
-                <a href="<?php echo SITE_PATH; ?>controllers/carrito.php" class="cart-icon">
+                <a href="../../controllers/carrito.php" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
@@ -62,11 +62,11 @@
                     <?php endif; ?>
                 </a>
             <?php else: ?>
-                <button class="btn btn-ghost" onclick="window.location.href='<?php echo SITE_PATH; ?>iniciar_sesion.html'">Iniciar Sesión</button>
-                <button class="btn btn-ghost" onclick="window.location.href='<?php echo SITE_PATH; ?>registrarse.html'">Registrate</button>
+                <button class="btn btn-ghost" onclick="window.location.href='../../iniciar_sesion.html'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='../../registrarse.html'">Registrate</button>
             <?php endif; ?>
 
-            <button class="btn btn-primary" onclick="window.location.href='<?php echo SITE_PATH; ?>controllers/crearpaginaperso.php'">Comenzar</button>
+            <button class="btn btn-primary" onclick="window.location.href='../../controllers/crearpaginaperso.php'">Comenzar</button>
         </div>
     </nav>
 </body>

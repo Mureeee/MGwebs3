@@ -9,12 +9,12 @@
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="<?php echo SITE_PATH; ?>index.php">Inicio</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>controllers/segunda_mano.php">Segunda Mano</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>controllers/soporte.php">Soporte</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>controllers/contactanos.php">Contacto</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>iniciar_sesion.html">Iniciar Sesión</a></li>
-                    <li><a href="<?php echo SITE_PATH; ?>registrarse.html">Registrarse</a></li>
+                    <li><a href="../../index.php">Inicio</a></li>
+                    <li><a href="../../controllers/segunda_mano.php">Segunda Mano</a></li>
+                    <li><a href="../../controllers/soporte.php">Soporte</a></li>
+                    <li><a href="../../controllers/contactanos.php">Contacto</a></li>
+                    <li><a href="../../iniciar_sesion.html">Iniciar Sesión</a></li>
+                    <li><a href="../../registrarse.html">Registrarse</a></li>
                 </ul>
             </div>
 
@@ -41,6 +41,6 @@
             <p> MGwebs. Todos los derechos reservados.</p>
         </div>
     </footer>
-<script src="<?php echo SITE_PATH; ?>public/js/script.js"></script>
+<script src="../../public/js/script.js"></script>
 </body>
 </html> 

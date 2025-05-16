@@ -12,7 +12,7 @@
             <div class="mensaje-error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form action="<?php echo SITE_PATH; ?>controllers/perfil.php" method="POST">
+        <form action="../perfil.php" method="POST">
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
 
