@@ -288,11 +288,11 @@
                 </a>
 
                 <div class="nav-links">
-                    <a href="../controllers/caracteristicas.php">Características</a>
-                    <a href="../controllers/como_funciona.php">Cómo Funciona</a>
-                    <a href="../controllers/productos.php" class="active">Productos</a>
-                    <a href="../controllers/soporte.php">Soporte</a>
-                    <a href="../controllers/contactanos.php">Contáctanos</a>
+                    <a href="<?php echo APP_URL; ?>/caracteristicas">Características</a>
+                    <a href="<?php echo APP_URL; ?>/como-funciona">Cómo Funciona</a>
+                    <a href="<?php echo APP_URL; ?>/productos">Productos</a>
+                    <a href="<?php echo APP_URL; ?>/soporte">Soporte</a>
+                    <a href="<?php echo APP_URL; ?>/contactanos">Contáctanos</a>
                 </div>
 
                 <div class="auth-buttons">

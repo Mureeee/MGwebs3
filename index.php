@@ -1,9 +1,63 @@
 <?php
-session_start();
-$isLoggedIn = isset($_SESSION['usuario_id']);
-$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
+// Cargar la configuración antes de iniciar la sesión
+require_once 'config/config.php';
+require_once 'config/database.php';
 
-// Incluir la vista
-require 'views/index.php';
+// Iniciar la sesión después de la configuración
+session_start();
+
+// Definir la ruta base
+define('BASE_PATH', __DIR__);
+
+// Obtener la ruta solicitada
+$request = $_SERVER['REQUEST_URI'];
+$basePath = dirname($_SERVER['SCRIPT_NAME']);
+$path = substr($request, strlen($basePath));
+
+// Enrutamiento básico
+switch ($path) {
+    case '/':
+    case '':
+        require 'controllers/HomeController.php';
+        $controller = new HomeController();
+        $controller->index();
+        break;
+    case '/login':
+        require 'controllers/AuthController.php';
+        $controller = new AuthController();
+        $controller->login();
+        break;
+    case '/admin':
+        require 'controllers/AdminController.php';
+        $controller = new AdminController();
+        $controller->index();
+        break;
+    case '/como-funciona':
+        require 'controllers/InfoController.php';
+        $controller = new InfoController();
+        $controller->comoFunciona();
+        break;
+    case '/caracteristicas':
+        require 'controllers/caracteristicas.php';
+        break;
+    case '/productos':
+        require 'controllers/productos.php';
+        break;
+    case '/soporte':
+        require 'controllers/soporte.php';
+        break;
+    case '/contactanos':
+        require 'controllers/contactanos.php';
+        break;
+    case '/logout':
+        require 'controllers/AuthController.php';
+        $controller = new AuthController();
+        $controller->logout();
+        break;
+    default:
+        header("HTTP/1.0 404 Not Found");
+        require 'views/404.php';
+        break;
+}
 
 ?>

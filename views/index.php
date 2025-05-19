@@ -24,7 +24,7 @@
         </div>
 
         <div class="nav-links">
-            <a href="controllers/caracteristicas.php">Características</a>
+            <a href="<?php echo APP_URL; ?>/caracteristicas">Características</a>
             <a href="controllers/como_funciona.php">Cómo Funciona</a>
             <a href="controllers/productos.php">Productos</a>
             <a href="controllers/soporte.php">Soporte</a>
@@ -45,7 +45,7 @@
                             <a href="controllers/admin_panel.php" class="dropdown-item">Panel Admin</a>
                         <?php endif; ?>
                         <a href="controllers/perfil.php" class="dropdown-item">Perfil</a>
-                        <a href="controllers/cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        <a href="<?php echo APP_URL; ?>/logout" class="dropdown-item">Cerrar Sesión</a>
 
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                     <?php endif; ?>
                 </a>
             <?php else: ?>
-                <button class="btn btn-ghost" onclick="window.location.href='views/login.php'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='/MGwebs3/login'">Iniciar Sesión</button>
                 <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
             <?php endif; ?>
 
@@ -225,6 +225,25 @@
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
+
+    <div class="footer">
+        <div class="footer-section">
+            <h3>Enlaces Útiles</h3>
+            <ul class="footer-links">
+                <li><a href="<?php echo APP_URL; ?>/">Inicio</a></li>
+                <li><a href="<?php echo APP_URL; ?>/segunda_mano">Segunda Mano</a></li>
+                <li><a href="<?php echo APP_URL; ?>/soporte">Soporte</a></li>
+                <li><a href="<?php echo APP_URL; ?>/contactanos">Contacto</a></li>
+                <?php if (!$isLoggedIn): ?>
+                    <li><a href="<?php echo APP_URL; ?>/login">Iniciar Sesión</a></li>
+                    <li><a href="<?php echo APP_URL; ?>/registrarse.html">Registrarse</a></li>
+                <?php else: ?>
+                    <li><a href="<?php echo APP_URL; ?>/perfil">Mi Perfil</a></li>
+                    <li><a href="<?php echo APP_URL; ?>/carrito">Mi Carrito</a></li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
 </body>
 
 </html> 

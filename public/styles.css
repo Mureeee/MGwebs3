@@ -1082,3 +1082,92 @@
     text-align: center;
   }
   
+  /* Estilos específicos para el formulario de login */
+  .register-container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    width: 350px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    margin: 80px auto; /* Añadir margen superior para separar del header y centrar horizontalmente */
+    position: relative;
+  }
+  
+  .register-container h2 {
+    color: #a78bfa;
+    text-align: center;
+  }
+  
+  .register-container label {
+    display: block;
+    margin-top: 1em;
+    color: #fff; /* Asegurar color blanco para las etiquetas */
+    text-align: left; /* Alinear etiquetas a la izquierda */
+  }
+  
+  .register-container input[type="text"], .register-container input[type="password"] {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    margin-bottom: 1rem;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+  }
+  
+  .register-container input::placeholder {
+    color: #ddd;
+  }
+  
+  .register-container button {
+    width: 100%;
+    padding: 0.8em;
+    background: linear-gradient(90deg, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .register-container button:hover {
+    background: linear-gradient(90deg, #2575fc, #6a11cb);
+  }
+  
+  .register-container .register-link {
+    margin-top: 1em;
+    color: #ffffff;
+  }
+  
+  .register-container .register-link a {
+    color: #2575fc;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .register-container .register-link a:hover {
+    color: #6a11cb;
+  }
+  
+  /* Asegurar que el body y main permitan centrar el contenido */
+  body {
+    display: flex;
+    flex-direction: column; /* Organizar header, main, footer en columna */
+    min-height: 100vh;
+    background-color: #111; /* Fondo oscuro consistente */
+    color: #fff;
+    font-family: Arial, sans-serif; /* Fuente consistente */
+  }
+  
+  main {
+    flex-grow: 1; /* Permitir que main crezca para llenar el espacio */
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    padding: 20px; /* Añadir un poco de padding */
+  }
+  

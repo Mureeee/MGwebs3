@@ -1,6 +1,5 @@
 <?php
-require_once 'config/database.php';
-session_start();
+require_once ROOT_PATH . '/config/database.php';
 
 // Verificar si el usuario está logueado
 $isLoggedIn = isset($_SESSION['usuario_id']);
@@ -30,7 +29,7 @@ if ($isLoggedIn) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Características - MGwebs</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Estilos específicos para la página de características */
