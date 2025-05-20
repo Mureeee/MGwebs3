@@ -1,0 +1,207 @@
+.reviews-section {
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 1.5rem;
+    position: sticky;
+    top: 2rem;
+    max-height: calc(100vh - 4rem);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #8b5cf6 rgba(30, 30, 30, 0.95);
+}
+
+.reviews-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.reviews-section::-webkit-scrollbar-track {
+    background: rgba(30, 30, 30, 0.95);
+    border-radius: 4px;
+}
+
+.reviews-section::-webkit-scrollbar-thumb {
+    background-color: #8b5cf6;
+    border-radius: 4px;
+}
+
+.reviews-section::-webkit-scrollbar-thumb:hover {
+    background-color: #7c3aed;
+}
+
+.reviews-title {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    border-bottom: 2px solid #8b5cf6;
+    padding-bottom: 0.5rem;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.add-review-form {
+    margin-bottom: 1.5rem;
+    background: rgba(40, 40, 40, 0.5);
+    padding: 1.25rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.add-review-title {
+    color: #8b5cf6;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.rating-input {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: flex-end;
+}
+
+.rating-input input {
+    display: none;
+}
+
+.rating-input label {
+    color: #666;
+    cursor: pointer;
+    font-size: 1.8rem;
+    transition: all 0.2s ease;
+}
+
+.rating-input label:hover,
+.rating-input label:hover ~ label,
+.rating-input input:checked ~ label {
+    color: #ffd700;
+    transform: scale(1.1);
+}
+
+.review-textarea {
+    width: 100%;
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 0.8rem;
+    color: #fff;
+    resize: vertical;
+    min-height: 80px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.review-textarea:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+.review-textarea:focus {
+    outline: none;
+    border-color: #8b5cf6;
+}
+
+.btn-submit-review {
+    background: #8b5cf6;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-submit-review:hover {
+    background: #7c3aed;
+    transform: translateY(-2px);
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.review-item {
+    background: rgba(40, 40, 40, 0.5);
+    padding: 1.25rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+    margin-bottom: 1rem;
+}
+
+.review-item:last-child {
+    margin-bottom: 0;
+}
+
+.review-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(139, 92, 246, 0.2);
+    background: rgba(45, 45, 45, 0.5);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.review-author {
+    color: #8b5cf6;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.review-rating {
+    color: #ffd700;
+    letter-spacing: 2px;
+}
+
+.review-date {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+}
+
+.review-content {
+    color: #ccc;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+.no-reviews {
+    text-align: center;
+    padding: 2rem;
+    color: #ccc;
+    background: rgba(40, 40, 40, 0.5);
+    border-radius: 10px;
+    font-size: 1.1rem;
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 1.5rem;
+    background: rgba(40, 40, 40, 0.5);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.login-prompt a {
+    color: #8b5cf6;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.login-prompt a:hover {
+    color: #7c3aed;
+    text-decoration: underline;
+}

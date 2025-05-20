@@ -61,7 +61,71 @@ class ProductosController {
         require ROOT_PATH . '/views/productos.php';
     }
 
-    // Puedes mover los métodos getProductoById, getCategorias, getPrecioMinMax a un modelo Producto.php si quieres separar aún más
+    public function detalleProducto($id) {
+        // Obtener los detalles del producto
+        $producto = $this->productoModel->getProductoById($id);
+        
+        if (!$producto) {
+            header("HTTP/1.0 404 Not Found");
+            require ROOT_PATH . '/views/404.php';
+            return;
+        }
+
+        // Obtener las reseñas del producto
+        $resenas = $this->productoModel->getResenasByProductId($id);
+
+        // Preparar los datos para la vista
+        $data = [
+            'isLoggedIn' => isset($_SESSION['usuario_id']),
+            'primeraLetra' => isset($_SESSION['usuario_nombre']) ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '',
+            'nombreUsuario' => isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : '',
+            'correoUsuario' => isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '',
+            'rolUsuario' => isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '',
+            'itemsCarrito' => isset($_SESSION['carrito']) && is_array($_SESSION['carrito']) ? array_sum($_SESSION['carrito']) : 0,
+            'producto' => $producto,
+            'resenas' => $resenas
+        ];
+
+        // Cargar la vista de detalles
+        require ROOT_PATH . '/views/detalle-producto.php';
+    }
+
+    public function agregarResena() {
+        if (!isset($_SESSION['usuario_id'])) {
+            header('HTTP/1.1 401 Unauthorized');
+            echo json_encode(['error' => 'Debes iniciar sesión para dejar una reseña']);
+            return;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('HTTP/1.1 405 Method Not Allowed');
+            return;
+        }
+
+        $producto_id = $_POST['producto_id'] ?? null;
+        $rating = $_POST['rating'] ?? null;
+        $comentario = $_POST['comentario'] ?? '';
+
+        if (!$producto_id || !$rating) {
+            header('HTTP/1.1 400 Bad Request');
+            echo json_encode(['error' => 'Faltan datos requeridos']);
+            return;
+        }
+
+        $result = $this->productoModel->agregarResena(
+            $producto_id,
+            $_SESSION['usuario_id'],
+            $rating,
+            $comentario
+        );
+
+        if ($result) {
+            header('Location: ' . APP_URL . '/detalle-producto/' . $producto_id);
+        } else {
+            header('HTTP/1.1 500 Internal Server Error');
+            echo json_encode(['error' => 'Error al guardar la reseña']);
+        }
+    }
 }
 
 // Mover la clase Producto a un archivo Modelo/Producto.php si se desea mayor separación.
@@ -125,19 +189,50 @@ class Producto {
 
     public function getProductoById($id) {
         try {
-            $query = "SELECT p.id_producto, p.nombre_producto, p.descripcion, p.precio, c.nombre_categoria 
+            $query = "SELECT p.*, c.nombre_categoria 
                      FROM producto p 
                      LEFT JOIN categoria c ON p.categoria_id = c.id_categoria 
                      WHERE p.id_producto = ?";
+            
             $stmt = $this->conn->prepare($query);
-            $stmt->bindParam(1, $id, PDO::PARAM_INT);
-            $stmt->execute();
+            $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
-            die("Error al obtener el producto: " . $e->getMessage());
+            error_log("Error al obtener producto: " . $e->getMessage());
+            return null;
         }
     }
-    
+
+    public function getResenasByProductId($id) {
+        try {
+            $query = "SELECT r.*, u.nombre as nombre_usuario 
+                     FROM resenas r 
+                     LEFT JOIN usuarios u ON r.usuario_id = u.id 
+                     WHERE r.producto_id = ? 
+                     ORDER BY r.fecha_creacion DESC";
+            
+            $stmt = $this->conn->prepare($query);
+            $stmt->execute([$id]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error al obtener reseñas: " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function agregarResena($producto_id, $usuario_id, $rating, $comentario) {
+        try {
+            $query = "INSERT INTO resenas (producto_id, usuario_id, rating, comentario) 
+                     VALUES (?, ?, ?, ?)";
+            
+            $stmt = $this->conn->prepare($query);
+            return $stmt->execute([$producto_id, $usuario_id, $rating, $comentario]);
+        } catch (PDOException $e) {
+            error_log("Error al agregar reseña: " . $e->getMessage());
+            return false;
+        }
+    }
+
     public function getCategorias() {
         try {
             $query = "SELECT id_categoria, nombre_categoria FROM categoria ORDER BY nombre_categoria";

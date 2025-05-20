@@ -15,6 +15,13 @@ $request = $_SERVER['REQUEST_URI'];
 $basePath = dirname($_SERVER['SCRIPT_NAME']);
 $path = substr($request, strlen($basePath));
 
+// Extraer el ID del producto de la URL si existe
+$productId = null;
+if (preg_match('/\/detalle-producto\/(\d+)/', $path, $matches)) {
+    $productId = $matches[1];
+    $path = '/detalle-producto';
+}
+
 // Enrutamiento básico
 switch ($path) {
     case '/':
@@ -46,6 +53,14 @@ switch ($path) {
     case '/productos':
         $controller = new ProductosController();
         $controller->index();
+        break;
+    case '/detalle-producto':
+        $controller = new ProductosController();
+        $controller->detalleProducto($productId);
+        break;
+    case '/agregar-resena':
+        $controller = new ProductosController();
+        $controller->agregarResena();
         break;
     case '/soporte':
         require 'controllers/soporte.php';

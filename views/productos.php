@@ -8,6 +8,7 @@ extract($data);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGwebs - Productos</title>
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/styles.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/productos.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Estilos específicos para la página de productos */
@@ -161,9 +162,22 @@ extract($data);
         
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
             width: 100%;
+        }
+        
+        /* Responsive para tablets y móviles */
+        @media (max-width: 1024px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
         }
         
         .product-card {
@@ -396,25 +410,85 @@ extract($data);
                         <?php else: ?>
                     <?php foreach ($productos as $prod): ?>
                         <div class="product-card">
-                             <?php
-                                $imagenes = json_decode($prod['imagenes'], true);
+                            <?php
+                                // Obtener la ruta de la imagen
                                 $image_src = '';
-                                if (!empty($imagenes) && is_array($imagenes) && isset($imagenes[0])) {
-                                    $primera_imagen = $imagenes[0];
-                                    // Asumir que la ruta en la DB es solo el nombre del archivo o una ruta relativa a public/imagenes/
-                                    $image_src = APP_URL . '/public/imagenes/' . htmlspecialchars($primera_imagen);
+                                $debug_info = '';
+                                
+                                if (!empty($prod['imagenes'])) {
+                                    $debug_info .= "Valor original: " . $prod['imagenes'] . "<br>";
+                                    
+                                    // Intentar decodificar JSON si es necesario
+                                    $decoded = json_decode($prod['imagenes'], true);
+                                    if (json_last_error() === JSON_ERROR_NONE && !empty($decoded)) {
+                                        $debug_info .= "Es JSON válido<br>";
+                                        // Si es un array, tomar el primer elemento
+                                        $image_src = is_array($decoded) ? reset($decoded) : $decoded;
+                                    } else {
+                                        $debug_info .= "No es JSON válido, usando valor directo<br>";
+                                        $image_src = $prod['imagenes'];
+                                    }
+                                    
+                                    // Limpiar y ajustar la ruta
+                                    $image_src = trim($image_src);
+                                    $base_name = basename($image_src);
+                                    
+                                    // Directorio de imágenes
+                                    $images_dir = __DIR__ . '/../public/imagenes/';
+                                    $debug_info .= "Buscando en directorio: " . $images_dir . "<br>";
+                                    
+                                    // Buscar el archivo real (ignorando acentos)
+                                    $found_file = false;
+                                    if ($handle = opendir($images_dir)) {
+                                        while (($file = readdir($handle)) !== false) {
+                                            // Normalizar ambos nombres para comparación
+                                            $normalized_file = strtolower(str_replace(['á','é','í','ó','ú'], ['a','e','i','o','u'], $file));
+                                            $normalized_base = strtolower(str_replace(['á','é','í','ó','ú'], ['a','e','i','o','u'], $base_name));
+                                            
+                                            if ($normalized_file === $normalized_base) {
+                                                $image_src = 'public/imagenes/' . $file;
+                                                $found_file = true;
+                                                break;
+                                            }
+                                        }
+                                        closedir($handle);
+                                    }
+                                    
+                                    $debug_info .= "Archivo encontrado: " . ($found_file ? 'Sí' : 'No') . "<br>";
+                                    $debug_info .= "Ruta final: " . $image_src . "<br>";
                                 }
                             ?>
-                            <?php if (!empty($image_src) && @getimagesize($image_src)): ?>
-                                <img src="<?php echo $image_src; ?>" 
-                                     alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
-                                     class="product-image">
-                            <?php else: ?>
-                                <!-- Placeholder o imagen por defecto si no hay imagen -->
-                                <div class="product-image" style="background-color: #555; display: flex; align-items: center; justify-content: center; color: white;">
-                                    No Image
-                                </div>
-                            <?php endif; ?>
+                            <div class="product-image-container" data-product-name="<?php echo htmlspecialchars($prod['nombre_producto']); ?>">
+                                <?php if (!empty($image_src)): ?>
+                                    <?php
+                                        // Construir la ruta completa de la imagen
+                                        $full_image_path = __DIR__ . '/../' . ltrim($image_src, '/');
+                                        $image_exists = file_exists($full_image_path);
+                                        $debug_info .= "Ruta completa: " . $full_image_path . "<br>";
+                                        $debug_info .= "Archivo existe: " . ($image_exists ? 'Sí' : 'No') . "<br>";
+                                    ?>
+                                    <?php if ($image_exists): ?>
+                                        <img src="<?php echo APP_URL . '/' . $image_src; ?>" 
+                                             alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
+                                             class="product-image"
+                                             onerror="this.onerror=null; this.classList.add('error'); this.parentElement.classList.add('error');">
+                                    <?php else: ?>
+                                        <div class="product-image-placeholder">
+                                            <span>Imagen no disponible</span>
+                                            <div class="debug-info" style="font-size: 10px; color: #999; margin-top: 10px;">
+                                                <?php echo $debug_info; ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <div class="product-image-placeholder">
+                                        <span>Imagen no disponible</span>
+                                        <div class="debug-info" style="font-size: 10px; color: #999; margin-top: 10px;">
+                                            <?php echo $debug_info; ?>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                             <div class="product-info">
                                 <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
                                 <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
@@ -438,109 +512,10 @@ extract($data);
 
     <!-- Scripts -->
     <script src="<?php echo APP_URL; ?>/public/js/menu.js"></script>
-    
-    <!-- Código de las partículas -->
-    <script>
-        // Código de las partículas
-        const canvas = document.getElementById('sparkles');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        class Particle {
-            constructor() {
-                this.reset();
-            }
-
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.alpha = Math.random() * 0.5 + 0.2;
-                this.size = Math.random() * 1.5 + 0.5;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width || 
-                    this.y < 0 || this.y > canvas.height) {
-                    this.reset();
-                }
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                ctx.fill();
-            }
-        }
-
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 100; i++) {
-                particles.push(new Particle());
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        initParticles();
-        animate();
-        
-        // Script para el slider de precio
-        document.addEventListener('DOMContentLoaded', function() {
-            const precioSlider = document.getElementById('precio_slider');
-            const precioMaxInput = document.getElementById('precio_max'); // Corregir variable
-            const precioMinInput = document.getElementById('precio_min'); // Añadir para sincronización bidireccional
-
-            if (precioSlider && precioMaxInput) {
-                // Sincronizar slider con input max
-                precioSlider.addEventListener('input', function() {
-                    precioMaxInput.value = this.value;
-                });
-
-                // Sincronizar input max con slider
-                precioMaxInput.addEventListener('input', function() {
-                     if (parseInt(this.value) >= parseInt(precioSlider.min) && parseInt(this.value) <= parseInt(precioSlider.max)) { // Validar rango
-                         precioSlider.value = this.value;
-                     }
-                });
-
-                 // Sincronizar input min con slider (opcional, si quieres que mueva el slider min)
-                precioMinInput.addEventListener('input', function() {
-                      // Podrías añadir lógica aquí si tienes un slider de precio mínimo también,
-                      // o si quieres que el input mínimo afecte de alguna manera al rango visualizado.
-                      // Por ahora, solo nos aseguramos de que el slider refleje el máximo.
-                 });
-
-                 // Inicializar input max con el valor del slider si hay un valor pre-filtrado
-                 if (precioMaxInput.value === '') {
-                     precioMaxInput.value = precioSlider.value; // Inicializar si está vacío
-                 }
-            }
-        });
-
-        // Control del botón para volver arriba (usando la lógica del archivo de caracteristicas que ya funcionaba)
-        document.addEventListener('DOMContentLoaded', function () {
-            const scrollBtn = document.getElementById('scrollToTopBtn');
-
+    <script src="<?php echo APP_URL; ?>/public/js/particles.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/price-slider.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/scroll-to-top.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/user-menu.js"></script>
             // Función para verificar la posición de scroll y mostrar/ocultar el botón
             function checkScrollPosition() {
                 if (window.scrollY > 300) { // Usar un umbral similar al de caracteristicas
