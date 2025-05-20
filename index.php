@@ -63,10 +63,19 @@ switch ($path) {
         $controller->agregarResena();
         break;
     case '/soporte':
-        require 'controllers/soporte.php';
+        require_once 'controllers/SoporteController.php';
+        $controller = new SoporteController();
+        $controller->index();
         break;
     case '/contactanos':
-        require 'controllers/contactanos.php';
+        require_once 'controllers/ContactanosController.php';
+        $controller = new ContactanosController();
+        $controller->index();
+        break;
+    case '/contactanos/enviar':
+        require_once 'controllers/ContactanosController.php';
+        $controller = new ContactanosController();
+        $controller->enviar();
         break;
     case '/logout':
         require 'controllers/AuthController.php';

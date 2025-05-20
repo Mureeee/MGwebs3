@@ -25,10 +25,10 @@
 
         <div class="nav-links">
             <a href="<?php echo APP_URL; ?>/caracteristicas">Características</a>
-            <a href="controllers/como_funciona.php">Cómo Funciona</a>
+            <a href="<?php echo APP_URL; ?>/como-funciona">Cómo Funciona</a>
             <a href="controllers/productos.php">Productos</a>
-            <a href="controllers/soporte.php">Soporte</a>
-            <a href="controllers/contactanos.php">Contáctanos</a>
+            <a href="<?php echo APP_URL; ?>/caracteristicas">Soporte</a>
+            <a href="<?php echo APP_URL; ?>/contactanos">Contáctanos</a>
         </div>
 
         <div class="auth-buttons">
@@ -225,25 +225,8 @@
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
-
-    <div class="footer">
-        <div class="footer-section">
-            <h3>Enlaces Útiles</h3>
-            <ul class="footer-links">
-                <li><a href="<?php echo APP_URL; ?>/">Inicio</a></li>
-                <li><a href="<?php echo APP_URL; ?>/segunda_mano">Segunda Mano</a></li>
-                <li><a href="<?php echo APP_URL; ?>/soporte">Soporte</a></li>
-                <li><a href="<?php echo APP_URL; ?>/contactanos">Contacto</a></li>
-                <?php if (!$isLoggedIn): ?>
-                    <li><a href="<?php echo APP_URL; ?>/login">Iniciar Sesión</a></li>
-                    <li><a href="<?php echo APP_URL; ?>/registrarse.html">Registrarse</a></li>
-                <?php else: ?>
-                    <li><a href="<?php echo APP_URL; ?>/perfil">Mi Perfil</a></li>
-                    <li><a href="<?php echo APP_URL; ?>/carrito">Mi Carrito</a></li>
-                <?php endif; ?>
-            </ul>
-        </div>
-    </div>
+    
+    
 </body>
-
+<?php include 'partials/footer.php'; // Incluir el footer ?> 
 </html> 

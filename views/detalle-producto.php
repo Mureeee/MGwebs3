@@ -12,34 +12,31 @@ extract($data);
     <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/css/reviews.css">
     <style>
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 2rem auto;
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            align-items: start;
             padding: 0 1rem;
         }
 
-        @media (max-width: 1024px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
+        .product-sections {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
 
         .product-detail {
             background: rgba(30, 30, 30, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 2rem;
+            padding: 1.5rem;
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 2rem;
+            gap: 1.5rem;
+            align-items: center;
         }
 
         .product-detail-image {
             width: 100%;
-            height: 600px;
+            height: 300px;
             border-radius: 10px;
             overflow: hidden;
             background: #1a1a1a;
@@ -62,9 +59,10 @@ extract($data);
         }
 
         .product-detail-title {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: #fff;
             margin: 0;
+            margin-bottom: 0.5rem;
         }
 
         .product-detail-category {
@@ -74,16 +72,16 @@ extract($data);
 
         .product-detail-description {
             color: #ccc;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin: 1rem 0;
+            font-size: 1rem;
+            line-height: 1.5;
+            margin: 0.5rem 0;
         }
 
         .product-detail-price {
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: #8b5cf6;
             font-weight: bold;
-            margin: 1rem 0;
+            margin: 0.75rem 0;
         }
 
         .product-detail-actions {
@@ -133,8 +131,8 @@ extract($data);
 
             <!-- Contenido del Producto -->
             <div class="container">
-                <!-- Columna izquierda: Detalles del producto -->
                 <div class="product-sections">
+                    <!-- Detalles del producto -->
                     <div class="product-detail">
                     <div class="product-detail-image">
                     <?php
