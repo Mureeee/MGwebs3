@@ -201,12 +201,16 @@ session_start();
 
         <div class="personalizacion-container">
             <?php if (!isset($_SESSION['usuario_id'])): ?>
+                <br>
+                <br>
+                <br>
                 <div class="step-title">Inicia sesión para continuar</div>
                 <div class="step-description">Necesitas iniciar sesión o registrarte para poder crear tu página web
                     personalizada.</div>
                 <div style="text-align: center; margin-top: 30px;">
                     <button class="btn btn-primary" onclick="window.location.href='iniciar_sesion.html'">Iniciar
                         Sesión</button>
+                        <br> <br>
                     <button class="btn btn-outline" onclick="window.location.href='registrarse.html'">Registrarse</button>
                 </div>
                 <br>
