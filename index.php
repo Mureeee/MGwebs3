@@ -2,8 +2,21 @@
 // Cargar la configuración antes de iniciar la sesión
 require_once 'config/config.php';
 require_once 'config/database.php';
+
+// Incluir todas las clases de controladores y modelos al inicio con require_once
+require_once 'controllers/HomeController.php';
+require_once 'controllers/AuthController.php';
+require_once 'controllers/AdminController.php';
+require_once 'controllers/InfoController.php';
+require_once 'controllers/CaracteristicasController.php';
 require_once 'controllers/ProductosController.php';
 require_once 'controllers/DetalleProductoController.php';
+require_once 'controllers/CarritoController.php';
+require_once 'controllers/CrearPaginaPersoController.php';
+require_once 'controllers/SoporteController.php';
+require_once 'controllers/ContactanosController.php';
+require_once 'controllers/PerfilController.php';
+// Asegúrate de incluir aquí cualquier otro modelo o clase necesaria que defina clases.
 
 // Iniciar la sesión después de la configuración
 session_start();
@@ -16,44 +29,86 @@ $request = $_SERVER['REQUEST_URI'];
 $basePath = dirname($_SERVER['SCRIPT_NAME']);
 $path = substr($request, strlen($basePath));
 
-// Extraer el ID del producto de la URL si existe
+// Limpiar la ruta de posibles barras finales
+$path = rtrim($path, '/');
+
+// Extraer ID y acción de la URL para rutas como /admin/{action}/{id}
+$segments = explode('/', $path);
+$adminAction = null;
+$adminId = null;
+
+// Verificar si la ruta comienza con /admin
+if (isset($segments[1]) && $segments[1] === 'admin') {
+    // Capturar la acción (ej: add, edit, delete)
+    if (isset($segments[2])) {
+        $adminAction = $segments[2];
+    }
+    // Capturar el ID si existe (ej: para edit/123)
+    if (isset($segments[3])) {
+        $adminId = $segments[3];
+    }
+    // Normalizar la ruta para el switch a solo /admin
+    $path = '/admin';
+}
+
+// Extraer el ID del producto de la URL si existe para /detalle-producto
 $productId = null;
 $action = null; // Variable para la acción (agregar-carrito, enviar-resena, etc.)
 
 // Patrón para capturar /detalle-producto/{id} o /detalle-producto/{id}/{action}
-if (preg_match('/\/detalle-producto\/(\d+)(?:\/([a-zA-Z0-9_-]+))?/', $path, $matches)) {
+if ($path === '/detalle-producto' && preg_match('/\/detalle-producto\/(\d+)(?:\/([a-zA-Z0-9_-]+))?/', $request, $matches)) {
     $productId = $matches[1];
     if (isset($matches[2])) {
         $action = $matches[2];
     }
-    $path = '/detalle-producto'; // Normalizar la ruta para el switch
+    // $path ya está normalizado a '/detalle-producto'
 }
 
-// Enrutamiento básico
+// === Enrutamiento ===
 switch ($path) {
     case '/':
     case '':
-        require 'controllers/HomeController.php';
         $controller = new HomeController();
         $controller->index();
         break;
+    
     case '/login':
-        require 'controllers/AuthController.php';
         $controller = new AuthController();
         $controller->login();
         break;
+
     case '/admin':
-        require 'controllers/AdminController.php';
+        // La clase AdminController ya está incluida con require_once al inicio
         $controller = new AdminController();
-        $controller->index();
+
+        // Manejar acciones específicas del panel de administración
+        if ($adminAction === 'add' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            $controller->handleAddProduct();
+        } elseif ($adminAction === 'edit' && $adminId !== null) {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $controller->handleEditProduct($adminId);
+            } else {
+                $controller->editProductForm($adminId);
+            }
+        } elseif ($adminAction === 'delete' && $adminId !== null) {
+             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                 $controller->handleDeleteProduct($adminId);
+             } else {
+                  $_SESSION['error_message'] = 'La eliminación debe ser por método POST.';
+                  header('Location: ' . APP_URL . '/admin');
+                  exit();
+             }
+        } else {
+            // Acción por defecto: mostrar el panel (lista de productos)
+            $controller->index();
+        }
         break;
+
     case '/como-funciona':
-        require 'controllers/InfoController.php';
         $controller = new InfoController();
         $controller->comoFunciona();
         break;
     case '/caracteristicas':
-        require 'controllers/CaracteristicasController.php';
         $controller = new CaracteristicasController();
         $controller->index();
         break;
@@ -63,6 +118,7 @@ switch ($path) {
         break;
     case '/detalle-producto':
         // Asegurarse de que hay un ID de producto
+        // El ID y la acción ya fueron capturados al inicio si la ruta coincide con el patrón
         if ($productId === null) {
              header("HTTP/1.0 400 Bad Request");
              echo "Error: ID de producto no especificado.";
@@ -79,51 +135,44 @@ switch ($path) {
         }
         break;
     case '/agregar-resena':
+        // Esta ruta parece redundante si enviarResena se maneja en /detalle-producto/{id}/enviar-resena
+        // Considera eliminarla si ya no se usa.
         $controller = new ProductosController();
-        $controller->agregarResena();
+        $controller->agregarResena(); // O redirigir si ya no es necesario
         break;
     case '/carrito':
-        require 'controllers/CarritoController.php';
         $controller = new CarritoController();
         $controller->index();
         break;
     case '/carrito/update':
-        require 'controllers/CarritoController.php';
         $controller = new CarritoController();
         $controller->actualizarCantidad();
         break;
     case '/carrito/delete':
-        require 'controllers/CarritoController.php';
         $controller = new CarritoController();
         $controller->eliminarProducto();
         break;
     case '/crearpaginaperso':
-        require 'controllers/CrearPaginaPersoController.php';
         $controller = new CrearPaginaPersoController();
         $controller->index();
         break;
     case '/soporte':
-        require_once 'controllers/SoporteController.php';
         $controller = new SoporteController();
         $controller->index();
         break;
     case '/contactanos':
-        require_once 'controllers/ContactanosController.php';
         $controller = new ContactanosController();
         $controller->index();
         break;
     case '/contactanos/enviar':
-        require_once 'controllers/ContactanosController.php';
         $controller = new ContactanosController();
         $controller->enviar();
         break;
     case '/logout':
-        require 'controllers/AuthController.php';
         $controller = new AuthController();
         $controller->logout();
         break;
     case '/perfil':
-        require 'controllers/PerfilController.php';
         $controller = new PerfilController();
         $controller->index();
         break;
