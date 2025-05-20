@@ -1,3 +1,15 @@
+<?php
+// Asegurar que la sesión esté iniciada (ya debería estar en index.php)
+// if (session_status() == PHP_SESSION_NONE) {
+//     session_start();
+// }
+
+// Asegurar que las variables de usuario necesarias para el navbar estén definidas
+$isLoggedIn = isset($_SESSION['usuario_id']);
+$nombreUsuario = isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : '';
+$rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
+$primeraLetra = !empty($nombreUsuario) ? strtoupper(substr($nombreUsuario, 0, 1)) : '?';
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -26,47 +38,49 @@
         <div class="nav-links">
             <a href="<?php echo APP_URL; ?>/caracteristicas">Características</a>
             <a href="<?php echo APP_URL; ?>/como-funciona">Cómo Funciona</a>
-            <a href="controllers/productos.php">Productos</a>
-            <a href="<?php echo APP_URL; ?>/caracteristicas">Soporte</a>
+            <a href="<?php echo APP_URL; ?>/productos">Productos</a>
+            <a href="<?php echo APP_URL; ?>/soporte">Soporte</a>
             <a href="<?php echo APP_URL; ?>/contactanos">Contáctanos</a>
         </div>
 
         <div class="auth-buttons">
             <?php if ($isLoggedIn): ?>
                 <div class="user-menu">
-                    <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
+                    <div class="user-avatar" title="<?php echo htmlspecialchars($nombreUsuario); ?>">
                         <?php echo $primeraLetra; ?>
                     </div>
                     <div class="dropdown-menu">
                         <div class="dropdown-header">
-                            <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
+                            <?php echo htmlspecialchars($nombreUsuario); ?>
                         </div>
-                        <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
-                            <a href="controllers/admin_panel.php" class="dropdown-item">Panel Admin</a>
+                        <?php if ($rolUsuario === 'administrador'): ?>
+                            <div class="dropdown-item" data-href="<?php echo APP_URL; ?>/admin">Panel Admin</div>
                         <?php endif; ?>
-                        <a href="controllers/perfil.php" class="dropdown-item">Perfil</a>
-                        <a href="<?php echo APP_URL; ?>/logout" class="dropdown-item">Cerrar Sesión</a>
-
+                        <div class="dropdown-item" data-href="<?php echo APP_URL; ?>/perfil">Perfil</div>
+                        <div class="dropdown-item" data-href="<?php echo APP_URL; ?>/logout">Cerrar Sesión</div>
                     </div>
                 </div>
 
                 <!-- Icono del carrito (solo para usuarios logueados) -->
-                <a href="controllers/carrito.php" class="cart-icon">
+                <a href="<?php echo APP_URL; ?>/carrito" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
-                    <?php if (!empty($_SESSION['carrito'])): ?>
-                        <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
+                    <?php
+                    $totalCarrito = isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0;
+                    ?>
+                    <?php if ($totalCarrito > 0): ?>
+                        <span class="cart-count"><?php echo $totalCarrito; ?></span>
                     <?php endif; ?>
                 </a>
             <?php else: ?>
-                <button class="btn btn-ghost" onclick="window.location.href='/MGwebs3/login'">Iniciar Sesión</button>
-                <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
+                <button class="btn btn-ghost" onclick="window.location.href='<?php echo APP_URL; ?>/login'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='<?php echo APP_URL; ?>/registrarse'">Registrate</button>
             <?php endif; ?>
 
-            <button class="btn btn-primary" onclick="window.location.href='controllers/crearpaginaperso.php'">Comenzar</button>
+            <button class="btn btn-primary" onclick="window.location.href='<?php echo APP_URL; ?>/crearpaginaperso'">Comenzar</button>
         </div>
     </nav>
 
@@ -81,15 +95,18 @@
             herramienta efectiva para tu negocio.
         </p>
         <div class="button-container">
-            <button class="btn btn-primary" onclick="window.location.href='controllers/detalle_producto.php?id=16'">
+            <button class="btn btn-primary" onclick="window.location.href='<?php echo APP_URL; ?>/detalle-producto/16'">
                 Pagina mas Vendida
             </button>
-            <button class="btn btn-outline" onclick="window.location.href='controllers/productos.php'">
+            <button class="btn btn-outline" onclick="window.location.href='<?php echo APP_URL; ?>/productos'">
                 Ver mas Páginas
             </button>
         </div>
     </div>
     <style>
+        /* .content-center { */
+        /*     margin-bottom: 150px; /* Ajusta este valor según sea necesario */ */
+        /* } */
         #scrollToTopBtn {
             position: fixed;
             bottom: 30px;
@@ -129,75 +146,88 @@
     </style>
     <script src="public/js/script.js"></script>
     <script>
-        // Código de las partículas
-        const canvas = document.getElementById('sparkles');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
+        // Script para manejar los clics en los elementos del dropdown que no son <a>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item[data-href]');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
+            dropdownItems.forEach(item => {
+                item.style.cursor = 'pointer'; // Indicar que es clickeable
+                item.addEventListener('click', function () {
+                    const href = this.getAttribute('data-href');
+                    if (href) {
+                        window.location.href = href;
+                    }
+                });
+            });
 
-        class Particle {
-            constructor() {
-                this.reset();
+            // Código de las partículas
+            const canvas = document.getElementById('sparkles');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
 
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
-                this.alpha = Math.random() * 0.5 + 0.2;
-                this.size = Math.random() * 1.5 + 0.5;
-            }
-
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-
-                if (this.x < 0 || this.x > canvas.width ||
-                    this.y < 0 || this.y > canvas.height) {
+            class Particle {
+                constructor() {
                     this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.alpha = Math.random() * 0.5 + 0.2;
+                    this.size = Math.random() * 1.5 + 0.5;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > canvas.width ||
+                        this.y < 0 || this.y > canvas.height) {
+                        this.reset();
+                    }
+                }
+
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                    ctx.fill();
                 }
             }
 
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
-                ctx.fill();
+            function initParticles() {
+                particles = [];
+                for (let i = 0; i < 100; i++) {
+                    particles.push(new Particle());
+                }
             }
-        }
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 100; i++) {
-                particles.push(new Particle());
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(particle => {
+                    particle.update();
+                    particle.draw();
+                });
+                requestAnimationFrame(animate);
             }
-        }
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(particle => {
-                particle.update();
-                particle.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        initParticles();
-        animate();
-        // Control del botón para volver arriba
-        document.addEventListener('DOMContentLoaded', function () {
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            initParticles();
+            animate();
+            // Control del botón para volver arriba
             const scrollBtn = document.getElementById('scrollToTopBtn');
 
             // Función para verificar la posición de scroll y mostrar/ocultar el botón
             function checkScrollPosition() {
-                if (window.scrollY > 300) {
+                if (window.scrollY > 800) {
                     scrollBtn.classList.add('visible');
                 } else {
                     scrollBtn.classList.remove('visible');
@@ -217,8 +247,44 @@
                     behavior: 'smooth'
                 });
             });
+
+            // Asegurarse de que el menú de usuario funcione correctamente (añadido)
+            const userMenu = document.querySelector('.user-menu');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            if (userMenu) {
+                // Alternar el menú desplegable al hacer clic en el avatar
+                userMenu.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('active');
+                });
+
+                // Cerrar el menú al hacer clic fuera de él
+                document.addEventListener('click', function () {
+                    if (dropdownMenu.classList.contains('active')) {
+                        dropdownMenu.classList.remove('active');
+                    }
+                });
+
+                // Evitar que el menú se cierre al hacer clic dentro de él
+                dropdownMenu.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Menú móvil (mantener existente)
+            const menuButton = document.querySelector('.menu-button');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (menuButton) {
+                menuButton.addEventListener('click', function () {
+                    navLinks.classList.toggle('active');
+                });
+            }
         });
     </script>
+    
+    <!-- Botón para volver arriba -->
     <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
             stroke-linejoin="round">
@@ -226,7 +292,6 @@
         </svg>
     </button>
     
-    
+    <?php include 'partials/footer.php'; // Incluir el footer ?>
 </body>
-<?php include 'partials/footer.php'; // Incluir el footer ?> 
 </html> 

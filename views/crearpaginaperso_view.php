@@ -1,6 +1,6 @@
 <?php
-// Eliminar la llamada redundante a session_start() ya que se inicia en index.php
-// session_start();
+// Este archivo ahora actúa como una vista y es incluido por CrearPaginaPersoController
+// La sesión ya se inició en index.php y las variables como $isLoggedIn, $primeraLetra, etc. deberían estar disponibles.
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -169,37 +169,15 @@
         <canvas id="sparkles" class="particles-canvas"></canvas>
 
         <!-- Navbar -->
-        <nav class="navbar slide-down">
-            <a href="index.php" class="logo">
-                <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
-                    <path d="M12 8v8" />
-                    <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
-                </svg>
-                <span>MGwebs</span>
-            </a>
-
-            <div class="nav-links">
-                <a href="caracteristicas.php">Características</a>
-                <a href="como_funciona.php">Cómo Funciona</a>
-                <a href="productos.php">Productos</a>
-                <a href="soporte.php" class="active">Soporte</a>
-                <a href="contactanos.php">Contáctanos</a>
-            </div>
-
-            <div class="auth-buttons">
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
-                    Sesión</button>
-                <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
-                <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
-            </div>
-
-            <button class="menu-button">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16m-16 6h16" />
-                </svg>
-            </button>
-        </nav>
+        <?php // Incluir el partial de la barra de navegación si existe y es reusable ?>
+        <?php 
+            // Variables necesarias para views/partials/navbar.php si se incluye
+            $isLoggedIn = isset($_SESSION['usuario_id']);
+            $nombreUsuario = $isLoggedIn ? $_SESSION['usuario_nombre'] : '';
+            $primeraLetra = $isLoggedIn ? strtoupper(substr($nombreUsuario, 0, 1)) : '';
+            $rolUsuario = $isLoggedIn ? $_SESSION['usuario_rol'] : '';
+        ?>
+        <?php include __DIR__ . '/partials/navbar.php'; ?>
 
         <div class="personalizacion-container">
             <?php if (!isset($_SESSION['usuario_id'])): ?>
@@ -207,9 +185,9 @@
                 <div class="step-description">Necesitas iniciar sesión o registrarte para poder crear tu página web
                     personalizada.</div>
                 <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn btn-primary" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                    <button class="btn btn-primary" onclick="window.location.href='<?php echo APP_URL; ?>/login'">Iniciar
                         Sesión</button>
-                    <button class="btn btn-outline" onclick="window.location.href='registrarse.html'">Registrarse</button>
+                    <button class="btn btn-outline" onclick="window.location.href='<?php echo APP_URL; ?>/registrarse'">Registrarse</button>
                 </div>
                 <br>
 
@@ -326,7 +304,7 @@
                     <h3>¡Solicitud enviada con éxito!</h3>
                     <p>Hemos recibido tu solicitud y nos pondremos en contacto contigo pronto para comenzar a trabajar en tu
                         proyecto.</p>
-                    <button class="btn btn-primary" onclick="window.location.href='index.php'"
+                    <button class="btn btn-primary" onclick="window.location.href='<?php echo APP_URL; ?>'"
                         style="margin-top: 20px;">Volver al inicio</button>
                 </div>
 
@@ -341,52 +319,12 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Sobre MGwebs</h3>
-                <p>Tu pagina web <br>de las paginas Webs</p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Enlaces Útiles</h3>
-                <ul class="footer-links">
-                    <li><a href="index.php">Inicio</a></li>
-                    <li><a href="segunda_mano.php">Segunda Mano</a></li>
-                    <li><a href="soporte.html">Soporte</a></li>
-                    <li><a href="contacto.html">Contacto</a></li>
-                    <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                    <li><a href="registrarse.html">Registrarse</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Síguenos</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <ul class="footer-links">
-                    <li><span>📞 +34 123 456 789</span></li>
-                    <li><span>✉️ info@mgwebs.com</span></li>
-                    <li><span>📍 Calle Principal 123, Ciudad</span></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p> 2025 MGwebs. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    <?php include __DIR__ . '/partials/footer.php'; // Incluir el footer ?>
 
     <!-- Scripts -->
-    <script src="js/particles.js"></script>
-    <script src="js/menu.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/particles.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/menu.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/user-menu.js"></script>
     <script>
         $(document).ready(function () {
             // Selección de categoría
@@ -422,7 +360,7 @@
                 formData.append('descripcion', $('#descripcion').val());
 
                 $.ajax({
-                    url: 'procesar_personalizacion.php',
+                    url: '<?php echo APP_URL; ?>/procesar_personalizacion.php', // Usar APP_URL aquí
                     method: 'POST',
                     data: formData,
                     processData: false,
@@ -481,7 +419,4 @@
     </button>
 </body>
 
-</html>
-<?php
-// Esto asegura que el cierre de la etiqueta html sea lo último en el archivo.
-?>
+</html> 

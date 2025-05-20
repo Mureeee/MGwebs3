@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - MGwebs3</title>
     <!-- Enlazar CSS -->
-    <link rel="stylesheet" href="<?php echo SITE_PATH; ?>public/styles.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Incluir scripts JS si hay -->
 </head>
@@ -35,8 +35,8 @@
                         <td><?php // echo $producto['nombre']; ?></td>
                         <td><?php // echo $producto['precio']; ?></td>
                         <td>
-                            <a href="<?php // echo SITE_PATH; ?>admin/edit_product.php?id=<?php // echo $producto['id']; ?>">Editar</a>
-                            <a href="<?php // echo SITE_PATH; ?>admin/delete_product.php?id=<?php // echo $producto['id']; ?>">Eliminar</a>
+                            <a href="<?php // echo APP_URL; ?>/admin/edit_product.php?id=<?php // echo $producto['id']; ?>">Editar</a>
+                            <a href="<?php // echo APP_URL; ?>/admin/delete_product.php?id=<?php // echo $producto['id']; ?>">Eliminar</a>
                         </td>
                     </tr> -->
                     <?php /* endforeach; */ ?>
@@ -65,8 +65,8 @@
                         <td><?php // echo $usuario['email']; ?></td>
                         <td><?php // echo $usuario['rol']; ?></td>
                          <td>
-                            <a href="<?php // echo SITE_PATH; ?>admin/edit_user.php?id=<?php // echo $usuario['id']; ?>">Editar</a>
-                            <a href="<?php // echo SITE_PATH; ?>admin/delete_user.php?id=<?php // echo $usuario['id']; ?>">Eliminar</a>
+                            <a href="<?php // echo APP_URL; ?>/admin/edit_user.php?id=<?php // echo $usuario['id']; ?>">Editar</a>
+                            <a href="<?php // echo APP_URL; ?>/admin/delete_user.php?id=<?php // echo $usuario['id']; ?>">Eliminar</a>
                         </td>
                     </tr> -->
                     <?php /* endforeach; */ ?>
@@ -84,6 +84,6 @@
     <?php include __DIR__ . '/partials/footer.php'; ?>
 
     <!-- Scripts JS específicos del panel si hay -->
-    <script src="<?php echo SITE_PATH; ?>public/js/script.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/script.js"></script>
 </body>
 </html> 

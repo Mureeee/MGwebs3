@@ -18,6 +18,16 @@
     </div>
 
     <div class="auth-buttons">
+        <?php
+            // Asegurar que $isLoggedIn esté definida (debería venir del controlador, pero por seguridad)
+            if (!isset($isLoggedIn)) {
+                $isLoggedIn = isset($_SESSION['usuario_id']);
+            }
+
+            $nombreUsuario = isset($_SESSION['usuario_nombre']) ? $_SESSION['usuario_nombre'] : '';
+            $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
+            $primeraLetra = !empty($nombreUsuario) ? strtoupper(substr($nombreUsuario, 0, 1)) : '?';
+        ?>
         <?php if ($isLoggedIn): ?>
             <div class="user-menu">
                 <div class="user-avatar" title="<?php echo htmlspecialchars($nombreUsuario); ?>">
@@ -28,10 +38,10 @@
                         <?php echo htmlspecialchars($nombreUsuario); ?>
                     </div>
                     <?php if ($rolUsuario === 'administrador'): ?>
-                        <a href="<?php echo APP_URL; ?>/admin" class="dropdown-item">Panel Admin</a>
+                        <div class="dropdown-item" data-href="<?php echo APP_URL; ?>/admin">Panel Admin</div>
                     <?php endif; ?>
-                    <a href="<?php echo APP_URL; ?>/perfil" class="dropdown-item">Perfil</a>
-                    <a href="<?php echo APP_URL; ?>/logout" class="dropdown-item">Cerrar Sesión</a>
+                    <div class="dropdown-item" data-href="<?php echo APP_URL; ?>/perfil">Perfil</div>
+                    <div class="dropdown-item" data-href="<?php echo APP_URL; ?>/logout">Cerrar Sesión</div>
                 </div>
             </div>
 
@@ -61,4 +71,20 @@
             <path d="M4 6h16M4 12h16m-16 6h16" />
         </svg>
     </button>
-</nav> 
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const dropdownItems = document.querySelectorAll('.dropdown-menu .dropdown-item[data-href]');
+
+        dropdownItems.forEach(item => {
+            item.style.cursor = 'pointer'; // Indicar que es clickeable
+            item.addEventListener('click', function () {
+                const href = this.getAttribute('data-href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+</script> 

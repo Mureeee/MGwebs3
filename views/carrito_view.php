@@ -1,47 +1,8 @@
 <?php
-session_start();
-require_once 'config/database.php';
-
-$isLoggedIn = isset($_SESSION['usuario_id']);
-$primeraLetra = $isLoggedIn ? strtoupper(substr($_SESSION['usuario_nombre'], 0, 1)) : '';
-
-// Inicializar el carrito si no existe
-if (!isset($_SESSION['carrito'])) {
-    $_SESSION['carrito'] = [];
-}
-
-// Obtener los productos del carrito
-function obtenerProductosCarrito($conn)
-{
-    if (empty($_SESSION['carrito'])) {
-        return [];
-    }
-
-    $ids = array_keys($_SESSION['carrito']);
-    $placeholders = str_repeat('?,', count($ids) - 1) . '?';
-
-    $query = "SELECT id_producto, nombre_producto, precio, imagenes FROM producto WHERE id_producto IN ($placeholders)";
-    $stmt = $conn->prepare($query);
-    $stmt->execute($ids);
-
-    $productos = [];
-    while ($producto = $stmt->fetch(PDO::FETCH_ASSOC)) {
-        $producto['cantidad'] = $_SESSION['carrito'][$producto['id_producto']];
-        $productos[] = $producto;
-    }
-
-    return $productos;
-}
-
-try {
-    $database = new Database();
-    $conn = $database->getConnection();
-    $productosCarrito = obtenerProductosCarrito($conn);
-} catch (PDOException $e) {
-    $error = "Error de conexión: " . $e->getMessage();
-}
+// Este archivo ahora actúa como una vista para el carrito y es incluido por CarritoController
+// La sesión, $isLoggedIn, $primeraLetra, $nombreUsuario, $rolUsuario y $productosCarrito
+// se esperan que estén disponibles desde CarritoController->index().
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -49,7 +10,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrito - MGwebs</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
@@ -461,7 +422,7 @@ try {
 
     <!-- Navbar -->
     <nav class="navbar slide-down">
-        <a href="index.php" class="logo">
+        <a href="<?php echo APP_URL; ?>" class="logo">
             <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
                 <path d="M12 8v8" />
@@ -471,11 +432,11 @@ try {
         </a>
 
         <div class="nav-links">
-            <a href="caracteristicas.php">Características</a>
-            <a href="como_funciona.php">Cómo Funciona</a>
-            <a href="productos.php">Productos</a>
-            <a href="soporte.php">Soporte</a>
-            <a href="contactanos.php">Contáctanos</a>
+            <a href="<?php echo APP_URL; ?>/caracteristicas">Características</a>
+            <a href="<?php echo APP_URL; ?>/como-funciona">Cómo Funciona</a>
+            <a href="<?php echo APP_URL; ?>/productos">Productos</a>
+            <a href="<?php echo APP_URL; ?>/soporte">Soporte</a>
+            <a href="<?php echo APP_URL; ?>/contactanos">Contáctanos</a>
         </div>
 
         <div class="auth-buttons">
@@ -489,29 +450,32 @@ try {
                             <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
                         </div>
                         <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
-                            <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
+                            <a href="<?php echo APP_URL; ?>/admin" class="dropdown-item">Panel Admin</a>
                         <?php endif; ?>
-                        <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        <a href="<?php echo APP_URL; ?>/logout" class="dropdown-item">Cerrar Sesión</a>
                     </div>
                 </div>
 
                 <!-- Icono del carrito (solo para usuarios logueados) -->
-                <a href="carrito.php" class="cart-icon">
+                <a href="<?php echo APP_URL; ?>/carrito" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                     </svg>
-                    <?php if (!empty($_SESSION['carrito'])): ?>
-                        <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
+                    <?php
+                    $totalCarrito = isset($_SESSION['carrito']) ? count($_SESSION['carrito']) : 0;
+                    ?>
+                    <?php if ($totalCarrito > 0): ?>
+                        <span class="cart-count"><?php echo $totalCarrito; ?></span>
                     <?php endif; ?>
                 </a>
             <?php else: ?>
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
-                <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
+                <button class="btn btn-ghost" onclick="window.location.href='<?php echo APP_URL; ?>/login'">Iniciar Sesión</button>
+                <button class="btn btn-ghost" onclick="window.location.href='<?php echo APP_URL; ?>/registrarse'">Registrate</button>
             <?php endif; ?>
 
-            <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+            <button class="btn btn-primary" onclick="window.location.href='<?php echo APP_URL; ?>/crearpaginaperso'">Comenzar</button>
         </div>
 
         <button class="menu-button">
@@ -524,7 +488,7 @@ try {
     <div class="carrito-container">
         <div class="carrito-header">
             <h1>Tu Carrito</h1>
-            <a href="productos.php" class="seguir-comprando">
+            <a href="<?php echo APP_URL; ?>/productos" class="seguir-comprando">
                 <i class="fas fa-arrow-left"></i> Seguir comprando
             </a>
         </div>
@@ -536,7 +500,7 @@ try {
                 </svg>
                 <h2>Tu carrito está vacío</h2>
                 <p>Parece que aún no has añadido productos a tu carrito</p>
-                <button class="btn-productos" onclick="window.location.href='productos.php'">
+                <button class="btn-productos" onclick="window.location.href='<?php echo APP_URL; ?>/productos'">
                     <i class="fas fa-shopping-bag"></i> Ver Productos
                 </button>
             </div>
@@ -617,7 +581,7 @@ try {
 
     <script>
         function actualizarCantidad(id, cambio) {
-            fetch('actualizar_carrito.php', {
+            fetch('<?php echo APP_URL; ?>/carrito/update', { // Usar ruta amigable
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -643,7 +607,7 @@ try {
 
         function eliminarProducto(id) {
             if (confirm('¿Estás seguro de que quieres eliminar este producto del carrito?')) {
-                fetch('actualizar_carrito.php', {
+                fetch('<?php echo APP_URL; ?>/carrito/delete', { // Usar ruta amigable
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -766,4 +730,4 @@ try {
     </button>
 </body>
 
-</html>
+</html> 

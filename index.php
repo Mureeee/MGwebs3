@@ -3,6 +3,7 @@
 require_once 'config/config.php';
 require_once 'config/database.php';
 require_once 'controllers/ProductosController.php';
+require_once 'controllers/DetalleProductoController.php';
 
 // Iniciar la sesión después de la configuración
 session_start();
@@ -17,9 +18,15 @@ $path = substr($request, strlen($basePath));
 
 // Extraer el ID del producto de la URL si existe
 $productId = null;
-if (preg_match('/\/detalle-producto\/(\d+)/', $path, $matches)) {
+$action = null; // Variable para la acción (agregar-carrito, enviar-resena, etc.)
+
+// Patrón para capturar /detalle-producto/{id} o /detalle-producto/{id}/{action}
+if (preg_match('/\/detalle-producto\/(\d+)(?:\/([a-zA-Z0-9_-]+))?/', $path, $matches)) {
     $productId = $matches[1];
-    $path = '/detalle-producto';
+    if (isset($matches[2])) {
+        $action = $matches[2];
+    }
+    $path = '/detalle-producto'; // Normalizar la ruta para el switch
 }
 
 // Enrutamiento básico
@@ -55,12 +62,45 @@ switch ($path) {
         $controller->index();
         break;
     case '/detalle-producto':
-        $controller = new ProductosController();
-        $controller->detalleProducto($productId);
+        // Asegurarse de que hay un ID de producto
+        if ($productId === null) {
+             header("HTTP/1.0 400 Bad Request");
+             echo "Error: ID de producto no especificado.";
+             exit;
+        }
+        $controller = new DetalleProductoController();
+        if ($action === 'agregar-carrito') {
+            $controller->agregarAlCarrito($productId);
+        } elseif ($action === 'enviar-resena') {
+             $controller->enviarResena($productId);
+        } else {
+            // Acción por defecto: mostrar detalle del producto
+            $controller->index($productId);
+        }
         break;
     case '/agregar-resena':
         $controller = new ProductosController();
         $controller->agregarResena();
+        break;
+    case '/carrito':
+        require 'controllers/CarritoController.php';
+        $controller = new CarritoController();
+        $controller->index();
+        break;
+    case '/carrito/update':
+        require 'controllers/CarritoController.php';
+        $controller = new CarritoController();
+        $controller->actualizarCantidad();
+        break;
+    case '/carrito/delete':
+        require 'controllers/CarritoController.php';
+        $controller = new CarritoController();
+        $controller->eliminarProducto();
+        break;
+    case '/crearpaginaperso':
+        require 'controllers/CrearPaginaPersoController.php';
+        $controller = new CrearPaginaPersoController();
+        $controller->index();
         break;
     case '/soporte':
         require_once 'controllers/SoporteController.php';

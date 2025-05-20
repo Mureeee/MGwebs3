@@ -480,7 +480,7 @@
                 </div>
 
                 <!-- Icono del carrito (solo para usuarios logueados) -->
-                <a href="../controllers/carrito.php" class="cart-icon">
+                <a href="<?php echo APP_URL; ?>/carrito" class="cart-icon">
                     <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
@@ -522,7 +522,7 @@
                 </p>
 
                 <?php if ($isLoggedIn): ?>
-                    <form method="POST" class="form-agregar">
+                    <form method="POST" class="form-agregar" action="<?php echo APP_URL; ?>/detalle-producto/<?php echo $producto['id_producto']; ?>/agregar-carrito">
                         <div class="cantidad-control">
                             <button type="button" onclick="actualizarCantidad(-1)">-</button>
                             <span id="cantidad">1</span>
@@ -635,7 +635,7 @@
             
             <!-- Formulario para añadir reseña con sistema mejorado de estrellas -->
             <?php if ($isLoggedIn): ?>
-                <form method="POST" class="form-resena">
+                <form method="POST" class="form-resena" action="<?php echo APP_URL; ?>/detalle-producto/<?php echo $producto['id_producto']; ?>/enviar-resena">
                     <h3 class="form-resena-titulo">Deja tu opinión</h3>
                     
                     <div class="form-grupo">

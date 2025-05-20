@@ -17,11 +17,8 @@
     font-family: system-ui, -apple-system, sans-serif;
     background-color: rgba(0, 0, 0, 0.96);
     color: var(--white);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
     margin: 0;
-    overflow-x: hidden;
+    /* overflow: hidden; */ /* Eliminar overflow: hidden para permitir scroll vertical */
   }
   
   /* Grid background */
@@ -469,7 +466,7 @@
     background: #4a148c; /* Color morado más oscuro */
     padding: 2rem;
     color: #fff;
-    margin-top: auto;
+    margin-top: 100px; /* Añadir margen superior para separar del contenido */
   }
   
   .footer-content {
@@ -696,13 +693,14 @@
   
   /* Estilos para el contenedor principal */
   .content-center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     text-align: center;
-    width: 90%;
     max-width: 800px;
+    margin: 0 auto 150px auto;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
     z-index: 1;
   }
   
@@ -852,6 +850,22 @@
     color: white;
     text-decoration: none;
     transition: background-color 0.3s;
+  }
+  
+  /* Asegurar estilo consistente para los enlaces del dropdown */
+  .dropdown-menu a.dropdown-item,
+  .dropdown-menu a.dropdown-item:link,
+  .dropdown-menu a.dropdown-item:visited,
+  .dropdown-menu a.dropdown-item:hover,
+  .dropdown-menu a.dropdown-item:active {
+    color: white !important;
+    text-decoration: none !important;
+  }
+  
+  /* Intentar forzar estilo para enlaces visitados en el dropdown */
+  .dropdown-menu a:visited {
+    color: white !important;
+    text-decoration: none !important;
   }
   
   .dropdown-item:hover {
@@ -1173,5 +1187,65 @@
     justify-content: center; /* Centrar horizontalmente */
     align-items: center; /* Centrar verticalmente */
     padding: 20px; /* Añadir un poco de padding */
+  }
+  
+  /* Styles for Admin Panel */
+  .admin-panel {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(30, 30, 30, 0.95); /* Fondo oscuro semi-transparente */
+    backdrop-filter: blur(10px); /* Efecto de desenfoque */
+    border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    color: white;
+  }
+  
+  .admin-panel h1,
+  .admin-panel h2 {
+    color: #a78bfa; /* Color lila para títulos */
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+  }
+  
+  .admin-panel table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    color: white;
+  }
+  
+  .admin-panel th,
+  .admin-panel td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .admin-panel th {
+    background-color: rgba(167, 139, 250, 0.2); /* Lila claro semi-transparente para encabezados */
+    font-weight: bold;
+  }
+  
+  .admin-panel tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05); /* Resaltar fila al pasar el ratón */
+  }
+  
+  .admin-panel td a {
+    color: #a78bfa; /* Color lila para enlaces en acciones */
+    text-decoration: none;
+    margin-right: 10px;
+  }
+  
+  .admin-panel td a:hover {
+    text-decoration: underline;
+  }
+  
+  .admin-panel .no-content {
+    text-align: center;
+    padding: 20px;
+    font-style: italic;
+    color: rgba(255, 255, 255, 0.7);
   }
   
