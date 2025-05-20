@@ -168,56 +168,13 @@
             $buttonText = $isEditing ? 'Actualizar Producto' : 'Guardar Producto';
             ?>
 
-            <!-- Formulario para Añadir/Editar Producto -->
-            <div class="admin-form">
-                <h3><?php echo $formTitle; ?></h3>
-                <form action="<?php echo $formAction; ?>" method="POST" enctype="multipart/form-data">
-                    <?php if ($isEditing): ?>
-                        <input type="hidden" name="id_producto" value="<?php echo $producto['id_producto']; ?>">
-                    <?php endif; ?>
-                    <div class="form-group">
-                        <label for="nombre">Nombre del Producto:</label>
-                        <input type="text" id="nombre" name="nombre" value="<?php echo $isEditing ? htmlspecialchars($producto['nombre_producto']) : ''; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="descripcion">Descripción:</label>
-                        <textarea id="descripcion" name="descripcion" rows="4" required><?php echo $isEditing ? htmlspecialchars($producto['descripcion']) : ''; ?></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="precio">Precio:</label>
-                        <input type="number" id="precio" name="precio" step="0.01" value="<?php echo $isEditing ? htmlspecialchars($producto['precio']) : ''; ?>" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="categoria_id">Categoría:</label>
-                        <select id="categoria_id" name="categoria_id" required>
-                            <?php foreach ($categorias as $categoria): ?>
-                                <option value="<?php echo $categoria['id_categoria']; ?>" <?php echo ($isEditing && $producto['categoria_id'] == $categoria['id_categoria']) ? 'selected' : ''; ?>>
-                                    <?php echo htmlspecialchars($categoria['nombre_categoria']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                     <div class="form-group">
-                        <label for="imagen">Imagen:</label>
-                        <input type="file" id="imagen" name="imagen" accept="image/*">
-                        <?php if ($isEditing && !empty($producto['imagenes'])): ?>
-                             <?php
-                                $current_image_src = '';
-                                $imagenes = json_decode($producto['imagenes'], true);
-                                if (is_array($imagenes) && !empty($imagenes)) {
-                                    $current_image_src = APP_URL . '/' . $imagenes[0];
-                                }
-                             ?>
-                             <?php if (!empty($current_image_src)): ?>
-                                 <p>Imagen actual:</p>
-                                 <img src="<?php echo $current_image_src; ?>" alt="Imagen actual" class="current-image-preview">
-                             <?php endif; ?>
-                        <?php endif; ?>
-                    </div>
-                    <button type="submit"><?php echo $buttonText; ?></button>
-                </form>
-            </div>
-            
+            <?php if (!$isEditing): ?>
+                 <button id="toggleAddProductForm" class="btn">Añadir Nuevo Producto</button>
+                 <div id="addProductFormContainer" style="display: none;">
+                 <!-- El contenido del formulario se cargará aquí vía AJAX -->
+                 </div> <!-- Cierre de #addProductFormContainer -->
+            <?php endif; ?>
+
             <h2>Gestión de Productos</h2>
             <table>
                 <thead>
@@ -297,5 +254,6 @@
 
     <!-- Scripts JS específicos del panel si hay -->
     <script src="<?php echo APP_URL; ?>/public/js/script.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/admin_panel.js"></script>
 </body>
 </html> 
