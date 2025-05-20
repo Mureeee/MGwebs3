@@ -1,5 +1,27 @@
 <?php
+require_once 'config/database.php';
 session_start();
+
+// Verificar si el usuario está logueado
+$isLoggedIn = isset($_SESSION['usuario_id']);
+$primeraLetra = '';
+$nombreUsuario = '';
+$correoUsuario = '';
+$rolUsuario = '';
+$itemsCarrito = 0;
+
+// Si está logueado, obtener información del usuario
+if ($isLoggedIn) {
+    $primeraLetra = strtoupper(substr($_SESSION['usuario_nombre'], 0, 1));
+    $nombreUsuario = $_SESSION['usuario_nombre'];
+    $correoUsuario = isset($_SESSION['usuario_correo']) ? $_SESSION['usuario_correo'] : '';
+    $rolUsuario = isset($_SESSION['usuario_rol']) ? $_SESSION['usuario_rol'] : '';
+
+    // Calcular items en el carrito
+    if (isset($_SESSION['carrito']) && is_array($_SESSION['carrito'])) {
+        $itemsCarrito = array_sum($_SESSION['carrito']);
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -186,10 +208,42 @@ session_start();
             </div>
 
             <div class="auth-buttons">
-                <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
-                    Sesión</button>
-                <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
-                <button class="btn btn-primary" onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
+                <?php if ($isLoggedIn): ?>
+                    <div class="user-menu">
+                        <div class="user-avatar" title="<?php echo htmlspecialchars($nombreUsuario); ?>">
+                            <?php echo $primeraLetra; ?>
+                        </div>
+                        <div class="dropdown-menu">
+                            <div class="dropdown-header">
+                                <?php echo htmlspecialchars($nombreUsuario); ?>
+                            </div>
+                            <?php if ($rolUsuario === 'administrador'): ?>
+                                <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
+                            <?php endif; ?>
+                            <a href="perfil.php" class="dropdown-item">Perfil</a>
+                            <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
+                        </div>
+                    </div>
+
+                    <!-- Icono del carrito (solo para usuarios logueados) -->
+                    <a href="carrito.php" class="cart-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                        <?php if ($itemsCarrito > 0): ?>
+                            <span class="cart-count"><?php echo $itemsCarrito; ?></span>
+                        <?php endif; ?>
+                    </a>
+                <?php else: ?>
+                    <button class="btn btn-ghost" onclick="window.location.href='iniciar_sesion.html'">Iniciar
+                        Sesión</button>
+                    <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
+                <?php endif; ?>
+                <button class="btn btn-primary"
+                    onclick="window.location.href='crearpaginaperso.php'">Comenzar</button>
             </div>
 
             <button class="menu-button">
