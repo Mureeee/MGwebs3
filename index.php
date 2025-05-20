@@ -2,6 +2,7 @@
 // Cargar la configuración antes de iniciar la sesión
 require_once 'config/config.php';
 require_once 'config/database.php';
+require_once 'controllers/ProductosController.php';
 
 // Iniciar la sesión después de la configuración
 session_start();
@@ -38,10 +39,13 @@ switch ($path) {
         $controller->comoFunciona();
         break;
     case '/caracteristicas':
-        require 'controllers/caracteristicas.php';
+        require 'controllers/CaracteristicasController.php';
+        $controller = new CaracteristicasController();
+        $controller->index();
         break;
     case '/productos':
-        require 'controllers/productos.php';
+        $controller = new ProductosController();
+        $controller->index();
         break;
     case '/soporte':
         require 'controllers/soporte.php';
@@ -53,6 +57,11 @@ switch ($path) {
         require 'controllers/AuthController.php';
         $controller = new AuthController();
         $controller->logout();
+        break;
+    case '/perfil':
+        require 'controllers/PerfilController.php';
+        $controller = new PerfilController();
+        $controller->index();
         break;
     default:
         header("HTTP/1.0 404 Not Found");

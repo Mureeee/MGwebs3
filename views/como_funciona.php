@@ -1,3 +1,6 @@
+<?php
+extract($data);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cómo Funciona - MGwebs</title>
-    <link rel="stylesheet" href="../public/styles.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* Estilos específicos para la página de cómo funciona */
@@ -528,69 +531,7 @@
         <!-- Main Content -->
         <div class="content-wrapper">
             <!-- Navbar -->
-            <nav class="navbar slide-down">
-                <a href="../index.php" class="logo">
-                    <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" />
-                        <path d="M12 8v8" />
-                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z" />
-                    </svg>
-                    <span>MGwebs</span>
-                </a>
-
-                <div class="nav-links">
-                    <a href="../caracteristicas.php">Características</a>
-                    <a href="../como_funciona.php">Cómo Funciona</a>
-                    <a href="../productos.php">Productos</a>
-                    <a href="../soporte.php" class="active">Soporte</a>
-                    <a href="../contactanos.php">Contáctanos</a>
-                </div>
-
-                <div class="auth-buttons">
-                    <?php if ($isLoggedIn): ?>
-                        <div class="user-menu">
-                            <div class="user-avatar" title="<?php echo htmlspecialchars($nombreUsuario); ?>">
-                                <?php echo $primeraLetra; ?>
-                            </div>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-header">
-                                    <?php echo htmlspecialchars($nombreUsuario); ?>
-                                </div>
-                                <?php if ($rolUsuario === 'administrador'): ?>
-                                    <a href="../admin_panel.php" class="dropdown-item">Panel Admin</a>
-                                <?php endif; ?>
-                                <a href="../perfil.php" class="dropdown-item">Perfil</a>
-                                <a href="../cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
-                            </div>
-                        </div>
-
-                        <!-- Icono del carrito (solo para usuarios logueados) -->
-                        <a href="../carrito.php" class="cart-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="9" cy="21" r="1" />
-                                <circle cx="20" cy="21" r="1" />
-                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
-                            </svg>
-                            <?php if ($itemsCarrito > 0): ?>
-                                <span class="cart-count"><?php echo $itemsCarrito; ?></span>
-                            <?php endif; ?>
-                        </a>
-                    <?php else: ?>
-                        <button class="btn btn-ghost" onclick="window.location.href='../iniciar_sesion.html'">Iniciar
-                            Sesión</button>
-                        <button class="btn btn-ghost" onclick="window.location.href='../registrarse.html'">Registrate</button>
-                    <?php endif; ?>
-                    <button class="btn btn-primary"
-                        onclick="window.location.href='../crearpaginaperso.php'">Comenzar</button>
-                </div>
-
-                <button class="menu-button">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16m-16 6h16" />
-                    </svg>
-                </button>
-            </nav>
+            <?php include 'partials/navbar.php'; ?>
 
             <!-- Contenido de Cómo Funciona -->
             <div class="how-it-works-container">
@@ -606,7 +547,7 @@
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">1</div>
-                            <div class="timeline-image" style="background-image: url('../public/imagenes/seleccion plantilla.jpg')"></div>
+                            <div class="timeline-image" style="background-image: url('<?php echo APP_URL; ?>/public/imagenes/seleccion plantilla.jpg')"></div>
                             <h3>Selecciona una Plantilla</h3>
                             <p>El primer paso es elegir la plantilla que mejor se adapte a tus necesidades. Ofrecemos
                                 una amplia variedad de diseños profesionales para diferentes sectores y tipos de
@@ -617,7 +558,7 @@
                                 <li><i class="fas fa-check"></i> Vista previa en tiempo real</li>
                                 <li><i class="fas fa-check"></i> Filtros por categoría y funcionalidad</li>
                             </ul>
-                            <a href="../productos.php" class="btn-outline">Ver Plantillas Disponibles</a>
+                            <a href="<?php echo APP_URL; ?>/productos" class="btn-outline">Ver Plantillas Disponibles</a>
                         </div>
                     </div>
 
@@ -625,7 +566,7 @@
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">2</div>
-                            <div class="timeline-image" style="background-image: url('../public/imagenes/personaliza tu sitio.png')"></div>
+                            <div class="timeline-image" style="background-image: url('<?php echo APP_URL; ?>/public/imagenes/personaliza tu sitio.png')"></div>
                             <h3>Personaliza tu Sitio</h3>
                             <p>Una vez seleccionada la plantilla, completa un formulario detallado donde nos indicas tus
                                 preferencias y necesidades específicas para personalizar tu sitio web.</p>
@@ -645,7 +586,7 @@
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">3</div>
-                            <div class="timeline-image" style="background-image: url('../public/imagenes/realiza el pago.webp')"></div>
+                            <div class="timeline-image" style="background-image: url('<?php echo APP_URL; ?>/public/imagenes/realiza el pago.webp')"></div>
                             <h3>Realiza el Pago</h3>
                             <p>Finalmente, procede al pago de tu sitio web. Ofrecemos diferentes métodos de pago seguros
                                 y flexibles para tu comodidad.</p>
@@ -665,7 +606,7 @@
                     <div class="timeline-item">
                         <div class="timeline-content">
                             <div class="timeline-number">4</div>
-                            <div class="timeline-image" style="background-image: url('../public/imagenes/recibe tu sitio web.jpeg')"></div>
+                            <div class="timeline-image" style="background-image: url('<?php echo APP_URL; ?>/public/imagenes/recibe tu sitio web.jpeg')"></div>
                             <h3>Recibe tu Sitio Web</h3>
                             <p>En un plazo de 7 a 14 días (dependiendo de la complejidad del proyecto), recibirás tu
                                 sitio web completamente funcional y listo para ser publicado.</p>
@@ -741,8 +682,8 @@
                     <p>Comienza hoy mismo a construir tu presencia online con MGwebs. Sigue nuestro sencillo proceso y
                         tendrás tu sitio web profesional en poco tiempo.</p>
                     <div class="cta-buttons">
-                        <a href="../controllers/crearpaginaperso.php" class="btn-primary">Comenzar Ahora</a>
-                        <a href="../productos.php" class="btn-secondary">Ver Planes y Precios</a>
+                        <a href="<?php echo APP_URL; ?>/crearpaginaperso" class="btn-primary">Comenzar Ahora</a>
+                        <a href="<?php echo APP_URL; ?>/productos" class="btn-secondary">Ver Planes y Precios</a>
                     </div>
                 </div>
             </div>
@@ -750,56 +691,10 @@
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Sobre MGwebs</h3>
-                <p>Tu pagina web <br>de las paginas Webs</p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Enlaces Útiles</h3>
-                <ul class="footer-links">
-                    <li><a href="../index.php">Inicio</a></li>
-                    <li><a href="../controllers/segunda_mano.php">Segunda Mano</a></li>
-                    <li><a href="../controllers/soporte.php">Soporte</a></li>
-                    <li><a href="../controllers/contactanos.php">Contacto</a></li>
-                    <?php if (!$isLoggedIn): ?>
-                        <li><a href="../iniciar_sesion.html">Iniciar Sesión</a></li>
-                        <li><a href="../registrarse.html">Registrarse</a></li>
-                    <?php else: ?>
-                        <li><a href="../perfil.php">Mi Perfil</a></li>
-                        <li><a href="../carrito.php">Mi Carrito</a></li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Síguenos</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <ul class="footer-links">
-                    <li><span>📞 +34 123 456 789</span></li>
-                    <li><span>✉️ info@mgwebs.com</span></li>
-                    <li><span>📍 Calle Diagonal 123, Barcelona</span></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p> MGwebs. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    <?php include 'partials/footer.php'; ?>
 
     <!-- Scripts -->
-    <script src="../js/menu.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/menu.js"></script>
 
     <!-- Script para el menú de usuario y carrito -->
     <script>
@@ -904,7 +799,7 @@
         resizeCanvas();
         initParticles();
         animate();
-
+        // Control del botón para volver arriba
         document.addEventListener('DOMContentLoaded', function () {
             const scrollBtn = document.getElementById('scrollToTopBtn');
 
@@ -932,12 +827,13 @@
             });
         });
     </script>
+
+    <button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
 </body>
-<button id="scrollToTopBtn" aria-label="Volver arriba" title="Volver arriba">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-        stroke-linejoin="round">
-        <polyline points="18 15 12 9 6 15"></polyline>
-    </svg>
-</button>
 
 </html> 

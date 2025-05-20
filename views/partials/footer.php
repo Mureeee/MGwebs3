@@ -9,12 +9,17 @@
             <div class="footer-section">
                 <h3>Enlaces Útiles</h3>
                 <ul class="footer-links">
-                    <li><a href="../../index.php">Inicio</a></li>
-                    <li><a href="../../controllers/segunda_mano.php">Segunda Mano</a></li>
-                    <li><a href="../../controllers/soporte.php">Soporte</a></li>
-                    <li><a href="../../controllers/contactanos.php">Contacto</a></li>
-                    <li><a href="../../iniciar_sesion.html">Iniciar Sesión</a></li>
-                    <li><a href="../../registrarse.html">Registrarse</a></li>
+                    <li><a href="<?php echo APP_URL; ?>">Inicio</a></li>
+                    <li><a href="<?php echo APP_URL; ?>/segunda-mano">Segunda Mano</a></li>
+                    <li><a href="<?php echo APP_URL; ?>/soporte">Soporte</a></li>
+                    <li><a href="<?php echo APP_URL; ?>/contactanos">Contacto</a></li>
+                    <?php if (!$isLoggedIn): ?>
+                        <li><a href="<?php echo APP_URL; ?>/login">Iniciar Sesión</a></li>
+                        <li><a href="<?php echo APP_URL; ?>/registrarse">Registrarse</a></li>
+                    <?php else: ?>
+                        <li><a href="<?php echo APP_URL; ?>/perfil">Mi Perfil</a></li>
+                        <li><a href="<?php echo APP_URL; ?>/carrito">Mi Carrito</a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
 
@@ -32,7 +37,7 @@
                 <ul class="footer-links">
                     <li><span>📞 +34 123 456 789</span></li>
                     <li><span>✉️ info@mgwebs.com</span></li>
-                    <li><span>📍 Calle Principal 123, Ciudad</span></li>
+                    <li><span>📍 Calle Diagonal 123, Barcelona</span></li>
                 </ul>
             </div>
         </div>
@@ -41,6 +46,6 @@
             <p> MGwebs. Todos los derechos reservados.</p>
         </div>
     </footer>
-<script src="../../public/js/script.js"></script>
+<script src="<?php echo APP_URL; ?>/public/js/script.js"></script>
 </body>
 </html> 

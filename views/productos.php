@@ -1,36 +1,59 @@
+<?php
+extract($data);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MGwebs - Productos</title>
-    <link rel="stylesheet" href="../public/styles.css">
+    <link rel="stylesheet" href="<?php echo APP_URL; ?>/public/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Añadir más espacio entre el navbar y la sección de productos */
+        /* Estilos específicos para la página de productos */
+        .particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        main {
+            min-height: 100vh;
+            background-color: rgba(0, 0, 0, 0.96);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding-top: 1rem;
+        }
+
         .products-section {
-            margin-top: 6rem; /* Aumentar el margen superior */
-            padding-top: 2rem; /* Añadir padding superior adicional */
+            max-width: 1400px;
+            margin: 8rem auto 4rem;
+            padding: 0 2rem;
             display: flex;
             gap: 2rem;
-        }
-        
-        /* Asegurar que el contenido no se solape con el navbar */
-        .content-wrapper {
-            padding-top: 1rem;
         }
         
         /* Estilo para el panel de filtros */
         .filters-panel {
             width: 300px;
             background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 10px;
             padding: 1.5rem;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 100px;
             height: fit-content;
-            margin-left: 2rem;
+            margin-left: 0;
         }
         
         .filters-title {
@@ -133,54 +156,60 @@
         /* Estilo para las tarjetas de productos */
         .products-container {
             flex: 1;
+            width: 100%;
         }
         
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 2rem;
-            padding: 0 2rem;
+            width: 100%;
         }
         
         .product-card {
             background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         
         .product-image {
             width: 100%;
             height: 200px;
             object-fit: cover;
+            background-color: #333;
         }
         
         .product-info {
             padding: 1.5rem;
+            flex-grow: 1; /* Para que la info ocupe el espacio restante */
+            display: flex;
+            flex-direction: column;
         }
         
         .product-info h3 {
             margin-top: 0;
             color: white;
             font-size: 1.4rem;
+            margin-bottom: 0.5rem; /* Espacio debajo del título */
         }
         
         .product-category {
             color: #6a11cb;
             font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem; /* Espacio debajo de la categoría */
         }
         
         .product-description {
             color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             line-height: 1.5;
+            flex-grow: 1; /* Para que la descripción empuje el precio y botón hacia abajo */
         }
         
         .product-price {
@@ -188,6 +217,28 @@
             font-weight: bold;
             color: white;
             margin-bottom: 1.5rem;
+            margin-top: auto; /* Empuja el precio y botón hacia abajo */
+        }
+        
+        .product-card .btn-primary {
+            display: block; /* Hacer el botón un bloque para ocupar ancho */
+            width: 100%;
+            text-align: center; /* Centrar texto del botón */
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            border: none;
+            padding: 0.75rem 1.5rem; /* Ajustar padding */
+            color: white;
+            font-weight: 500;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-decoration: none; /* Quitar subrayado */
+            font-size: 1rem; /* Ajustar tamaño de fuente */
+        }
+        
+        .product-card .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(106, 17, 203, 0.2);
         }
         
         .no-products {
@@ -195,78 +246,88 @@
             padding: 2rem;
             color: white;
             font-size: 1.2rem;
-            grid-column: 1 / -1;
+            grid-column: 1 / -1; /* Centrar en el grid */
         }
         
         /* Responsive */
         @media (max-width: 992px) {
             .products-section {
                 flex-direction: column;
+                align-items: center; /* Centrar contenido en columna */
             }
             
             .filters-panel {
-                width: auto;
-                margin: 0 2rem;
+                width: 90%; /* Ajustar ancho del panel de filtros */
+                max-width: 400px; /* Limitar ancho máximo */
+                margin: 0 auto 2rem; /* Centrar y añadir margen inferior */
                 position: static;
+                top: auto;
+            }
+            
+            .products-container {
+                width: 100%; /* Ajustar ancho del contenedor de productos */
+                padding: 0 2rem; /* Añadir padding lateral */
             }
         }
         
         @media (max-width: 768px) {
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1.5rem; /* Reducir gap */
             }
         }
         
         @media (max-width: 576px) {
+            .products-section {
+                 padding: 0 1rem; /* Reducir padding en pantallas muy pequeñas */
+            }
             .products-grid {
                 grid-template-columns: 1fr;
+                gap: 1rem; /* Reducir gap */
+            }
+             .filters-panel {
+                width: 95%;
+                margin: 0 auto 1.5rem;
+                padding: 1rem;
             }
         }
 
-        #scrollToTop {
-            transition: opacity 0.3s;
-        }
-
-        #scrollToTop:hover {
-            background-color: #2575fc; /* Cambiar color al pasar el ratón */
-        }
-
+        /* Estilos para el botón de volver arriba */
         #scrollToTopBtn {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  width: 50px;
-  height: 50px;
-  background-color: #a78bfa; /* Color lila */
-  color: white;
-  border: none;
-  border-radius: 50%;
-  display: flex; /* Cambiado de 'none' a 'flex' para que sea visible por defecto */
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-  z-index: 9999; /* Aumentado para asegurar que esté por encima de otros elementos */
-  opacity: 0; /* Inicialmente transparente */
-  pointer-events: none; /* No interactuable cuando está invisible */
-}
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #a78bfa; /* Color lila */
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s, opacity 0.3s;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
 
-#scrollToTopBtn.visible {
-  opacity: 1;
-  pointer-events: auto;
-}
+        #scrollToTopBtn.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-#scrollToTopBtn:hover {
-  background-color: #8b5cf6;
-  transform: scale(1.1);
-}
+        #scrollToTopBtn:hover {
+            background-color: #8b5cf6;
+            transform: scale(1.1);
+        }
 
-#scrollToTopBtn svg {
-  width: 24px;
-  height: 24px;
-}
-
+        #scrollToTopBtn svg {
+            width: 24px;
+            height: 24px;
+        }
     </style>
 </head>
 <body>
@@ -277,66 +338,7 @@
         <!-- Main Content -->
         <div class="content-wrapper">
             <!-- Navbar -->
-            <nav class="navbar slide-down">
-                <a href="../index.php" class="logo">
-                    <svg class="bot-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 2a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2 2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z"/>
-                        <path d="M12 8v8"/>
-                        <path d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5z"/>
-                    </svg>
-                    <span>MGwebs</span>
-                </a>
-
-                <div class="nav-links">
-                    <a href="<?php echo APP_URL; ?>/caracteristicas">Características</a>
-                    <a href="<?php echo APP_URL; ?>/como-funciona">Cómo Funciona</a>
-                    <a href="<?php echo APP_URL; ?>/productos">Productos</a>
-                    <a href="<?php echo APP_URL; ?>/soporte">Soporte</a>
-                    <a href="<?php echo APP_URL; ?>/contactanos">Contáctanos</a>
-                </div>
-
-                <div class="auth-buttons">
-                    <?php if ($isLoggedIn): ?>
-                        <div class="user-menu">
-                            <div class="user-avatar" title="<?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>">
-                                <?php echo $primeraLetra; ?>
-                            </div>
-                            <div class="dropdown-menu">
-                                <div class="dropdown-header">
-                                    <?php echo htmlspecialchars($_SESSION['usuario_nombre']); ?>
-                                </div>
-                                <?php if (isset($_SESSION['usuario_rol']) && $_SESSION['usuario_rol'] === 'administrador'): ?>
-                                    <a href="admin_panel.php" class="dropdown-item">Panel Admin</a>
-                                <?php endif; ?>
-                                <a href="perfil.php" class="dropdown-item">Perfil</a>
-                                <a href="cerrar_sesion.php" class="dropdown-item">Cerrar Sesión</a>
-                            </div>
-                        </div>
-                    <?php else: ?>
-                        <button class="btn btn-ghost" style="padding: 15px 30px; font-size: 1.2rem;" onclick="window.location.href='iniciar_sesion.html'">Iniciar Sesión</button>
-                        <button class="btn btn-ghost" onclick="window.location.href='registrarse.html'">Registrate</button>
-                    <?php endif; ?>
-
-                    <!-- Icono del carrito: SIEMPRE visible -->
-                    <a href="../controllers/carrito.php" class="cart-icon">
-                        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="9" cy="21" r="1"/>
-                            <circle cx="20" cy="21" r="1"/>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                        </svg>
-                        <?php if (!empty($_SESSION['carrito'])): ?>
-                            <span class="cart-count"><?php echo array_sum($_SESSION['carrito']); ?></span>
-                        <?php endif; ?>
-                    </a>
-                    <button class="btn btn-primary" onclick="window.location.href='../controllers/crearpaginaperso.php'">Comenzar</button>
-                </div>
-
-                <button class="menu-button">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h16m-16 6h16"/>
-                    </svg>
-                </button>
-            </nav>
+            <?php include 'partials/navbar.php'; ?>
 
             <!-- Contenido de Productos -->
             <div class="products-section">
@@ -344,7 +346,7 @@
                 <!-- Panel de Filtros -->
                 <div class="filters-panel">
                     <h2 class="filters-title">Filtros</h2>
-                    <form action="" method="GET" id="filtrosForm">
+                    <form action="<?php echo APP_URL; ?>/productos" method="GET" id="filtrosForm">
                         <div class="filter-group">
                             <label for="nombre" class="filter-label">Buscar por nombre:</label>
                             <input type="text" id="nombre" name="nombre" class="filter-input" placeholder="Nombre del producto" value="<?php echo htmlspecialchars($filtros['nombre'] ?? ''); ?>">
@@ -368,23 +370,24 @@
                                 <input type="number" id="precio_min" name="precio_min" placeholder="Min €" min="0" value="<?php echo htmlspecialchars($filtros['precio_min'] ?? ''); ?>">
                                 <input type="number" id="precio_max" name="precio_max" placeholder="Max €" min="0" value="<?php echo htmlspecialchars($filtros['precio_max'] ?? ''); ?>">
                             </div>
-                            <input type="range" id="precio_slider" class="price-range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" step="10" value="<?php echo $filtros['precio_max'] ?? $precioMax; ?>">
-                            <div style="display: flex; justify-content: space-between; color: white; font-size: 0.8rem;">
-                                <span><?php echo number_format($precioMin, 0); ?>€</span>
-                                <span><?php echo number_format($precioMax, 0); ?>€</span>
-                            </div>
+                             <?php if (isset($precioMin, $precioMax)): ?>
+                                <input type="range" id="precio_slider" class="price-range" min="<?php echo $precioMin; ?>" max="<?php echo $precioMax; ?>" step="1" value="<?php echo $filtros['precio_max'] ?? $precioMax; ?>">
+                                <div style="display: flex; justify-content: space-between; color: white; font-size: 0.8rem;">
+                                    <span><?php echo number_format($precioMin, 0); ?>€</span>
+                                    <span><?php echo number_format($precioMax, 0); ?>€</span>
+                                </div>
+                            <?php endif; ?>
                         </div>
                         
                         <button type="submit" class="filter-button">Aplicar Filtros</button>
                         
                         <div class="reset-filters">
-                            <a href="productos.php">Limpiar filtros</a>
+                            <a href="<?php echo APP_URL; ?>/productos">Limpiar filtros</a>
                         </div>
                     </form>
                 </div>
                 
                 <!-- Contenedor de Productos -->
-                <div class="products-container">
                 <div class="products-grid">
                         <?php if (empty($productos)): ?>
                             <div class="no-products">
@@ -393,15 +396,31 @@
                         <?php else: ?>
                     <?php foreach ($productos as $prod): ?>
                         <div class="product-card">
-                            <img src="../<?php echo htmlspecialchars($prod['imagenes']); ?>" 
-                                 alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
-                                 class="product-image">
+                             <?php
+                                $imagenes = json_decode($prod['imagenes'], true);
+                                $image_src = '';
+                                if (!empty($imagenes) && is_array($imagenes) && isset($imagenes[0])) {
+                                    $primera_imagen = $imagenes[0];
+                                    // Asumir que la ruta en la DB es solo el nombre del archivo o una ruta relativa a public/imagenes/
+                                    $image_src = APP_URL . '/public/imagenes/' . htmlspecialchars($primera_imagen);
+                                }
+                            ?>
+                            <?php if (!empty($image_src) && @getimagesize($image_src)): ?>
+                                <img src="<?php echo $image_src; ?>" 
+                                     alt="<?php echo htmlspecialchars($prod['nombre_producto']); ?>"
+                                     class="product-image">
+                            <?php else: ?>
+                                <!-- Placeholder o imagen por defecto si no hay imagen -->
+                                <div class="product-image" style="background-color: #555; display: flex; align-items: center; justify-content: center; color: white;">
+                                    No Image
+                                </div>
+                            <?php endif; ?>
                             <div class="product-info">
                                 <h3><?php echo htmlspecialchars($prod['nombre_producto']); ?></h3>
                                 <p class="product-category"><?php echo htmlspecialchars($prod['nombre_categoria']); ?></p>
                                 <p class="product-description"><?php echo htmlspecialchars($prod['descripcion']); ?></p>
                                 <p class="product-price">€<?php echo number_format($prod['precio'], 2); ?></p>
-                                <a href="../controllers/detalle_producto.php?id=<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
+                                <a href="<?php echo APP_URL; ?>/detalle-producto/<?php echo $prod['id_producto']; ?>" class="btn btn-primary">
                                     Ver Detalles
                                 </a>
                             </div>
@@ -409,58 +428,16 @@
                     <?php endforeach; ?>
                         <?php endif; ?>
                     </div>
-                </div>
+                
             </div>
         </div>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Sobre MGwebs</h3>
-                <p>Tu pagina web <br>de las paginas Webs</p>
-            </div>
-
-            <div class="footer-section">
-                <h3>Enlaces Útiles</h3>
-                <ul class="footer-links">
-                    <li><a href="../index.php">Inicio</a></li>
-                    <li><a href="../controllers/segunda_mano.php">Segunda Mano</a></li>
-                    <li><a href="soporte.html">Soporte</a></li>
-                    <li><a href="../controllers/contactanos.php">Contacto</a></li>
-                    <li><a href="iniciar_sesion.html">Iniciar Sesión</a></li>
-                    <li><a href="registrarse.html">Registrarse</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-section">
-                <h3>Síguenos</h3>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-
-            <div class="footer-section">
-                <h3>Contacto</h3>
-                <ul class="footer-links">
-                    <li><span>📞 +34 123 456 789</span></li>
-                    <li><span>✉️ info@mgwebs.com</span></li>
-                    <li><span>📍 Calle Principal 123, Ciudad</span></li>
-                </ul>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <p> MGwebs. Todos los derechos reservados.</p>
-        </div>
-    </footer>
+    <?php include 'partials/footer.php'; ?>
 
     <!-- Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../public/js/menu.js"></script>
+    <script src="<?php echo APP_URL; ?>/public/js/menu.js"></script>
     
     <!-- Código de las partículas -->
     <script>
@@ -530,61 +507,100 @@
         // Script para el slider de precio
         document.addEventListener('DOMContentLoaded', function() {
             const precioSlider = document.getElementById('precio_slider');
-            const precioMax = document.getElementById('precio_max');
-            
-            if (precioSlider && precioMax) {
+            const precioMaxInput = document.getElementById('precio_max'); // Corregir variable
+            const precioMinInput = document.getElementById('precio_min'); // Añadir para sincronización bidireccional
+
+            if (precioSlider && precioMaxInput) {
+                // Sincronizar slider con input max
                 precioSlider.addEventListener('input', function() {
-                    precioMax.value = this.value;
+                    precioMaxInput.value = this.value;
                 });
-                
-                precioMax.addEventListener('input', function() {
-                    precioSlider.value = this.value;
+
+                // Sincronizar input max con slider
+                precioMaxInput.addEventListener('input', function() {
+                     if (parseInt(this.value) >= parseInt(precioSlider.min) && parseInt(this.value) <= parseInt(precioSlider.max)) { // Validar rango
+                         precioSlider.value = this.value;
+                     }
                 });
+
+                 // Sincronizar input min con slider (opcional, si quieres que mueva el slider min)
+                precioMinInput.addEventListener('input', function() {
+                      // Podrías añadir lógica aquí si tienes un slider de precio mínimo también,
+                      // o si quieres que el input mínimo afecte de alguna manera al rango visualizado.
+                      // Por ahora, solo nos aseguramos de que el slider refleje el máximo.
+                 });
+
+                 // Inicializar input max con el valor del slider si hay un valor pre-filtrado
+                 if (precioMaxInput.value === '') {
+                     precioMaxInput.value = precioSlider.value; // Inicializar si está vacío
+                 }
             }
         });
 
-        // Mostrar el botón cuando se desplaza hacia abajo
-        window.onscroll = function() {
-            const button = document.getElementById("scrollToTop");
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                button.style.display = "block";
-            } else {
-                button.style.display = "none";
-            }
-        };
-
-        // Función para hacer scroll hacia arriba
-        document.getElementById("scrollToTop").onclick = function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
-
-        // Control del botón para volver arriba
-        document.addEventListener('DOMContentLoaded', function() {
+        // Control del botón para volver arriba (usando la lógica del archivo de caracteristicas que ya funcionaba)
+        document.addEventListener('DOMContentLoaded', function () {
             const scrollBtn = document.getElementById('scrollToTopBtn');
-            
+
             // Función para verificar la posición de scroll y mostrar/ocultar el botón
             function checkScrollPosition() {
-                if (window.scrollY > 300) {
+                if (window.scrollY > 300) { // Usar un umbral similar al de caracteristicas
                     scrollBtn.classList.add('visible');
                 } else {
                     scrollBtn.classList.remove('visible');
                 }
             }
-            
+
             // Verificar al cargar la página
             checkScrollPosition();
-            
+
             // Verificar al hacer scroll
             window.addEventListener('scroll', checkScrollPosition);
-            
+
             // Acción al hacer clic en el botón
-            scrollBtn.addEventListener('click', function() {
+            scrollBtn.addEventListener('click', function () {
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
                 });
             });
         });
+
+        // Asegurarse de que el menú de usuario funcione correctamente
+        document.addEventListener('DOMContentLoaded', function () {
+            const userMenu = document.querySelector('.user-menu');
+            const dropdownMenu = document.querySelector('.dropdown-menu');
+
+            if (userMenu) {
+                // Alternar el menú desplegable al hacer clic en el avatar
+                userMenu.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    dropdownMenu.classList.toggle('active');
+                });
+
+                // Cerrar el menú al hacer clic fuera de él
+                document.addEventListener('click', function () {
+                    if (dropdownMenu.classList.contains('active')) {
+                        dropdownMenu.classList.remove('active');
+                    }
+                });
+
+                // Evitar que el menú se cierre al hacer clic dentro de él
+                dropdownMenu.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                });
+            }
+
+            // Menú móvil
+            const menuButton = document.querySelector('.menu-button');
+            const navLinks = document.querySelector('.nav-links');
+
+            if (menuButton) {
+                menuButton.addEventListener('click', function () {
+                    navLinks.classList.toggle('active');
+                });
+            }
+        });
+
     </script>
 
     <!-- Botón para volver arriba -->
@@ -594,22 +610,5 @@
             <polyline points="18 15 12 9 6 15"></polyline>
         </svg>
     </button>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const scrollBtn = document.getElementById('scrollToTopBtn');
-        function checkScrollPosition() {
-            if (window.scrollY > 200) {
-                scrollBtn.classList.add('visible');
-            } else {
-                scrollBtn.classList.remove('visible');
-            }
-        }
-        checkScrollPosition();
-        window.addEventListener('scroll', checkScrollPosition);
-        scrollBtn.addEventListener('click', function () {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    });
-    </script>
 </body>
 </html> 

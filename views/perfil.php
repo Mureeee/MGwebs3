@@ -1,4 +1,8 @@
-<?php include 'partials/header.php'; // Incluir el header ?>
+<?php
+extract($data); // Asegurarse de extraer los datos del controlador
+include 'partials/header.php'; // Incluir el header
+include 'partials/navbar.php'; // Incluir el navbar
+?>
 
 <main>
     <div class="perfil-container">

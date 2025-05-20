@@ -1,9 +1,6 @@
 <?php
-
-require_once ROOT_PATH . '/config/database.php';
-
-class InfoController {
-    public function comoFunciona() {
+class CaracteristicasController {
+    public function index() {
         // Verificar si el usuario está logueado
         $isLoggedIn = isset($_SESSION['usuario_id']);
         $primeraLetra = '';
@@ -35,7 +32,7 @@ class InfoController {
             'itemsCarrito' => $itemsCarrito
         ];
 
-        // Cargar la vista, pasando los datos
-        require 'views/como_funciona.php';
+        // Cargar la vista
+        require_once 'views/caracteristicas.php';
     }
 } 

@@ -457,8 +457,12 @@
   
   /* Footer Styles */
   main {
-    flex: 1;
-    padding-top: 90px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    margin-top: 80px;
   }
   
   .footer {
