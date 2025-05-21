@@ -5,7 +5,7 @@ include 'partials/navbar.php'; // Incluir el navbar
 ?>
 
 <main>
-    <div class="perfil-container">
+    <div class="perfil-container registration-container">
         <h1>Mi Perfil</h1>
 
         <?php if (!empty($mensaje)): ?>
@@ -16,21 +16,29 @@ include 'partials/navbar.php'; // Incluir el navbar
             <div class="mensaje-error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form action="../perfil.php" method="POST">
-            <label for="nombre">Nombre:</label>
-            <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
+        <form action="<?php echo APP_URL; ?>/perfil" method="POST" class="perfil-form">
+            <div class="form-group">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($usuario['nombre']); ?>" required>
+            </div>
 
-            <label for="email">Correo Electrónico:</label>
-            <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($usuario['correo']); ?>" required>
+            <div class="form-group">
+                <label for="email">Correo Electrónico:</label>
+                <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($usuario['correo']); ?>" required>
+            </div>
             
-            <label for="direccion_envio">Dirección de Envío:</label>
-            <textarea id="direccion_envio" name="direccion_envio"><?php echo htmlspecialchars($usuario['direccion_envio']); ?></textarea>
+            <div class="form-group">
+                <label for="direccion_envio">Dirección de Envío:</label>
+                <textarea id="direccion_envio" name="direccion_envio"><?php echo htmlspecialchars($usuario['direccion_envio']); ?></textarea>
+            </div>
 
             <h2>Cambiar Contraseña (opcional)</h2>
-            <label for="password">Nueva Contraseña:</label>
-            <input type="password" id="password" name="password">
+            <div class="form-group">
+                <label for="password">Nueva Contraseña:</label>
+                <input type="password" id="password" name="password">
+            </div>
 
-            <button type="submit">Actualizar Perfil</button>
+            <button type="submit" class="btn btn-primary">Actualizar Perfil</button>
         </form>
 
         <!-- Aquí podrías añadir más secciones como historial de pedidos, etc. -->

@@ -46,6 +46,4 @@
             <p> MGwebs. Todos los derechos reservados.</p>
         </div>
     </footer>
-<script src="<?php echo APP_URL; ?>/public/js/script.js"></script>
-</body>
-</html> 
+<script src="<?php echo APP_URL; ?>/public/js/script.js"></script> 

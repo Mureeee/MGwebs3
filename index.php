@@ -16,6 +16,7 @@ require_once 'controllers/CrearPaginaPersoController.php';
 require_once 'controllers/SoporteController.php';
 require_once 'controllers/ContactanosController.php';
 require_once 'controllers/PerfilController.php';
+require_once 'controllers/RegisterController.php';
 // Asegúrate de incluir aquí cualquier otro modelo o clase necesaria que defina clases.
 
 // Iniciar la sesión después de la configuración
@@ -32,23 +33,35 @@ $path = substr($request, strlen($basePath));
 // Limpiar la ruta de posibles barras finales
 $path = rtrim($path, '/');
 
-// Extraer ID y acción de la URL para rutas como /admin/{action}/{id}
-$segments = explode('/', $path);
-$adminAction = null;
-$adminId = null;
+// Extraer ID y acción de la URL para rutas dinámicas antes del switch
+$productId = null;
+$action = null; // Variable para la acción (agregar-carrito, enviar-resena, etc.)
 
-// Verificar si la ruta comienza con /admin
-if (isset($segments[1]) && $segments[1] === 'admin') {
-    // Capturar la acción (ej: add, edit, delete)
-    if (isset($segments[2])) {
-        $adminAction = $segments[2];
+// Patrón para capturar /detalle-producto/{id} o /detalle-producto/{id}/{action}
+if (preg_match('/\/detalle-producto\/(\d+)(?:\/([a-zA-Z0-9_-]+))?/', $path, $matches)) {
+    $productId = $matches[1];
+    if (isset($matches[2])) {
+        $action = $matches[2];
     }
-    // Capturar el ID si existe (ej: para edit/123)
-    if (isset($segments[3])) {
-        $adminId = $segments[3];
+    // Re-normalizar la ruta a /detalle-producto para que coincida con el caso del switch
+    $path = '/detalle-producto';
+} else {
+    // Extraer ID y acción para rutas de admin antes del switch
+    $adminAction = null;
+    $adminId = null;
+    // Verificar si la ruta comienza con /admin
+    if (isset($segments[1]) && $segments[1] === 'admin') {
+        // Capturar la acción (ej: add, edit, delete)
+        if (isset($segments[2])) {
+            $adminAction = $segments[2];
+        }
+        // Capturar el ID si existe (ej: para edit/123)
+        if (isset($segments[3])) {
+            $adminId = $segments[3];
+        }
+        // Normalizar la ruta para el switch a solo /admin
+        $path = '/admin';
     }
-    // Normalizar la ruta para el switch a solo /admin
-    $path = '/admin';
 }
 
 // Extraer el ID del producto de la URL si existe para /detalle-producto
@@ -117,8 +130,7 @@ switch ($path) {
         $controller->index();
         break;
     case '/detalle-producto':
-        // Asegurarse de que hay un ID de producto
-        // El ID y la acción ya fueron capturados al inicio si la ruta coincide con el patrón
+        // Asegurarse de que hay un ID de producto extraído por el preg_match anterior
         if ($productId === null) {
              header("HTTP/1.0 400 Bad Request");
              echo "Error: ID de producto no especificado.";
@@ -175,6 +187,29 @@ switch ($path) {
     case '/perfil':
         $controller = new PerfilController();
         $controller->index();
+        break;
+    case '/registrarse':
+        $controller = new RegisterController();
+        // Mostrar el formulario solo para peticiones GET
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+             $controller->index();
+        } else {
+            // Para otros métodos en /registrarse, devolver método no permitido
+             header("HTTP/1.0 405 Method Not Allowed");
+             echo "Método no permitido para esta ruta.";
+             exit();
+        }
+        break;
+    case '/registrarse/process':
+        $controller = new RegisterController();
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Esta es la ruta correcta para procesar el registro POST via AJAX
+            $controller->process();
+        } else {
+            header("HTTP/1.0 405 Method Not Allowed");
+            echo "Método no permitido. Solo POST es aceptado para esta ruta.";
+            exit();
+        }
         break;
     default:
         header("HTTP/1.0 404 Not Found");
