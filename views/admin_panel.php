@@ -162,16 +162,34 @@
             }
 
             // Determinar si estamos en modo edición o añadir
-            // Si hay un producto en $data, significa que estamos editando
-            $isEditing = isset($producto_a_editar) && !empty($producto_a_editar); // Usar un nombre diferente para evitar conflicto con el loop de productos
+            // Si hay un producto en $producto_a_editar (pasado desde AdminController::editProductForm), significa que estamos editando
+            $isEditing = isset($producto_a_editar) && !empty($producto_a_editar);
             $formTitle = $isEditing ? 'Editar Producto' : 'Añadir Nuevo Producto';
+            // Si estamos editando, la acción es /admin/edit/{id}, si no, es /admin/add
             $formAction = $isEditing ? APP_URL . '/admin/edit/' . $producto_a_editar['id_producto'] : APP_URL . '/admin/add';
             $buttonText = $isEditing ? 'Actualizar Producto' : 'Guardar Producto';
 
-            // Si estamos en modo edición, mostrar el formulario de edición directamente
-            if ($isEditing):
+            // Si estamos añadiendo, inicializar un array vacío para los campos
+            if (!$isEditing) {
+                $producto_a_editar = []; // Esto asegura que no haya errores al acceder a $producto_a_editar si no estamos editando
+            }
+
+            // Eliminar el botón de alternar si estamos editando, ya que el formulario estará visible
+            if (!$isEditing):
             ?>
-             <div id="addProductFormContainer">
+                 <button id="toggleAddProductForm" class="btn">Añadir Nuevo Producto</button>
+            <?php endif; ?>
+
+             <?php
+                 // Mostrar el formulario siempre que no estemos en modo edición, o si estamos en modo edición.
+                 // Si no estamos editando, inicialmente estará oculto por JS (que quitaremos).
+                 // Ahora, mostraremos el formulario si NO estamos editando (es el de añadir) O si SÍ estamos editando.
+                 // La lógica JS de ocultar/mostrar ya no será necesaria para el modo edición/añadir en sí.
+                 // Simplemente mostramos el formulario único.
+                 // El contenedor puede usarse para aplicar estilos.
+             ?>
+
+            <div id="productFormContainer">
                 <form action="<?php echo $formAction; ?>" method="POST" class="admin-form" enctype="multipart/form-data">
                     <h3><?php echo $formTitle; ?></h3>
 
@@ -211,6 +229,9 @@
                                 $imagenes_decodificadas = json_decode($producto_a_editar['imagenes'], true);
                                 if (is_array($imagenes_decodificadas) && !empty($imagenes_decodificadas)) {
                                     $imagen_actual = APP_URL . '/' . $imagenes_decodificadas[0];
+                                } else {
+                                     // Si no es JSON, asumimos que es una ruta simple
+                                     $imagen_actual = APP_URL . '/' . ltrim($producto_a_editar['imagenes'], '/');
                                 }
                             ?>
                             <?php if (!empty($imagen_actual)): ?>
@@ -222,48 +243,7 @@
 
                     <button type="submit"><?php echo $buttonText; ?></button>
                 </form>
-            </div>
-
-            <?php else: // Si no estamos editando, mostramos el botón para añadir y el contenedor (inicialmente oculto) para el formulario de añadir ?>
-                 <button id="toggleAddProductForm" class="btn">Añadir Nuevo Producto</button>
-                 <div id="addProductFormContainer" style="display: none;">
-                    <form action="<?php echo $formAction; ?>" method="POST" class="admin-form" enctype="multipart/form-data">
-                         <h3><?php echo $formTitle; ?></h3>
-
-                         <div class="form-group">
-                             <label for="nombre">Nombre:</label>
-                             <input type="text" id="nombre" name="nombre" value="" required>
-                         </div>
-
-                         <div class="form-group">
-                             <label for="descripcion">Descripción:</label>
-                             <textarea id="descripcion" name="descripcion" required></textarea>
-                         </div>
-
-                         <div class="form-group">
-                             <label for="precio">Precio:</label>
-                             <input type="number" id="precio" name="precio" step="0.01" value="" required>
-                         </div>
-
-                         <div class="form-group">
-                             <label for="categoria_id">Categoría:</label>
-                             <select id="categoria_id" name="categoria_id" required>
-                                 <option value="">Selecciona una categoría</option>
-                                 <?php foreach ($categorias as $cat): ?>
-                                     <option value="<?php echo $cat['id_categoria']; ?>"><?php echo htmlspecialchars($cat['nombre_categoria']); ?></option>
-                                 <?php endforeach; ?>
-                             </select>
-                         </div>
-
-                         <div class="form-group">
-                             <label for="imagen">Imagen:</label>
-                             <input type="file" id="imagen" name="imagen" accept="image/*">
-                         </div>
-
-                         <button type="submit"><?php echo $buttonText; ?></button>
-                     </form>
-                 </div> <!-- Cierre de #addProductFormContainer -->
-            <?php endif; ?>
+            </div> <!-- Cierre de #productFormContainer -->
 
             <h2>Gestión de Productos</h2>
             <table>
@@ -299,30 +279,17 @@
                                             $imagen_ruta_relativa_db = ltrim($producto['imagenes'], '/');
                                         }
 
-                                        // Construir la ruta completa del archivo en el servidor
-                                        // Usamos __DIR__ . '/../' para ir a la raíz del proyecto desde la vista
-                                        $ruta_completa_servidor = __DIR__ . '/../' . $imagen_ruta_relativa_db;
+                                        // Construir la URL completa usando APP_URL
+                                        $imagen_src = APP_URL . '/' . $imagen_ruta_relativa_db;
 
-                                        // Verificar si el archivo existe en el servidor usando la ruta de la DB
-                                        if (file_exists($ruta_completa_servidor)) {
-                                            // Si existe, construimos la URL completa usando APP_URL
-                                            $imagen_src = APP_URL . '/' . $imagen_ruta_relativa_db;
-                                        }
+                                        // Nota: No necesitamos verificar file_exists() aquí para mostrar en HTML, el navegador se encargará del 404.
+                                        // La verificación era para depuración y ya la quitamos.
                                     }
                                 ?>
                                 <?php if (!empty($imagen_src)): ?>
                                     <img src="<?php echo $imagen_src; ?>" alt="<?php echo htmlspecialchars($producto['nombre_producto']); ?>" class="product-image-preview">
                                 <?php else: ?>
                                     Imagen no disponible
-                                    <?php
-                                        // Información de depuración si la imagen no está disponible
-                                        $debug_output = "";
-                                        $debug_output .= "<br>DB: " . htmlspecialchars($producto['imagenes']);
-                                        // $ruta_completa_servidor ya se definió arriba
-                                        $debug_output .= "<br>Buscando en: " . htmlspecialchars($ruta_completa_servidor ?? 'Ruta no construida');
-                                        $debug_output .= "<br>Existe: " . (file_exists($ruta_completa_servidor ?? '') ? 'Sí' : 'No');
-                                    ?>
-                                    <span style="font-size: 0.8em; color: #aaa;"><?php echo $debug_output; ?></span>
                                 <?php endif; ?>
                             </td>
                             <td><?php echo htmlspecialchars($producto['nombre_producto']); ?></td>
@@ -330,8 +297,9 @@
                              <td><?php echo htmlspecialchars($producto['nombre_categoria']); ?></td>
                             <td>
                                 <a href="<?php echo APP_URL; ?>/admin/edit/<?php echo $producto['id_producto']; ?>" class="btn btn-outline">Editar</a>
-                                <form action="<?php echo APP_URL; ?>/admin/delete/<?php echo $producto['id_producto']; ?>" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
-                                     <button type="submit">Eliminar</button>
+                                <form action="<?php echo APP_URL; ?>/admin/delete" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
+                                     <input type="hidden" name="id" value="<?php echo $producto['id_producto']; ?>">
+                                     <button type="submit" class="btn btn-danger">Eliminar</button>
                                 </form>
                             </td>
                         </tr>
@@ -371,27 +339,43 @@
 
     <!-- Scripts JS específicos del panel si hay -->
     <script src="<?php echo APP_URL; ?>/public/js/script.js"></script>
+    <!-- El script admin_panel.js ya no se necesita para ocultar/mostrar el formulario -->
     <!-- <script src="<?php echo APP_URL; ?>/public/js/admin_panel.js"></script> -->
     <script>
-        // Script para mostrar/ocultar el formulario sin AJAX
+        // El script anterior de mostrar/ocultar se ha eliminado o comentado.
+        // Si quieres controlar la visibilidad del formulario de añadir cuando NO estás editando,
+        // puedes añadir una lógica aquí que, al cargar la página y si !$isEditing es true,
+        // oculte el contenedor del formulario y añada el evento al botón toggle.
         document.addEventListener('DOMContentLoaded', function() {
             const toggleButton = document.getElementById('toggleAddProductForm');
-            const formContainer = document.getElementById('addProductFormContainer');
+            const formContainer = document.getElementById('productFormContainer'); // Usar el nuevo ID del contenedor único
 
+            // Solo añadir lógica de alternar si el botón toggle existe (es decir, si no estamos editando)
             if (toggleButton && formContainer) {
+                // Ocultar el formulario por defecto si estamos en modo añadir
+                formContainer.style.display = 'none';
+
                 toggleButton.addEventListener('click', function() {
-                    // Alternar visibilidad
                     if (formContainer.style.display === 'none' || formContainer.style.display === '') {
                         formContainer.style.display = 'block'; // O 'flex'
                     } else {
                         formContainer.style.display = 'none';
                     }
                 });
-                 // Mantener el formulario visible si hubo un error de validación después de un POST fallido
+                 // Mantener el formulario visible si hubo un error de validación después de un POST fallido al AÑADIR
                  <?php if (isset($_SESSION['error_message']) && $_SERVER['REQUEST_METHOD'] === 'POST' && !$isEditing): ?>
                       formContainer.style.display = 'block'; // Mostrar si hay error en POST al añadir
                  <?php endif; ?>
+            } else if (formContainer && <?php echo json_encode($isEditing); ?>) {
+                // Si estamos editando ($isEditing es true), asegurar que el formulario esté visible
+                formContainer.style.display = 'block';
+                 // Además, si hubo un error en el POST al EDITAR, mantenerlo visible
+                 <?php if (isset($_SESSION['error_message']) && $_SERVER['REQUEST_METHOD'] === 'POST' && $isEditing): ?>
+                      formContainer.style.display = 'block';
+                 <?php endif; ?>
             }
+             // Si no hay botón toggle y no estamos editando, el formulario de añadir no se mostrará inicialmente,
+             // lo cual es el comportamiento deseado cuando solo se carga el panel sin intentar añadir.
         });
     </script>
 </body>

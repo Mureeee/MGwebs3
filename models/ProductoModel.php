@@ -51,6 +51,28 @@ class ProductoModel {
         return false;
     }
 
+    // Eliminar un producto
+    public function deleteProducto($id) {
+        // Primero obtener el producto para obtener la ruta de la imagen
+        $producto = $this->getProductoById($id);
+        if ($producto && !empty($producto['imagenes'])) {
+            // Convertir la ruta de la imagen a un array
+            $imagenes = json_decode($producto['imagenes'], true);
+            if (is_array($imagenes) && !empty($imagenes)) {
+                // Eliminar la imagen del sistema de archivos
+                $ruta_imagen = __DIR__ . '/../' . ltrim($imagenes[0], '/');
+                if (file_exists($ruta_imagen)) {
+                    unlink($ruta_imagen);
+                }
+            }
+        }
+
+        // Eliminar el producto de la base de datos
+        $query = "DELETE FROM " . $this->table_name . " WHERE id_producto = ?";
+        $stmt = $this->conn->prepare($query);
+        return $stmt->execute([$id]);
+    }
+
     // Subir imagen (método auxiliar)
     public function uploadImage($file) {
         $target_dir = __DIR__ . "/../public/imagenes/"; // Directorio donde se guardarán las imágenes
@@ -125,33 +147,6 @@ class ProductoModel {
         // La ruta de la imagen ya está controlada por la subida
 
         if ($stmt->execute($params)) {
-            return true;
-        }
-
-        return false;
-    }
-
-    // Eliminar un producto
-    public function deleteProducto($id) {
-        // Opcional: Obtener la ruta de la imagen para eliminar el archivo físico
-        // $producto = $this->getProductoById($id);
-        // if ($producto && !empty($producto['imagenes'])) {
-        //     $imagenes = json_decode($producto['imagenes'], true);
-        //     foreach ($imagenes as $img_path) {
-        //         $file_path = __DIR__ . '/../' . $img_path;
-        //         if (file_exists($file_path)) {
-        //             unlink($file_path);
-        //         }
-        //     }
-        // }
-
-        $query = "DELETE FROM " . $this->table_name . " WHERE id_producto = ?";
-        $stmt = $this->conn->prepare($query);
-        
-        // Sanitizar el ID
-        $id = htmlspecialchars(strip_tags($id));
-
-        if ($stmt->execute([$id])) {
             return true;
         }
 

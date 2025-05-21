@@ -116,6 +116,7 @@ class AdminController {
 
     // Método para mostrar el formulario de editar producto
     public function editProductForm($id) {
+        error_log("Attempting to load edit form for product ID: " . $id); // Línea de depuración temporal
         if (!$this->usuarioController->isLoggedIn() || !$this->usuarioController->isAdmin()) {
             header('Location: ' . APP_URL . '/login');
             exit();
@@ -202,14 +203,38 @@ class AdminController {
     }
 
     // Método para manejar la eliminación de un producto
-    public function handleDeleteProduct($id) {
+    public function handleDeleteProduct() {
+        error_log("handleDeleteProduct called"); // Debug: Método llamado
         if (!$this->usuarioController->isLoggedIn() || !$this->usuarioController->isAdmin()) {
             header('Location: ' . APP_URL . '/login');
             exit();
         }
 
+        // Obtener el ID del producto del POST
+        $id = isset($_POST['id']) ? $_POST['id'] : null;
+
+        error_log("Attempting to delete product with ID: " . ($id ?? 'NULL')); // Debug: ID a eliminar
+
+        if (!$id) {
+            $_SESSION['error_message'] = 'ID de producto no especificado.';
+            header('Location: ' . APP_URL . '/admin');
+            exit();
+        }
+
+        // Verificar que el producto existe antes de eliminarlo (Opcional, el modelo puede manejarlo)
+        // $producto = $this->productoModel->getProductoById($id);
+        // if (!$producto) {
+        //     $_SESSION['error_message'] = 'Producto no encontrado.';
+        //     header('Location: ' . APP_URL . '/admin');
+        //     exit();
+        // }
+
         // Eliminar el producto de la base de datos
-        if ($this->productoModel->deleteProducto($id)) {
+        $deletion_result = $this->productoModel->deleteProducto($id);
+
+        error_log("Deletion result for ID " . $id . ": " . ($deletion_result ? 'Success' : 'Failure')); // Debug: Resultado de la eliminación
+
+        if ($deletion_result) {
             $_SESSION['success_message'] = 'Producto eliminado con éxito.';
         } else {
             $_SESSION['error_message'] = 'Error al eliminar el producto.';

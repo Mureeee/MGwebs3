@@ -33,48 +33,37 @@ $path = substr($request, strlen($basePath));
 // Limpiar la ruta de posibles barras finales
 $path = rtrim($path, '/');
 
-// Extraer ID y acción de la URL para rutas dinámicas antes del switch
+// Eliminar la barra inicial para la división
+$path_segments = explode('/', ltrim($path, '/'));
+
+// Inicializar variables de acción e ID
 $productId = null;
-$action = null; // Variable para la acción (agregar-carrito, enviar-resena, etc.)
+$action = null; // Variable para la acción de detalle de producto
+$adminAction = null;
+$adminId = null;
+
+// Extraer ID y acción para rutas dinámicas antes del switch
 
 // Patrón para capturar /detalle-producto/{id} o /detalle-producto/{id}/{action}
-if (preg_match('/\/detalle-producto\/(\d+)(?:\/([a-zA-Z0-9_-]+))?/', $path, $matches)) {
-    $productId = $matches[1];
-    if (isset($matches[2])) {
-        $action = $matches[2];
+if (isset($path_segments[0]) && $path_segments[0] === 'detalle-producto') {
+    if (isset($path_segments[1]) && is_numeric($path_segments[1])) {
+        $productId = $path_segments[1];
+        if (isset($path_segments[2])) {
+            $action = $path_segments[2];
+        }
     }
-    // Re-normalizar la ruta a /detalle-producto para que coincida con el caso del switch
+     // Normalizar la ruta a /detalle-producto para que coincida con el caso del switch
     $path = '/detalle-producto';
-} else {
-    // Extraer ID y acción para rutas de admin antes del switch
-    $adminAction = null;
-    $adminId = null;
-    // Verificar si la ruta comienza con /admin
-    if (isset($segments[1]) && $segments[1] === 'admin') {
-        // Capturar la acción (ej: add, edit, delete)
-        if (isset($segments[2])) {
-            $adminAction = $segments[2];
-        }
-        // Capturar el ID si existe (ej: para edit/123)
-        if (isset($segments[3])) {
-            $adminId = $segments[3];
-        }
-        // Normalizar la ruta para el switch a solo /admin
-        $path = '/admin';
+} elseif (isset($path_segments[0]) && $path_segments[0] === 'admin') {
+    // Extraer acción y ID para rutas de admin
+    if (isset($path_segments[1])) {
+        $adminAction = $path_segments[1];
     }
-}
-
-// Extraer el ID del producto de la URL si existe para /detalle-producto
-$productId = null;
-$action = null; // Variable para la acción (agregar-carrito, enviar-resena, etc.)
-
-// Patrón para capturar /detalle-producto/{id} o /detalle-producto/{id}/{action}
-if ($path === '/detalle-producto' && preg_match('/\/detalle-producto\/(\d+)(?:\/([a-zA-Z0-9_-]+))?/', $request, $matches)) {
-    $productId = $matches[1];
-    if (isset($matches[2])) {
-        $action = $matches[2];
+    if (isset($path_segments[2])) {
+        $adminId = $path_segments[2];
     }
-    // $path ya está normalizado a '/detalle-producto'
+    // Normalizar la ruta para el switch a solo /admin
+    $path = '/admin';
 }
 
 // === Enrutamiento ===
@@ -84,7 +73,7 @@ switch ($path) {
         $controller = new HomeController();
         $controller->index();
         break;
-    
+
     case '/login':
         $controller = new AuthController();
         $controller->login();
@@ -101,18 +90,18 @@ switch ($path) {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $controller->handleEditProduct($adminId);
             } else {
+                // Esta es la ruta GET /admin/edit/{id}
                 $controller->editProductForm($adminId);
             }
-        } elseif ($adminAction === 'delete' && $adminId !== null) {
-             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                 $controller->handleDeleteProduct($adminId);
-             } else {
-                  $_SESSION['error_message'] = 'La eliminación debe ser por método POST.';
-                  header('Location: ' . APP_URL . '/admin');
-                  exit();
-             }
+        } elseif ($adminAction === 'delete' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+             // Manejar solicitud POST a /admin/delete (sin ID en URL)
+            $controller->handleDeleteProduct(); // Obtiene el ID de $_POST
+        } elseif ($adminAction === 'delete' && $adminId !== null && $_SERVER['REQUEST_METHOD'] === 'POST') {
+            // Esta rama manejaría POST a /admin/delete/{id}. Mantenemos la llamada a handleDeleteProduct.
+            $controller->handleDeleteProduct(); // Obtiene el ID de $_POST
         } else {
             // Acción por defecto: mostrar el panel (lista de productos)
+            // Esto también maneja /admin (GET)
             $controller->index();
         }
         break;
@@ -130,7 +119,7 @@ switch ($path) {
         $controller->index();
         break;
     case '/detalle-producto':
-        // Asegurarse de que hay un ID de producto extraído por el preg_match anterior
+        // Asegurarse de que hay un ID de producto extraído
         if ($productId === null) {
              header("HTTP/1.0 400 Bad Request");
              echo "Error: ID de producto no especificado.";
